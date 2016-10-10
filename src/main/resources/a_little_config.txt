@@ -1,0 +1,8 @@
+jdbcUrl = jdbc:mysql://ip-172-31-28-138:3306/electronic-cigarette?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+user = maindatacenter
+password = 123456
+static_url=http://localhost:8080/upload/
+uploadPath=/Users/yulong/remote/electronic-cigarette/src/main/webapp/upload/
+res_url=http://localhost:8080/res/
+devMode=true
+app_key=80b8a85d78bf4f87baa0994a38b48825
