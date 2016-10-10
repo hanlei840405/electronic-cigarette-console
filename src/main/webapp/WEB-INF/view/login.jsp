@@ -12,29 +12,29 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
 		<!-- bootstrap & fontawesome -->
-		<link rel="stylesheet" href="/res/ace-1.3.3/assets/css/bootstrap.css" />
-		<link rel="stylesheet" href="/res/ace-1.3.3/assets/css/font-awesome.css" />
+		<link rel="stylesheet" href="res/ace-1.3.3/assets/css/bootstrap.css" />
+		<link rel="stylesheet" href="res/ace-1.3.3/assets/css/font-awesome.css" />
 
 		<!-- text fonts -->
-		<link rel="stylesheet" href="/res/ace-1.3.3/assets/css/ace-fonts.css" />
+		<link rel="stylesheet" href="res/ace-1.3.3/assets/css/ace-fonts.css" />
 
 		<!-- ace styles -->
-		<link rel="stylesheet" href="/res/ace-1.3.3/assets/css/ace.css" />
+		<link rel="stylesheet" href="res/ace-1.3.3/assets/css/ace.css" />
 
 		<!--[if lte IE 9]>
-			<link rel="stylesheet" href="/res/ace-1.3.3/assets/css/ace-part2.css" />
+			<link rel="stylesheet" href="res/ace-1.3.3/assets/css/ace-part2.css" />
 		<![endif]-->
-		<link rel="stylesheet" href="/res/ace-1.3.3/assets/css/ace-rtl.css" />
+		<link rel="stylesheet" href="res/ace-1.3.3/assets/css/ace-rtl.css" />
 
 		<!--[if lte IE 9]>
-		  <link rel="stylesheet" href="/res/ace-1.3.3/assets/css/ace-ie.css" />
+		  <link rel="stylesheet" href="res/ace-1.3.3/assets/css/ace-ie.css" />
 		<![endif]-->
 
 		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 
 		<!--[if lt IE 9]>
-		<script src="/res/ace-1.3.3/assets/js/html5shiv.js"></script>
-		<script src="/res/ace-1.3.3/assets/js/respond.js"></script>
+		<script src="res/ace-1.3.3/assets/js/html5shiv.js"></script>
+		<script src="res/ace-1.3.3/assets/jsrespond.js"></script>
 		<![endif]-->
 		<style type="text/css">
 			.yzm-pic {
@@ -88,8 +88,8 @@
 													<div class="block clearfix">
 															
 															<input type="text"  style="width: 150px;" placeholder="验证码" name="imgCode" id="imgCode" />
-															<img class="yzm-pic" id="img" src="${context_path}/image/getCode"></img>
-														
+															<img class="yzm-pic" id="img" src="image/getCode"></img>
+
 													</div>
 													<div class="space"></div>
 
@@ -112,13 +112,13 @@
 										<div class="toolbar clearfix">
 											<div>
 												<a href="#" data-target="#forgot-box" class="forgot-password-link">
-													
+
 												</a>
 											</div>
 
 											<div>
 												<a href="#" data-target="#signup-box" class="user-signup-link">
-													
+
 												</a>
 											</div>
 										</div>
@@ -135,32 +135,32 @@
 
 		<!--[if !IE]> -->
 		<script type="text/javascript">
-			window.jQuery || document.write("<script src='/res/ace-1.3.3/assets/js/jquery.js'>"+"<"+"/script>");
+			window.jQuery || document.write("<script src='res/ace-1.3.3/assets/js/jquery.js'>"+"<"+"/script>");
 		</script>
 
 		<!-- <![endif]-->
 
 		<!--[if IE]>
 <script type="text/javascript">
- window.jQuery || document.write("<script src='/res/ace-1.3.3/assets/js/jquery1x.js'>"+"<"+"/script>");
+ window.jQuery || document.write("<script src='res/ace-1.3.3/assets/js/jquery1x.js'>"+"<"+"/script>");
 </script>
 <![endif]-->
 		<script type="text/javascript">
-			if('ontouchstart' in document.documentElement) document.write("<script src='/res/ace-1.3.3/assets/js/jquery.mobile.custom.js'>"+"<"+"/script>");
+			if('ontouchstart' in document.documentElement) document.write("<script src='res/ace-1.3.3/assets/js/jquery.mobile.custom.js'>"+"<"+"/script>");
 		</script>
 
 		<!-- inline scripts related to this page -->
 		<script type="text/javascript">
 			jQuery(function($) {
-				document.onkeydown = function (e) { 
-					var theEvent = window.event || e; 
-					var code = theEvent.keyCode || theEvent.which; 
-					if (code == 13) { 
+				document.onkeydown = function (e) {
+					var theEvent = window.event || e;
+					var code = theEvent.keyCode || theEvent.which;
+					if (code == 13) {
 					$('#login-btn').click();
-					} 
+					}
 				}
 				$('#img').click(function(){
-					$('#img').attr("src","${context_path}/image/getCode?tm="+Math.random());
+					$('#img').attr("src","image/getCode?tm="+Math.random());
 				});
 				 $('#login-btn').click(function(event) {
 				      event.stopPropagation();
@@ -194,10 +194,10 @@
 				      	url:"${url}"
 				      };
 				      $btn.addClass("disabled");
-				      $.post("${context_path}/dologin", submitData, function(data) {
+				      $.post("dologin", submitData, function(data) {
 								$btn.removeClass("disabled");
 								if (data.code == 0) {
-									window.top.location.href = "${context_path}/";
+									window.top.location.href = "${context_path}";
 								} else {
 									alert(data.msg);
 								}

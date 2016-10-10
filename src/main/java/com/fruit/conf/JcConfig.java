@@ -53,8 +53,8 @@ public class JcConfig extends JFinalConfig {
 		PropKit.use("a_little_config.txt");
 		me.setDevMode(PropKit.getBoolean("devMode", false));
 		me.setViewType(ViewType.JSP);
-		me.setError404View("/page/404.jsp");
-		me.setError500View("/page/500.jsp");
+		me.setError404View("page/404.jsp");
+		me.setError500View("page/500.jsp");
 	}
 
 	/**
