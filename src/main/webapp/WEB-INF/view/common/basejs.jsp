@@ -85,7 +85,6 @@
 		
 		<script src="${res_url}ace-1.3.3/assets/js/jquery.validate.js"></script>
 		<script src="${res_url}js/layer/layer.js"></script>
-		<script src="${res_url}js/jquery.mytime.js"></script>
 		<script type="text/javascript">
 		String.prototype.trim = function() {
 				return this.replace(/^\s\s*/, '').replace(/\s\s*$/, '');

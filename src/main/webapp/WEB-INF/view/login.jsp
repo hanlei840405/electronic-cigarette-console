@@ -135,18 +135,18 @@
 
 		<!--[if !IE]> -->
 		<script type="text/javascript">
-			window.jQuery || document.write("<script src='res/ace-1.3.3/assets/js/jquery.js'>"+"<"+"/script>");
+			window.jQuery || document.write("<script src='${context_path}/res/ace-1.3.3/assets/js/jquery.js'>"+"<"+"/script>");
 		</script>
 
 		<!-- <![endif]-->
 
 		<!--[if IE]>
 <script type="text/javascript">
- window.jQuery || document.write("<script src='res/ace-1.3.3/assets/js/jquery1x.js'>"+"<"+"/script>");
+ window.jQuery || document.write("<script src='${context_path}/res/ace-1.3.3/assets/js/jquery1x.js'>"+"<"+"/script>");
 </script>
 <![endif]-->
 		<script type="text/javascript">
-			if('ontouchstart' in document.documentElement) document.write("<script src='res/ace-1.3.3/assets/js/jquery.mobile.custom.js'>"+"<"+"/script>");
+			if('ontouchstart' in document.documentElement) document.write("<script src='${context_path}/res/ace-1.3.3/assets/js/jquery.mobile.custom.js'>"+"<"+"/script>");
 		</script>
 
 		<!-- inline scripts related to this page -->
