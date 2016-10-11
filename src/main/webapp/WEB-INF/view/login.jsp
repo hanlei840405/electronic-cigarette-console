@@ -65,7 +65,7 @@
 										<div class="widget-main">
 											<h4 class="header blue lighter bigger">
 												<i class="ace-icon fa fa-coffee green"></i>
-												欢迎使用JC管理系统
+												电子烟管理平台
 											</h4>
 
 											<div class="space-6"></div>
