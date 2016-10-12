@@ -41,6 +41,8 @@ public class AdminRoutes extends Routes{
 		add("/dict", DictController.class,"/WEB-INF/view/sys/dict");
 		add("/app", AppVersionController.class,"/WEB-INF/view/app");
 		add("/image", ImageController.class,"/WEB-INF/view/image");
+		add("/mall/category", ImageController.class,"/WEB-INF/view/mall");
+		add("/mall/sku", ImageController.class,"/WEB-INF/view/mall");
 		
 	}
 

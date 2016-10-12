@@ -3,7 +3,7 @@
 					<a href="javascript:;" class="navbar-brand">
 						<small>
 							<i class="fa fa-leaf"></i>
-							后台管理系统
+							电子烟管理平台
 						</small>
 					</a>
 				</div>
