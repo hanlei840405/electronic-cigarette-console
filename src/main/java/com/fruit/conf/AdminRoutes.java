@@ -20,6 +20,8 @@ import com.fruit.controller.IndexController;
 import com.fruit.controller.app.AppVersionController;
 import com.fruit.controller.sys.DictController;
 import com.fruit.controller.sys.LogController;
+import com.fruit.controller.sys.MallCategoryController;
+import com.fruit.controller.sys.MallSkuController;
 import com.fruit.controller.sys.ResController;
 import com.fruit.controller.sys.RoleController;
 import com.fruit.controller.sys.UserController;
@@ -41,8 +43,8 @@ public class AdminRoutes extends Routes{
 		add("/dict", DictController.class,"/WEB-INF/view/sys/dict");
 		add("/app", AppVersionController.class,"/WEB-INF/view/app");
 		add("/image", ImageController.class,"/WEB-INF/view/image");
-		add("/mall/category", ImageController.class,"/WEB-INF/view/mall");
-		add("/mall/sku", ImageController.class,"/WEB-INF/view/mall");
+		add("/mall/category", MallCategoryController.class,"/WEB-INF/view/mall");
+		add("/mall/sku", MallSkuController.class,"/WEB-INF/view/mall");
 		
 	}
 
