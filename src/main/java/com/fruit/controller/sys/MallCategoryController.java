@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.fruit.controller;
+package com.fruit.controller.sys;
 
 import java.util.List;
 
@@ -21,6 +21,7 @@ import com.fruit.core.auth.anno.RequiresPermissions;
 import com.fruit.core.controller.BaseController;
 import com.fruit.core.util.JqGridModelUtils;
 import com.fruit.core.view.InvokeResult;
+import com.fruit.model.SysRes;
 import com.fruit.model.SysRole;
 import com.fruit.model.SysUser;
 import com.jfinal.aop.Before;
@@ -35,8 +36,14 @@ public class MallCategoryController extends BaseController {
 	
 	@RequiresPermissions(value={"/mall/category"}) 
 	public void index() {
-		render("category_index.jsp");
+		this.renderJsp("res_index.jsp");
 	}
+	
+	@RequiresPermissions(value={"/sys/res"})
+	public void  getTreeGridView(){
+		this.renderJson(SysRes.me.getTreeGridView());
+	}
+	
 
 	@RequiresPermissions(value={"/mall/category"})
 	public void getListData() {
