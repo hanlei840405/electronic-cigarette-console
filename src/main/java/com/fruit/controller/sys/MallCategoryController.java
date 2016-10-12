@@ -21,10 +21,12 @@ import com.fruit.core.auth.anno.RequiresPermissions;
 import com.fruit.core.controller.BaseController;
 import com.fruit.core.util.JqGridModelUtils;
 import com.fruit.core.view.InvokeResult;
+import com.fruit.model.MallCategory;
 import com.fruit.model.SysRes;
 import com.fruit.model.SysRole;
 import com.fruit.model.SysUser;
 import com.jfinal.aop.Before;
+import com.jfinal.kit.JsonKit;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.tx.Tx;
 
@@ -36,12 +38,12 @@ public class MallCategoryController extends BaseController {
 	
 	@RequiresPermissions(value={"/mall/category"}) 
 	public void index() {
-		this.renderJsp("res_index.jsp");
+		this.renderJsp("category_index.jsp");
 	}
 	
-	@RequiresPermissions(value={"/sys/res"})
+	@RequiresPermissions(value={"/mall/category"})
 	public void  getTreeGridView(){
-		this.renderJson(SysRes.me.getTreeGridView());
+		this.renderJson(MallCategory.me.getTreeGridView());
 	}
 	
 
@@ -62,15 +64,21 @@ public class MallCategoryController extends BaseController {
 	}
 
 	@RequiresPermissions(value={"/mall/category"})
-	public void add() {
-		Integer id=this.getParaToInt("id");
+	public void  add(){
+		Integer id=getParaToInt("id");
 		if(id!=null){
-			this.setAttr("item", SysUser.me.findById(id));
+			SysRes sysRes=SysRes.me.getById(id);
+			if(sysRes!=null){
+				Integer pid = (Integer)sysRes.getInt("pid");
+				if(pid!=null){//获取父资源
+					SysRes pRes=SysRes.me.getById(pid);
+					setAttr("pRes",pRes);
+				}
+			}
+		setAttr("sysRes",sysRes);
 		}
-		List<SysRole> list=SysRole.me.getSysRoleNamelist();
-		this.setAttr("roleList", list);
-		this.setAttr("id", id);
-		render("user_add.jsp");
+		setAttr("jsonTree",JsonKit.toJson(SysRes.me.getZtreeViewList()));
+		this.renderJsp("category_add.jsp");
 	}
 	
 	@RequiresPermissions(value={"/mall/category"})
