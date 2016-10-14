@@ -89,7 +89,8 @@ public class MallCategoryController extends BaseController {
 		String email=this.getPara("email");
 		Integer id=this.getParaToInt("id");
 		String des=this.getPara("des");
-		InvokeResult result=SysUser.me.save(id, username, password, des,phone, email);
+		String wxid=this.getPara("wxid");
+		InvokeResult result=SysUser.me.save(id, username, password, des,phone, email,wxid);
 		this.renderJson(result); 
 	}
 	

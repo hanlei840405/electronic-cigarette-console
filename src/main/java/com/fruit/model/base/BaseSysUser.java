@@ -89,4 +89,12 @@ public abstract class BaseSysUser<M extends BaseSysUser<M>> extends BaseModel<M>
 		return get("token");
 	}
 
+	public void setWxid(String wxid) {
+		set("wxid", wxid);
+	}
+
+	public String getWxid() {
+		return get("wxid");
+	}
+
 }

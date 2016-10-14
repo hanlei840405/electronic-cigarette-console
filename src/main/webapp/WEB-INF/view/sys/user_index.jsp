@@ -106,6 +106,7 @@
                 colModel: [
                     { label: '用户名', name: 'name', width: 75 },
                     { label: '联系电话', name: 'phone', width: 75 ,sortable:false},
+					{ label: '微信号', name: 'wxid', width: 75 , sortable:false},
                     { label: '拥有角色', name: 'roleNames', width: 150 },
                     { label: '描述', name: 'des', width: 150 ,sortable:false},
                     { label: '注册时间', name: 'createdate', width: 150 },

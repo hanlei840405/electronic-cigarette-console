@@ -145,17 +145,17 @@ public class SysUser extends BaseSysUser<SysUser>
 		conditions.add(new Condition("name",Operators.EQ,name));
 		return this.get(conditions);
 	}
-	public InvokeResult save(Integer id,String username,String password,String des,String phone,String email){
+	public InvokeResult save(Integer id,String username,String password,String des,String phone,String email,String wxid){
 		if(null!=id){
 			SysUser sysUser=this.findById(id);
-			sysUser.set("des", des).set("phone", phone).set("email", email).update();
+			sysUser.set("des", des).set("phone", phone).set("email", email).set("wxid", wxid).update();
 		}else {
 			if(this.hasExist(username)){
 				return InvokeResult.failure("用户名已存在");
 			}else {
 				if(StrKit.isBlank(password))password="123456";
 				SysUser sysUser=new SysUser();
-				sysUser.set("name", username).set("pwd", MyDigestUtils.shaDigestForPasswrod(password)).set("createdate", new Date()).set("des", des).set("phone", phone).set("email", email).save();
+				sysUser.set("name", username).set("pwd", MyDigestUtils.shaDigestForPasswrod(password)).set("createdate", new Date()).set("des", des).set("phone", phone).set("email", email).set("wxid", wxid).save();
 			}
 		}
 		return InvokeResult.success();
