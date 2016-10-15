@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.fruit.model;
+package com.fruit.model.mall;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -27,6 +27,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.fruit.model.SysRes;
 import com.google.common.collect.Lists;
 import com.fruit.core.cache.CacheClearUtils;
 import com.fruit.core.model.Condition;
@@ -43,13 +44,13 @@ import com.jfinal.plugin.activerecord.Page;
  * @author eason
  * 系统用户
  */
-public class MallSku extends BaseSysUser<MallSku>
+public class Sku extends BaseSysUser<Sku>
 {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -1982696969221258167L;
-	public static MallSku me = new MallSku();
+	public static Sku me = new Sku();
 	
 	
 	
@@ -78,7 +79,7 @@ public class MallSku extends BaseSysUser<MallSku>
 		Set<Condition> conditions=new HashSet<Condition>();
 		conditions.add(new Condition("name",Operators.EQ,username));
 		conditions.add(new Condition("pwd",Operators.EQ,MyDigestUtils.shaDigestForPasswrod(pwd)));
-		MallSku sysUser=this.get(conditions);
+		Sku sysUser=this.get(conditions);
 		if(sysUser==null){
 			return InvokeResult.failure("用户名或密码不对");
 		}
@@ -96,12 +97,12 @@ public class MallSku extends BaseSysUser<MallSku>
 	 * @param uid
 	 * @return
 	 */
-	public List<MallSku> getSysUserList(int uid){
+	public List<Sku> getSysUserList(int uid){
 		
 		return this.paginate(1, 20, "select *", "from sys_user ",uid).getList();
 	}
 	
-	public List<MallSku> getSysUserIdList(int uid){
+	public List<Sku> getSysUserIdList(int uid){
 		return this.paginate(1, 20, "select id", "from sys_user ",uid).getList();
 	}
 	
@@ -140,21 +141,21 @@ public class MallSku extends BaseSysUser<MallSku>
 		long num=this.getCount(conditions);
 		return num>0?true:false;
 	}
-	public MallSku getByName(String name){
+	public Sku getByName(String name){
 		Set<Condition> conditions=new HashSet<Condition>();
 		conditions.add(new Condition("name",Operators.EQ,name));
 		return this.get(conditions);
 	}
 	public InvokeResult save(Integer id,String username,String password,String des,String phone,String email){
 		if(null!=id){
-			MallSku sysUser=this.findById(id);
+			Sku sysUser=this.findById(id);
 			sysUser.set("des", des).set("phone", phone).set("email", email).update();
 		}else {
 			if(this.hasExist(username)){
 				return InvokeResult.failure("用户名已存在");
 			}else {
 				if(StrKit.isBlank(password))password="123456";
-				MallSku sysUser=new MallSku();
+				Sku sysUser=new Sku();
 				sysUser.set("name", username).set("pwd", MyDigestUtils.shaDigestForPasswrod(password)).set("createdate", new Date()).set("des", des).set("phone", phone).set("email", email).save();
 			}
 		}
@@ -186,7 +187,7 @@ public class MallSku extends BaseSysUser<MallSku>
 	 */
 	public InvokeResult savePwdUpdate(Integer uid, String newPwd) {
 		// TODO Auto-generated method stub
-		MallSku sysUser=MallSku.me.findById(uid);
+		Sku sysUser= Sku.me.findById(uid);
 		if(sysUser!=null){
 			sysUser.set("pwd", newPwd).update();
 			return InvokeResult.success();
@@ -195,8 +196,8 @@ public class MallSku extends BaseSysUser<MallSku>
 		}
 		
 	}
-	public Page<MallSku> getSysUserPage(int page, int rows, String keyword,
-			String orderbyStr) {
+	public Page<Sku> getSysUserPage(int page, int rows, String keyword,
+									String orderbyStr) {
 		String select="select su.*, (select group_concat(name) as roleNames from sys_role where id in(select role_id from sys_user_role where user_id=su.id)) as roleNames";
 		StringBuffer sqlExceptSelect=new StringBuffer("from sys_user su");
 		return this.paginate(page, rows, select, sqlExceptSelect.toString());

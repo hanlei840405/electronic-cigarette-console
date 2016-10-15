@@ -11,11 +11,11 @@ public abstract class BaseMallCategory<M extends BaseMallCategory<M>> extends Ba
 	
 	
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		set("id", id);
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return get("id");
 	}
 

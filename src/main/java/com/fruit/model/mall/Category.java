@@ -1,144 +1,108 @@
 /**
  * Copyright (c) 2011-2016, Eason Pan(pylxyhome@vip.qq.com).
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.fruit.model;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+package com.fruit.model.mall;
 
 import com.fruit.core.cache.CacheClearUtils;
-import com.fruit.core.cache.CacheName;
 import com.fruit.core.model.Condition;
 import com.fruit.core.model.Operators;
-import com.fruit.core.view.ZtreeView;
+import com.fruit.model.SysRes;
 import com.fruit.model.base.BaseMallCategory;
-import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
-import com.jfinal.plugin.ehcache.CacheKit;
+
+import java.util.*;
 
 /**
  * @author eason
- * 商品类别
+ *         商品类别
  */
-public class MallCategory extends BaseMallCategory<MallCategory>
-{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1982696969221258167L;
-	public static MallCategory me = new MallCategory();
-	
+public class Category extends BaseMallCategory<Category> {
+    /**
+     *
+     */
+    private static final long serialVersionUID = -1982696969221258167L;
+    public static Category me = new Category();
 
-	/**
-	 * 获取商品分类
-	 * @author eason	
-	 * @param uid
-	 * @return
-	 */
-	public List<MallCategory> getMallCategoryList(){
-		
-		return this.paginate(1, 20, "select *", "from mall_category ").getList();
-	}
-	
-	public Map<String,Object> getTreeGridView(){
-		Map<String,Object> rows=new HashMap<String,Object>();
-		List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
-		LinkedHashMap<String, String> orderby=new LinkedHashMap<String,String>();
-		orderby.put("seq", "asc");
-		Set<Condition> conditions=new HashSet<Condition>();
-		conditions.add(new Condition("pid",Operators.EQ,""));
-		List<MallCategory> allTopMenuList=this.getList(1,10000,conditions,orderby); 
-//		for(SysRes item : allTopMenuList){
-//			Map<String,Object> mapItem=new HashMap<String,Object>();
-//			mapItem.put("id", item.getInt("id"));
-//			mapItem.put("name", item.getStr("name"));
-//			mapItem.put("pid", item.getInt("pid"));
-//			mapItem.put("des", item.getStr("des"));
-//			mapItem.put("url", item.getStr("url"));
-//			mapItem.put("loaded","true");
-//			mapItem.put("expanded","true");
-//			mapItem.put("seq", item.getInt("seq"));
-//			mapItem.put("isLeaf", item.getInt("type")==1?"false":"true");
-//			mapItem.put("level", 0);
-//			mapItem.put("type", item.getInt("type"));
-//			mapItem.put("enabled", item.getInt("enabled"));
-//			conditions=new HashSet<Condition>();
-//			conditions.add(new Condition("pid",Operators.EQ,item.getInt("id")));
-//			List<SysRes> allSubMenuList=this.getList(1,10000,conditions,orderby);
-//			if(allSubMenuList.size()==0){
-//				mapItem.put("isLeaf", "true");
-//			}else{
-//				mapItem.put("isLeaf", "false");
-//			}
-//			list.add(mapItem);
-//			for(SysRes subItem : allSubMenuList){
-//				mapItem=new HashMap<String,Object>();
-//				mapItem.put("id", subItem.getInt("id"));
-//				mapItem.put("name", subItem.getStr("name"));
-//				mapItem.put("pid", subItem.getInt("pid"));
-//				mapItem.put("des", subItem.getStr("des"));
-//				mapItem.put("url", subItem.getStr("url"));
-//				mapItem.put("loaded","true");
-//				mapItem.put("expanded","true");
-//				mapItem.put("seq", subItem.getInt("seq"));
-//				mapItem.put("type", subItem.getInt("type"));
-//				mapItem.put("level", 1);
-//				mapItem.put("enabled", subItem.getInt("enabled"));
-//				conditions=new HashSet<Condition>();
-//				conditions.add(new Condition("pid",Operators.EQ,subItem.getInt("id")));
-//				List<SysRes> menuList=this.getList(1,10000,conditions,orderby);
-//				if(menuList.size()==0){
-//					mapItem.put("isLeaf", "true");
-//				}else{
-//					mapItem.put("isLeaf", "false");
-//				}
-//				list.add(mapItem);
-//				for(SysRes itemlast : menuList){
-//					mapItem=new HashMap<String,Object>();
-//					mapItem.put("id", itemlast.getInt("id"));
-//					mapItem.put("name", itemlast.getStr("name"));
-//					mapItem.put("pid", itemlast.getInt("pid"));
-//					mapItem.put("des", itemlast.getStr("des"));
-//					mapItem.put("url", itemlast.getStr("url"));
-//					mapItem.put("loaded","true");
-//					mapItem.put("expanded","true");
-//					mapItem.put("seq", itemlast.getInt("seq"));
-//					mapItem.put("isLeaf", "true");
-//					mapItem.put("type", itemlast.getInt("type"));
-//					mapItem.put("level", 2);
-//					mapItem.put("enabled", itemlast.getInt("enabled"));
-//					list.add(mapItem);
-//				}
-//			}
-//		}
-//		rows.put("rows", list);
-//		return rows;
-	return null;
-	}
-	/**
-	 * 获取用户的所有资源
-	 * @author eason	
-	 * @param uid
-	 * @return
-	 */
+
+    /**
+     * 获取商品分类
+     *
+     * @return
+     * @author eason
+     */
+    public List<Category> getRootCategoryList() {
+
+        return this.paginate(1, 20, "select *", "from mall_category where parentCode is null").getList();
+    }
+
+    /**
+     * 获取类目树结构，暂定两级结构
+     *
+     * @return
+     */
+    public Map<String, Object> getTreeGridView() {
+        Map<String, Object> rows = new HashMap<String, Object>();
+        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+        LinkedHashMap<String, String> orderby = new LinkedHashMap<String, String>();
+        orderby.put("cateCode", "asc");
+        Set<Condition> conditions = new HashSet<Condition>();
+        conditions.add(new Condition("parentCode", Operators.EQ, null));
+        List<Category> categories = this.getList(1, 10000, conditions, orderby);
+        for (Category item : categories) {
+            Map<String, Object> mapItem = new HashMap<String, Object>();
+            mapItem.put("id", item.getLong("id"));
+            mapItem.put("cateCode", item.getStr("cateCode"));
+            mapItem.put("cateName", item.getStr("cateName"));
+            mapItem.put("parentCode", item.getStr("parentCode"));
+            mapItem.put("remare", item.getStr("remare"));
+            mapItem.put("loaded", true);
+            mapItem.put("expanded", true);
+            mapItem.put("level", 0);
+            conditions = new HashSet<Condition>();
+            conditions.add(new Condition("parentCode", Operators.EQ, item.getStr("cateCode")));
+            List<Category> subCategories = this.getList(1, 10000, conditions, orderby);
+            if (subCategories.size() == 0) {
+                mapItem.put("isLeaf", true);
+            } else {
+                mapItem.put("isLeaf", false);
+            }
+            list.add(mapItem);
+            for (Category subItem : subCategories) {
+                mapItem = new HashMap<String, Object>();
+                mapItem.put("id", subItem.getLong("id"));
+                mapItem.put("cateCode", subItem.getStr("cateCode"));
+                mapItem.put("cateName", subItem.getStr("cateName"));
+                mapItem.put("parentCode", subItem.getStr("parentCode"));
+                mapItem.put("remare", subItem.getStr("remare"));
+                mapItem.put("loaded", true);
+                mapItem.put("expanded", true);
+                mapItem.put("level", 1);
+                mapItem.put("isLeaf", true);
+                list.add(mapItem);
+            }
+        }
+        rows.put("rows", list);
+        return rows;
+    }
+    /**
+     * 获取用户的所有资源
+     * @author eason
+     * @param uid
+     * @return
+     */
 //	public Set<String> getSysUserAllResUrl(int uid){
 //		Set<String> sets=CacheKit.get(CacheName.userMenuCache, "getSysUserAllResUrl_"+uid);
 //		if(sets==null){
@@ -151,13 +115,13 @@ public class MallCategory extends BaseMallCategory<MallCategory>
 //		}
 //		return sets;
 //	}
-	/**
-	 * 获取系统用户资源
-	 * @author eason	
-	 * @param uid 访问的用户ID
-	 * @param uri 当前访问的资源地址
-	 * @return
-	 */
+    /**
+     * 获取系统用户资源
+     * @author eason
+     * @param uid 访问的用户ID
+     * @param uri 当前访问的资源地址
+     * @return
+     */
 //	public String getSysUserMenuView(int uid, String url) {
 //			String menuhtml=CacheKit.get(CacheName.userMenuCache, "getSysUserMenuView_"+uid);
 //			if(StrKit.notBlank(menuhtml)){
@@ -224,13 +188,13 @@ public class MallCategory extends BaseMallCategory<MallCategory>
 //		return sbBuilder.toString();
 //	}
 
-	/**
-	 * 
-	 * @author eason	
-	 * @param uid 用户ID
-	 * @param type 菜单|功能
-	 * @return
-	 */
+    /**
+     *
+     * @author eason
+     * @param uid 用户ID
+     * @param type 菜单|功能
+     * @return
+     */
 //	public List<SysRes> getSysResList(int uid,Integer type){
 //		List<SysRes> resList=CacheKit.get(CacheName.userMenuCache, "getSysResList_"+uid+"_"+type);
 //		if(resList==null||resList.size()==0){
@@ -307,11 +271,11 @@ public class MallCategory extends BaseMallCategory<MallCategory>
 //		sbBuilder.append("</ul>");
 //		return sbBuilder.toString();
 //	}
-	
-	/**
-	 * 获取上级资源
-	 * @return
-	 */
+
+    /**
+     * 获取上级资源
+     * @return
+     */
 //	public List<ZtreeView> getZtreeViewList() {
 //		List<ZtreeView> ztreeViews=new ArrayList<ZtreeView>();
 //		List<SysRes> sysResType=this.getTopList();
@@ -324,7 +288,7 @@ public class MallCategory extends BaseMallCategory<MallCategory>
 //		}
 //		return ztreeViews;
 //	}
-	
+
 //	public List<SysRes> getTopList() {
 //		// TODO Auto-generated method stub
 //		LinkedHashMap<String, String> orderby=new LinkedHashMap<String,String>();
@@ -335,50 +299,53 @@ public class MallCategory extends BaseMallCategory<MallCategory>
 //		return allTopMenuList;
 //	}
 //	
-	/**
-	 * 保存资源
-	 * @param id
-	 * @param name
-	 * @param seq
-	 * @param url
-	 * @param iconCls
-	 * @param type
-	 * @param pId
-	 * @return
-	 */
-	public int saveRes(Integer id,String name,String seq,String url,String iconCls,Integer type,Integer pId){
-		if(id==null){
-			SysRes res=new SysRes();
-			res.set("name", name).set("seq", seq).set("url", url).set("iconCls", iconCls).
-			set("type", type).set("pid", pId).save();
-			Integer resId=res.get("id");//获取刚保存Id
-			//保存角色资源权限res_id role_id （角色默认为管理员）
-			Record roleRes=new Record().set("res_id", resId).set("role_id", 1);
-			Db.save("sys_role_res",roleRes);
-			return 1;
-		}else{
-			SysRes sysRes=SysRes.me.getById(id);
-			sysRes.set("name", name).set("seq", seq).set("url", url).set("iconCls", iconCls).
-			set("type", type).set("pid", pId).update();
-			CacheClearUtils.clearUserMenuCache();
-			return 2;
-		}
-	}
-	
-	/**
-	 * 修改资源启用状态
-	 * @param resId
-	 * @param status
-	 * @return
-	 */
-	public int setEnabled(Integer resId,Integer status){
-		SysRes sysRes=SysRes.me.findById(resId);
-		if(sysRes==null){
-			return -1;
-		}else{
-			sysRes.set("enabled", status).update();
-			CacheClearUtils.clearUserMenuCache();
-			return 0;
-		}
-	}
+
+    /**
+     * 保存资源
+     *
+     * @param id
+     * @param name
+     * @param seq
+     * @param url
+     * @param iconCls
+     * @param type
+     * @param pId
+     * @return
+     */
+    public int saveRes(Integer id, String name, String seq, String url, String iconCls, Integer type, Integer pId) {
+        if (id == null) {
+            SysRes res = new SysRes();
+            res.set("name", name).set("seq", seq).set("url", url).set("iconCls", iconCls).
+                    set("type", type).set("pid", pId).save();
+            Integer resId = res.get("id");//获取刚保存Id
+            //保存角色资源权限res_id role_id （角色默认为管理员）
+            Record roleRes = new Record().set("res_id", resId).set("role_id", 1);
+            Db.save("sys_role_res", roleRes);
+            return 1;
+        } else {
+            SysRes sysRes = SysRes.me.getById(id);
+            sysRes.set("name", name).set("seq", seq).set("url", url).set("iconCls", iconCls).
+                    set("type", type).set("pid", pId).update();
+            CacheClearUtils.clearUserMenuCache();
+            return 2;
+        }
+    }
+
+    /**
+     * 修改资源启用状态
+     *
+     * @param resId
+     * @param status
+     * @return
+     */
+    public int setEnabled(Integer resId, Integer status) {
+        SysRes sysRes = SysRes.me.findById(resId);
+        if (sysRes == null) {
+            return -1;
+        } else {
+            sysRes.set("enabled", status).update();
+            CacheClearUtils.clearUserMenuCache();
+            return 0;
+        }
+    }
 }

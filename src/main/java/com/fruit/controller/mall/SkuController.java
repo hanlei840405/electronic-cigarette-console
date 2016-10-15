@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.fruit.controller.sys;
+package com.fruit.controller.mall;
 
 import java.util.List;
 
@@ -21,33 +21,24 @@ import com.fruit.core.auth.anno.RequiresPermissions;
 import com.fruit.core.controller.BaseController;
 import com.fruit.core.util.JqGridModelUtils;
 import com.fruit.core.view.InvokeResult;
-import com.fruit.model.MallCategory;
-import com.fruit.model.SysRes;
 import com.fruit.model.SysRole;
 import com.fruit.model.SysUser;
 import com.jfinal.aop.Before;
-import com.jfinal.kit.JsonKit;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.tx.Tx;
 
 /**
- * 类别管理.
+ * sku管理.
  * @author eason
  */
-public class MallCategoryController extends BaseController {
+public class SkuController extends BaseController {
 	
-	@RequiresPermissions(value={"/mall/category"}) 
+	@RequiresPermissions(value={"/mall/sku"}) 
 	public void index() {
-		this.renderJsp("category_index.jsp");
+		render("sku_index.jsp");
 	}
-	
-	@RequiresPermissions(value={"/mall/category"})
-	public void  getTreeGridView(){
-		this.renderJson(MallCategory.me.getTreeGridView());
-	}
-	
 
-	@RequiresPermissions(value={"/mall/category"})
+	@RequiresPermissions(value={"/mall/sku"})
 	public void getListData() {
 		String keyword=this.getPara("name");
 		Page<SysUser> pageInfo=SysUser.me.getSysUserPage(getPage(), this.getRows(),keyword,this.getOrderbyStr());
@@ -55,7 +46,7 @@ public class MallCategoryController extends BaseController {
 	}
 	
 
-	@RequiresPermissions(value={"/mall/category"})
+	@RequiresPermissions(value={"/mall/sku"})
 	public void setVisible(){
 		Integer visible=this.getParaToInt("visible");
 		String ids=this.getPara("ids");
@@ -63,25 +54,19 @@ public class MallCategoryController extends BaseController {
 		this.renderJson(result);
 	}
 
-	@RequiresPermissions(value={"/mall/category"})
-	public void  add(){
-		Integer id=getParaToInt("id");
+	@RequiresPermissions(value={"/mall/sku"})
+	public void add() {
+		Integer id=this.getParaToInt("id");
 		if(id!=null){
-			SysRes sysRes=SysRes.me.getById(id);
-			if(sysRes!=null){
-				Integer pid = (Integer)sysRes.getInt("pid");
-				if(pid!=null){//获取父资源
-					SysRes pRes=SysRes.me.getById(pid);
-					setAttr("pRes",pRes);
-				}
-			}
-		setAttr("sysRes",sysRes);
+			this.setAttr("item", SysUser.me.findById(id));
 		}
-		setAttr("jsonTree",JsonKit.toJson(SysRes.me.getZtreeViewList()));
-		this.renderJsp("category_add.jsp");
+		List<SysRole> list=SysRole.me.getSysRoleNamelist();
+		this.setAttr("roleList", list);
+		this.setAttr("id", id);
+		render("user_add.jsp");
 	}
 	
-	@RequiresPermissions(value={"/mall/category"})
+	@RequiresPermissions(value={"/mall/sku"})
 	public void save(){
 		String username=this.getPara("name");
 		String password=this.getPara("password");
@@ -95,7 +80,7 @@ public class MallCategoryController extends BaseController {
 	}
 	
 	
-	@RequiresPermissions(value={"/mall/category"})
+	@RequiresPermissions(value={"/mall/sku"})
 	public void userRoleSetting() {
 		Integer uid=this.getParaToInt("uid");
 		this.setAttr("item", SysUser.me.findById(uid));
@@ -105,7 +90,7 @@ public class MallCategoryController extends BaseController {
 	}
 	
 	
-	@RequiresPermissions(value={"/mall/category"})
+	@RequiresPermissions(value={"/mall/sku"})
 	@Before(Tx.class)
 	public void saveUserRoles(){
 		Integer uid=this.getParaToInt("id");
