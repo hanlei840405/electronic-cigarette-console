@@ -1,6 +1,7 @@
 package com.fruit.model;
 
 import com.fruit.model.mall.Category;
+import com.fruit.model.mall.Sku;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 
 /**
@@ -29,6 +30,7 @@ public class _MappingKit {
         arp.addMapping("sys_user", "id", SysUser.class);
         arp.addMapping("sys_user_role", "id", SysUserRole.class);
         arp.addMapping("mall_category", "id", Category.class);
+        arp.addMapping("mall_sku", "id", Sku.class);
         arp.addMapping("console_sequence", "id", ConsoleSequence.class);
     }
 }

@@ -8,87 +8,75 @@ import com.jfinal.plugin.activerecord.IBean;
  */
 @SuppressWarnings("serial")
 public abstract class BaseMallSku<M extends BaseMallSku<M>> extends BaseModel<M> implements IBean {
-	
-	
-
-	public void setId(Integer id) {
+	public void setId(java.lang.Long id) {
 		set("id", id);
 	}
 
-	public Integer getId() {
+	public java.lang.Long getId() {
 		return get("id");
 	}
 
-	public void setSkuName(String skuName) {
+	public void setSkuName(java.lang.String skuName) {
 		set("skuName", skuName);
 	}
 
-	public String getSkuName() {
+	public java.lang.String getSkuName() {
 		return get("skuName");
 	}
 
-	public void setPwd(String pwd) {
-		set("pwd", pwd);
+	public void setSku(java.lang.String sku) {
+		set("sku", sku);
 	}
 
-	public String getPwd() {
-		return get("pwd");
+	public java.lang.String getSku() {
+		return get("sku");
 	}
 
-	public void setDes(String des) {
-		set("des", des);
+	public void setCategory(java.lang.String category) {
+		set("category", category);
 	}
 
-	public String getDes() {
-		return get("des");
+	public java.lang.String getCategory() {
+		return get("category");
 	}
 
-	public void setStatus(Integer status) {
+	public void setAttribute(java.lang.String attribute) {
+		set("attribute", attribute);
+	}
+
+	public java.lang.String getAttribute() {
+		return get("attribute");
+	}
+
+	public void setStatus(java.lang.Integer status) {
 		set("status", status);
 	}
 
-	public Integer getStatus() {
+	public java.lang.Integer getStatus() {
 		return get("status");
 	}
 
-	public void setIcon(String icon) {
-		set("icon", icon);
+	public void setSpecName(java.lang.String specName) {
+		set("specName", specName);
 	}
 
-	public String getIcon() {
-		return get("icon");
+	public java.lang.String getSpecName() {
+		return get("specName");
 	}
 
-	public void setEmail(String email) {
-		set("email", email);
+	public void setRemark(java.lang.String remark) {
+		set("remark", remark);
 	}
 
-	public String getEmail() {
-		return get("email");
+	public java.lang.String getRemark() {
+		return get("remark");
 	}
 
-	public void setCreatedate(java.util.Date createdate) {
-		set("createdate", createdate);
+	public void setCateName(String cateName) {
+		set("cateName", cateName);
 	}
 
-	public java.util.Date getCreatedate() {
-		return get("createdate");
+	public String getCateName() {
+		return get("cateName");
 	}
-
-	public void setPhone(String phone) {
-		set("phone", phone);
-	}
-
-	public String getPhone() {
-		return get("phone");
-	}
-
-	public void setToken(String token) {
-		set("token", token);
-	}
-
-	public String getToken() {
-		return get("token");
-	}
-
 }
