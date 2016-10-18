@@ -22,7 +22,7 @@ public class ConsoleSequence extends BaseConsoleSequence<ConsoleSequence> {
         Set<Condition> conditions = new HashSet<Condition>();
         conditions.add(new Condition("category", Operators.EQ, category));
         ConsoleSequence sequence = dao.get(conditions);
-        long code = 100000;
+        int code = 100000;
         if (sequence != null) {
             code = sequence.getInt("code");
         }
