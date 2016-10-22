@@ -19,6 +19,7 @@ import com.fruit.controller.ImageController;
 import com.fruit.controller.IndexController;
 import com.fruit.controller.app.AppVersionController;
 import com.fruit.controller.mall.CategoryController;
+import com.fruit.controller.mall.CustomerController;
 import com.fruit.controller.mall.SkuController;
 import com.fruit.controller.sys.*;
 import com.jfinal.config.Routes;
@@ -42,6 +43,7 @@ public class AdminRoutes extends Routes {
         add("/image", ImageController.class, "/WEB-INF/view/image");
         add("/mall/category", CategoryController.class, "/WEB-INF/view/mall");
         add("/mall/sku", SkuController.class, "/WEB-INF/view/mall");
+        add("/mall/customer", CustomerController.class, "/WEB-INF/view/mall");
 
     }
 

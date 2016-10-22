@@ -180,12 +180,13 @@
     function deleteCategory() {
         var rdata = getSelectedRows();
         var id = rdata.id;
+        debugger;
         if (typeof(id) == "undefined") {
             layer.msg("请选择要操作的类目");
             return;
         }
 
-        $.post("${context_path}/mall/category/delete", id, function (data) {
+        $.post("${context_path}/mall/category/delete", {id: id}, function (data) {
             if (data.code == 0) {
                 layer.msg(data.result, {
                     icon: 1,

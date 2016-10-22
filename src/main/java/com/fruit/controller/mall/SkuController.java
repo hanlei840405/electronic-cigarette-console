@@ -71,7 +71,7 @@ public class SkuController extends BaseController {
     public void add() {
         Long id = this.getParaToLong("id");
         if (id != null) {
-            Sku sku = Sku.dao.findFirst("select sku.*,cate.cateName from mall_sku sku inner join mall_category cate on sku.category = cate.cateCode where sku.id = ?", id);
+            Sku sku = Sku.dao.findById("select sku.*,cate.cateName from mall_sku sku inner join mall_category cate on sku.category = cate.cateCode where sku.id = ?", id);
             setAttr("sku", sku);
         }
         List<ZtreeView> result = Category.me.getZtreeViewList();

@@ -38,7 +38,14 @@
 																		<i class="ace-icon fa fa-check"></i>
 																	</span>
 
-                                            <input type="text" id="searchSku" name="searchSku" class="form-control search-query"
+                                            <select name="searchCategory" id="searchCategory" class="ui fluid search dropdown">
+                                                <option value="">---选择类目---</option>
+                                                <c:forEach items="${categories }" var="item">
+                                                    <option value="${item.cateCode }" >${item.cateName }</option>
+                                                </c:forEach>
+                                            </select>
+                                            <input type="text" id="searchSku" name="searchSku"
+                                                   class="form-control search-query"
                                                    placeholder="请输入关键字"/>
 																	<span class="input-group-btn">
 																		<button type="button" id="btn_search"
@@ -55,15 +62,6 @@
                     </div>
                 </div>
                 <div class="col-xs-12">
-                    <div class="row-fluid" style="margin-bottom: 5px;">
-                        <div class="span12 control-group">
-                            <jc:button className="btn btn-success" id="btn-up" textName="上架"/>
-                            <jc:button className="btn btn-danger" id="btn-down" textName="下架"/>
-                            <jc:button className="btn btn-primary" id="btn-add" textName="添加"/>
-                            <jc:button className="btn btn-info" id="btn-edit" textName="编辑"/>
-                            <jc:button className="btn" id="btn-delete" textName="删除"/>
-                        </div>
-                    </div>
                     <!-- PAGE CONTENT BEGINS -->
                     <table id="grid-table"></table>
 
@@ -127,9 +125,10 @@
         $("#btn_search").click(function () {
             //此处可以添加对查询数据的合法验证
             var searchSku = $("#searchSku").val();
+            var searchCategory = $("#searchCategory").val();
             $("#grid-table").jqGrid('setGridParam', {
                 datatype: 'json',
-                postData: {'sku': searchSku}, //发送数据
+                postData: {'category': searchCategory, 'sku': searchSku}, //发送数据
                 page: 1
             }).trigger("reloadGrid"); //重新载入
         });
