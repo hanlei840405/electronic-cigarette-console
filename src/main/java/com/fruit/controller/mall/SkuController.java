@@ -42,6 +42,12 @@ public class SkuController extends BaseController {
     }
 
     @RequiresPermissions(value = {"/mall/sku"})
+    public void getListDataExt() {
+        Page<Sku> pageInfo = Sku.dao.getPage(getPage(), this.getRows(), "select t1.*,IFNULL(t2.price,'') as price", "from mall_sku t1 LEFT JOIN mall_sku_sprice t2 on t1.sku = t2.sku", null);
+        this.renderJson(JqGridModelUtils.toJqGridView(pageInfo));
+    }
+
+    @RequiresPermissions(value = {"/mall/sku"})
     public void getListData() {
         String sku = this.getPara("sku");
         Page<Sku> pageInfo = Sku.dao.getPage(getPage(), this.getRows(), sku);

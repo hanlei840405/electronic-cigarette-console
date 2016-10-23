@@ -164,7 +164,7 @@
                 parent.layer.open({
                     title: '设置商品特殊价格',
                     type: 2,
-                    area: ['500px', '600'],
+                    area: ['800px', '600px'],
                     fix: false, //不固定
                     maxmin: true,
                     content: '${context_path}/mall/customer/setting?id=' + rid
