@@ -38,8 +38,8 @@
 																		<i class="ace-icon fa fa-check"></i>
 																	</span>
 
-                                            <input type="text" id="searchSku" name="searchSku" class="form-control search-query"
-                                                   placeholder="请输入关键字"/>
+                                            <input type="text" id="searchCustomer" name="searchCustomer" class="form-control search-query"
+                                                   placeholder="请输入商户号"/>
 																	<span class="input-group-btn">
 																		<button type="button" id="btn_search"
                                                                                 class="btn btn-purple btn-sm">
@@ -57,11 +57,9 @@
                 <div class="col-xs-12">
                     <div class="row-fluid" style="margin-bottom: 5px;">
                         <div class="span12 control-group">
-                            <jc:button className="btn btn-success" id="btn-up" textName="上架"/>
-                            <jc:button className="btn btn-danger" id="btn-down" textName="下架"/>
-                            <jc:button className="btn btn-primary" id="btn-add" textName="添加"/>
-                            <jc:button className="btn btn-info" id="btn-edit" textName="编辑"/>
-                            <jc:button className="btn" id="btn-delete" textName="删除"/>
+                            <jc:button className="btn btn-success" id="btn-audit" textName="审核"/>
+                            <jc:button className="btn btn-danger" id="btn-setting" textName="价格设置"/>
+                            <jc:button className="btn" id="btn-disable" textName="禁用"/>
                         </div>
                     </div>
                     <!-- PAGE CONTENT BEGINS -->
@@ -97,16 +95,23 @@
         });
 
         $("#grid-table").jqGrid({
-            url: '${context_path}/mall/sku/getListData',
+            url: '${context_path}/mall/customer/getListData',
             mtype: "GET",
             datatype: "json",
             colModel: [
-                {index: 'id', name: 'id', key: true, hidden: true, width: 75},
-                {label: '名称', name: 'skuName', key: true, width: 75},
-                {label: '编码', name: 'sku', width: 150},
-                {label: '规格', name: 'specName', width: 150},
-                {label: '类目', name: 'category', width: 150},
-                {label: '状态', name: 'status', formatter: fmatterStatus, width: 50}
+                {index: 'id', name: 'id', key: true, hidden: true},
+                {label: '商户号', name: 'cusCode', key: true, width: 50},
+                {label: '商户名称', name: 'cusName', width: 100},
+                {label: '性别', name: 'sex', width: 50, formatter: fmatterSex},
+                {label: '生日', name: 'birthday', width: 80},
+                {label: '微信', name: 'wechat', width: 100},
+                {label: '电话', name: 'phone', width: 80},
+                {label: '邮箱', name: 'email', width: 150},
+                {label: '累计金额', name: 'amount', width: 75},
+                {label: '比率', name: 'rate', width: 50},
+                {label: '上级经销商', name: 'upName', width: 100},
+                {label: '平台销售', name: 'saler', width: 100},
+                {label: '状态', name: 'status', width: 75, formatter: fmatterStatus}
             ],
             viewrecords: true,
             height: 280,
@@ -126,10 +131,10 @@
         $(window).triggerHandler('resize.jqGrid');
         $("#btn_search").click(function () {
             //此处可以添加对查询数据的合法验证
-            var searchSku = $("#searchSku").val();
+            var searchCustomer = $("#searchCustomer").val();
             $("#grid-table").jqGrid('setGridParam', {
                 datatype: 'json',
-                postData: {'sku': searchSku}, //发送数据
+                postData: {'customer': searchCustomer}, //发送数据
                 page: 1
             }).trigger("reloadGrid"); //重新载入
         });
@@ -143,14 +148,7 @@
                 content: '${context_path}/mall/sku/add'
             });
         });
-        $("#btn-up").click(function () {
-            upOrDown(1);
-        });
-        $("#btn-down").click(function () {
-            upOrDown(0);
-        });
-
-        $("#btn-edit").click(function () {//添加页面
+        $("#btn-setting").click(function () {//添加页面
             var rid = getOneSelectedRows();
             if (rid == -1) {
                 layer.msg("请选择一个商品", {
@@ -164,20 +162,20 @@
                 });
             } else {
                 parent.layer.open({
-                    title: '修改商品',
+                    title: '设置商品特殊价格',
                     type: 2,
-                    area: ['370px', '430px'],
+                    area: ['800px', '600px'],
                     fix: false, //不固定
                     maxmin: true,
-                    content: '${context_path}/mall/sku/add?id=' + rid
+                    content: '${context_path}/mall/customer/setting?id=' + rid
                 });
             }
         });
-        $("#btn-delete").click(function () {
+        $("#btn-disable").click(function () {
             var submitData = {
                 "ids": getSelectedRows()
             };
-            $.post("${context_path}/mall/sku/delete", submitData, function (data) {
+            $.post("${context_path}/mall/customer/disable", submitData, function (data) {
 
                 if (data.code == 0) {
                     layer.msg("操作成功", {
@@ -261,11 +259,23 @@
         }, "json");
     }
     //格式化状态显示
+    function fmatterSex(cellvalue, options, rowObject) {
+        if (cellvalue == 'M') {
+            return '男';
+        } else if (cellvalue == 'F') {
+            return '女';
+        } else {
+            return '未知';
+        }
+    }
+    //格式化状态显示
     function fmatterStatus(cellvalue, options, rowObject) {
         if (cellvalue == 0) {
-            return '<span class="label label-sm label-warning">下架</span>';
+            return '<span class="label label-sm label-warning">待审核</span>';
+        } else if (cellvalue == 1) {
+            return '<span class="label label-sm label-success">审核通过</span>';
         } else {
-            return '<span class="label label-sm label-success">上架</span>';
+            return '<span class="label label-sm label-success">审核不通过</span>';
         }
     }
     function reloadGrid() {

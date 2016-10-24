@@ -9,6 +9,15 @@
     <meta name="description" content="overview &amp; stats"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
     <jsp:include page="/WEB-INF/view/common/basecss.jsp" flush="true"/>
+    <style type="text/css">
+        .text-null {
+            border-color: #ff0000 !important;
+        }
+
+        .text-not-null {
+            border-color: #008000 !important;
+        }
+    </style>
 </head>
 <body class="no-skin">
 <!-- /section:basics/navbar.layout -->
@@ -20,6 +29,8 @@
         }
     </script>
     <div class="main-content" id="page-wrapper">
+        <input type="hidden" id="customer" value="${customer}"/>
+
         <div class="page-content" id="page-content">
             <div class="row">
                 <div class="col-xs-12">
@@ -31,39 +42,37 @@
 
                         <div class="widget-body">
                             <div class="widget-main">
-                                <div class="row">
-                                    <div class="col-xs-12 col-sm-8">
-                                        <div class="input-group">
-																	<span class="input-group-addon">
-																		<i class="ace-icon fa fa-check"></i>
-																	</span>
-
-                                            <input type="text" id="searchSku" name="searchSku" class="form-control search-query"
+                                <table width="100%">
+                                    <tr>
+                                        <td>
+                                            <select name="searchCategory" id="searchCategory"
+                                                    class="ui fluid search dropdown form-control">
+                                                <option value="">---选择类目---</option>
+                                                <c:forEach items="${categories }" var="item">
+                                                    <option value="${item.cateCode }">${item.cateName }</option>
+                                                </c:forEach>
+                                            </select>
+                                        </td>
+                                        <td><input type="text" id="searchSku" name="searchSku"
+                                                   class="form-control search-query"
                                                    placeholder="请输入关键字"/>
-																	<span class="input-group-btn">
+                                        </td>
+                                        <td>
+                                            <span class="input-group-btn">
 																		<button type="button" id="btn_search"
                                                                                 class="btn btn-purple btn-sm">
                                                                             <span class="ace-icon fa fa-search icon-on-right bigger-110"></span>
                                                                             搜索
                                                                         </button>
 																	</span>
-                                        </div>
-                                    </div>
-                                </div>
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-xs-12">
-                    <div class="row-fluid" style="margin-bottom: 5px;">
-                        <div class="span12 control-group">
-                            <jc:button className="btn btn-success" id="btn-up" textName="上架"/>
-                            <jc:button className="btn btn-danger" id="btn-down" textName="下架"/>
-                            <jc:button className="btn btn-primary" id="btn-add" textName="添加"/>
-                            <jc:button className="btn btn-info" id="btn-edit" textName="编辑"/>
-                            <jc:button className="btn" id="btn-delete" textName="删除"/>
-                        </div>
-                    </div>
                     <!-- PAGE CONTENT BEGINS -->
                     <table id="grid-table"></table>
 
@@ -97,19 +106,17 @@
         });
 
         $("#grid-table").jqGrid({
-            url: '${context_path}/mall/sku/getListData',
+            url: '${context_path}/mall/sku/getListDataExt',
             mtype: "GET",
             datatype: "json",
             colModel: [
                 {index: 'id', name: 'id', key: true, hidden: true, width: 75},
-                {label: '名称', name: 'skuName', key: true, width: 75},
-                {label: '编码', name: 'sku', width: 150},
-                {label: '规格', name: 'specName', width: 150},
-                {label: '类目', name: 'category', width: 150},
-                {label: '状态', name: 'status', formatter: fmatterStatus, width: 50}
+                {label: '编码', name: 'sku', width: 75},
+                {label: '名称', name: 'skuName', key: true, width: 150},
+                {label: '价格', name: 'price', width: 50, formatter: formatterPrice, edittype: 'text'}
             ],
             viewrecords: true,
-            height: 280,
+            height: 600,
             rowNum: 10,
             multiselect: true,//checkbox多选
             altRows: true,//隔行变色
@@ -127,71 +134,12 @@
         $("#btn_search").click(function () {
             //此处可以添加对查询数据的合法验证
             var searchSku = $("#searchSku").val();
+            var searchCategory = $("#searchCategory").val();
             $("#grid-table").jqGrid('setGridParam', {
                 datatype: 'json',
-                postData: {'sku': searchSku}, //发送数据
+                postData: {'category': searchCategory, 'sku': searchSku}, //发送数据
                 page: 1
             }).trigger("reloadGrid"); //重新载入
-        });
-        $("#btn-add").click(function () {//添加页面
-            parent.layer.open({
-                title: '新增商品',
-                type: 2,
-                area: ['370px', '430px'],
-                fix: false, //不固定
-                maxmin: true,
-                content: '${context_path}/mall/sku/add'
-            });
-        });
-        $("#btn-up").click(function () {
-            upOrDown(1);
-        });
-        $("#btn-down").click(function () {
-            upOrDown(0);
-        });
-
-        $("#btn-edit").click(function () {//添加页面
-            var rid = getOneSelectedRows();
-            if (rid == -1) {
-                layer.msg("请选择一个商品", {
-                    icon: 2,
-                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
-                });
-            } else if (rid == -2) {
-                layer.msg("只能选择一个商品", {
-                    icon: 2,
-                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
-                });
-            } else {
-                parent.layer.open({
-                    title: '修改商品',
-                    type: 2,
-                    area: ['370px', '430px'],
-                    fix: false, //不固定
-                    maxmin: true,
-                    content: '${context_path}/mall/sku/add?id=' + rid
-                });
-            }
-        });
-        $("#btn-delete").click(function () {
-            var submitData = {
-                "ids": getSelectedRows()
-            };
-            $.post("${context_path}/mall/sku/delete", submitData, function (data) {
-
-                if (data.code == 0) {
-                    layer.msg("操作成功", {
-                        icon: 1,
-                        time: 1000 //1秒关闭（如果不配置，默认是3秒）
-                    }, function () {
-                        //$("#grid-table").trigger("reloadGrid"); //重新载入
-                        reloadGrid();
-                    });
-
-                } else {
-                    layer.alert(data.msg);
-                }
-            }, "json");
         });
     });
     //replace icons with FontAwesome icons like above
@@ -209,21 +157,6 @@
             if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
         })
     }
-    /**获取选中的列***/
-    function getSelectedRows() {
-        var grid = $("#grid-table");
-        var rowKey = grid.getGridParam("selrow");
-        if (!rowKey)
-            return "-1";
-        else {
-            var selectedIDs = grid.getGridParam("selarrrow");
-            var result = "";
-            for (var i = 0; i < selectedIDs.length; i++) {
-                result += selectedIDs[i] + ",";
-            }
-            return result;
-        }
-    }
     function getOneSelectedRows() {
         var grid = $("#grid-table");
         var rowKey = grid.getGridParam("selrow");
@@ -239,34 +172,32 @@
             }
         }
     }
-    function upOrDown(status) {
-        var submitData = {
-            "ids": getSelectedRows(),
-            "status": status
-        };
-        $.post("${context_path}/mall/sku/upOrDown", submitData, function (data) {
+    function formatterPrice(cellvalue, options, rowObject) {
+        var cssName;
+        if (cellvalue == '') {
+            cssName = 'text-null';
+        } else {
+            cssName = 'text-not-null';
+        }
+        return '<input type="text" class="' + cssName + '" value="' + cellvalue + '" onblur="savePriceAsync(this)" id="' + rowObject.sku + '"/>';
+    }
+    function savePriceAsync(obj) {
+        var customer = $('#customer').val();
+        $.post("${context_path}/mall/customer/saveCustomerPrice", {
+            customer: customer,
+            sku: obj.id,
+            price: obj.value
+        }, function (data) {
 
             if (data.code == 0) {
-                layer.msg("操作成功", {
-                    icon: 1,
-                    time: 1000 //1秒关闭（如果不配置，默认是3秒）
-                }, function () {
-                    //$("#grid-table").trigger("reloadGrid"); //重新载入
-                    reloadGrid();
-                });
+                if (obj.value != '') {
+                    $(obj).removeClass('text-null').addClass('text-not-null');
+                } else {
+                    $(obj).removeClass('text-not-null').addClass('text-null');
+                }
 
-            } else {
-                layer.alert(data.msg);
             }
         }, "json");
-    }
-    //格式化状态显示
-    function fmatterStatus(cellvalue, options, rowObject) {
-        if (cellvalue == 0) {
-            return '<span class="label label-sm label-warning">下架</span>';
-        } else {
-            return '<span class="label label-sm label-success">上架</span>';
-        }
     }
     function reloadGrid() {
         $("#grid-table").trigger("reloadGrid"); //重新载入
