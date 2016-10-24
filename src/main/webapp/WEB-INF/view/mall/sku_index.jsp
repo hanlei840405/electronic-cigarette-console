@@ -61,6 +61,7 @@
                             <jc:button className="btn btn-danger" id="btn-down" textName="下架"/>
                             <jc:button className="btn btn-primary" id="btn-add" textName="添加"/>
                             <jc:button className="btn btn-info" id="btn-edit" textName="编辑"/>
+                            <jc:button className="btn btn-warning" id="btn-setting" textName="价格设置"/>
                             <jc:button className="btn" id="btn-delete" textName="删除"/>
                         </div>
                     </div>
@@ -142,6 +143,29 @@
                 maxmin: true,
                 content: '${context_path}/mall/sku/add'
             });
+        });
+        $("#btn-setting").click(function () {
+            var rid = getOneSelectedRows();
+            if (rid == -1) {
+                layer.msg("请选择一个商品", {
+                    icon: 2,
+                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                });
+            } else if (rid == -2) {
+                layer.msg("只能选择一个商品", {
+                    icon: 2,
+                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                });
+            } else {
+                parent.layer.open({
+                    title: '价格设置',
+                    type: 2,
+                    area: ['650px', '350px'],
+                    fix: false, //不固定
+                    maxmin: true,
+                    content: '${context_path}/mall/sku/setting?id=' + rid
+                });
+            }
         });
         $("#btn-up").click(function () {
             upOrDown(1);

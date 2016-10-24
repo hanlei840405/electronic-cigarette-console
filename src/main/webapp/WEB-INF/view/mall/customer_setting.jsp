@@ -179,21 +179,25 @@
         } else {
             cssName = 'text-not-null';
         }
-        return '<input type="text" class="' + cssName + '" value="' + cellvalue + '" onblur="savePriceAsync(this)" id="' + rowObject.sku + '"/>';
+        return '<input type="text" class="' + cssName + '" value="' + cellvalue + ' " old="' + cellvalue + '" onblur="savePriceAsync(this)" id="' + rowObject.sku + '"/>';
     }
     function savePriceAsync(obj) {
+        var text = $(obj);
+        if(text.val() == text.attr('old')) {
+            return false;
+        }
         var customer = $('#customer').val();
         $.post("${context_path}/mall/customer/saveCustomerPrice", {
             customer: customer,
-            sku: obj.id,
-            price: obj.value
+            sku: text.attr('id'),
+            price: text.val()
         }, function (data) {
 
             if (data.code == 0) {
-                if (obj.value != '') {
-                    $(obj).removeClass('text-null').addClass('text-not-null');
+                if (text.val() != '') {
+                    text.removeClass('text-null').addClass('text-not-null');
                 } else {
-                    $(obj).removeClass('text-not-null').addClass('text-null');
+                    text.removeClass('text-not-null').addClass('text-null');
                 }
 
             }
