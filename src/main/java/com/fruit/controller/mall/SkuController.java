@@ -28,9 +28,19 @@ import com.fruit.model.mall.Sku;
 import com.fruit.model.mall.SkuNprice;
 import com.jfinal.kit.JsonKit;
 import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.upload.UploadFile;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
+import java.util.List;
 
 /**
  * sku管理.
@@ -109,8 +119,9 @@ public class SkuController extends BaseController {
         String category = this.getPara("category");
         String specName = this.getPara("specName");
         String attribute = this.getPara("attribute");
+        String image = this.getPara("image");
         if (id == null) {
-            Sku.dao.clear().set("skuName", skuName).set("sku", sku).set("category", category).set("specName", specName).set("attribute", attribute).save();
+            Sku.dao.clear().set("skuName", skuName).set("sku", sku).set("category", category).set("specName", specName).set("attribute", attribute).set("image", image).save();
             if (!"1".equals(attribute)) {
                 SkuNprice.dao.clear().set("sku", sku).set("priceType", "A").save();
                 SkuNprice.dao.clear().set("sku", sku).set("priceType", "B").save();
@@ -126,6 +137,7 @@ public class SkuController extends BaseController {
             values.put("category", category);
             values.put("specName", specName);
             values.put("attribute", attribute);
+            values.put("image", image);
             Sku.dao.update(conditions, values);
         }
         this.renderJson(InvokeResult.success());
@@ -269,6 +281,37 @@ public class SkuController extends BaseController {
         SkuNprice.dao.update(conditions, params);
 
         this.renderJson(InvokeResult.success());
+    }
+
+    @RequiresPermissions(value = {"/mall/sku"})
+    public void uploadImage() throws IOException {
+        UploadFile uploadFile = this.getFile();
+        File file = uploadFile.getFile();
+
+        BufferedImage prevImage = ImageIO.read(file);
+        int newWidth = 268;
+        int newHeight = 249;
+        BufferedImage image = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_BGR);
+        Graphics graphics = image.createGraphics();
+        graphics.drawImage(prevImage, 0, 0, newWidth, newHeight, null);
+
+        Path rootLocation = Paths.get(System.getProperties().getProperty("user.home"), "/upload/public/");
+
+
+        File folder = new File(rootLocation.toUri());
+        if (!folder.exists() && !folder.isDirectory()) {
+            folder.mkdir();
+        }
+        if (Files.exists(rootLocation.resolve(uploadFile.getOriginalFileName()))) {
+            Files.delete(rootLocation.resolve(uploadFile.getOriginalFileName()));
+        }
+        File dist = new File(rootLocation.resolve(uploadFile.getOriginalFileName()).toString());
+        ImageIO.write(image, "jpg", dist);
+        file.delete();
+
+        Map<String, Object> result = new HashMap<String, Object>();
+        result.put("name", uploadFile.getOriginalFileName());
+        renderJson(result);
     }
 }
 

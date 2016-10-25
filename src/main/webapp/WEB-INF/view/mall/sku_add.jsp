@@ -9,6 +9,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <jsp:include page="/WEB-INF/view/common/basecss.jsp" flush="true"/>
     <link rel="stylesheet" href="${res_url}js/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="${res_url}uploadify/uploadify.css">
+    <style type="text/css">
+        .uploadify-button{
+            background-color: white;
+        }
+        .uploadify:hover .uploadify-button{
+            background-color: white;
+        }
+    </style>
 </head>
 
 <body class="no-skin">
@@ -26,9 +35,10 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <!-- PAGE CONTENT BEGINS -->
-                        <form class="form-horizontal" id="validation-form" method="post">
+                        <form class="form-horizontal" id="validation-form" method="post"  enctype="multipart/form-data">
                             <div class="form-group">
                                 <input name="id" type="hidden" value="${sku.id}"/>
+                                <input id="image" name="image" type="hidden" value="${sku.image}"/>
                                 <label class="control-label col-xs-2 col-sm-2 no-padding-right"
                                        for="displayName">类目</label>
 
@@ -81,6 +91,17 @@
                             </div>
                             <div class="form-group">
                                 <label class="control-label col-xs-2 col-sm-12 no-padding-right"
+                                       for="file_upload">图片</label>
+
+                                <div class="col-xs-10 col-sm-12">
+                                    <div class="clearfix">
+                                        <input type="text" name="file_upload" id="file_upload" value="${sku.sku}"
+                                               class="col-xs-12 col-sm-12">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-xs-2 col-sm-12 no-padding-right"
                                        for="attribute">赠品</label>
 
                                 <div class="col-xs-10 col-sm-12">
@@ -113,10 +134,34 @@
 <!-- basic scripts -->
 <jsp:include page="/WEB-INF/view/common/basejs.jsp" flush="true"/>
 <script src="${res_url}js/ztree/js/jquery.ztree.core-3.5.min.js"></script>
+<script src="${res_url}uploadify/jquery.uploadify.min.js" type="text/javascript"></script>
 <script type="text/javascript">
     $(document).ready(function () {
         initformSubmitEvent();
         $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+        $('#file_upload').uploadify({
+            //校验数据
+            'swf' : '${res_url}uploadify/uploadify.swf', //指定上传控件的主体文件，默认‘uploader.swf’
+            'uploader' : '${context_path}/mall/sku/uploadImage', //指定服务器端上传处理文件，默认‘upload.php’
+            'auto' : true, //手动上传
+            'buttonImage' : '${res_url}uploadify/uploadify-upload.png', //浏览按钮背景图片
+            'width' :110,
+            'height' :30,
+            'cancelImg': '${res_url}uploadify/uploadify-cancel.png',
+            //'buttonText': '选 择应用',
+            'multi' : false, //单文件上传
+            'fileTypeExts' : '*.jpg', //允许上传的文件后缀
+            'fileSizeLimit' : '50MB', //上传文件的大小限制，单位为B, KB, MB, 或 GB
+            'successTimeout' : 30, //成功等待时间
+            'onUploadSuccess' : function(file, data,response) {//每成功完成一次文件上传时触发一次
+                data=eval("["+data+"]")[0];
+                $("#image").val(data.name);
+                alert('上传成功');
+            },
+            'onUploadError' : function(file, data, response) {//当上传返回错误时触发
+                alert('上传失败');
+            }
+        });
     });
 
     var setting = {
