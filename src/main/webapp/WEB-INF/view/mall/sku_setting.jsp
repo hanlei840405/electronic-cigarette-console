@@ -69,22 +69,22 @@
                                         类型A
                                     </td>
                                     <td>
-                                        <input type="text" name="numA1" value="${numA1}" style="width: 100%">
+                                        <input type="text" name="numA1" class="required" value="${numA1}" style="width: 100%">
                                     </td>
                                     <td>
-                                        <input type="text" name="priceA1" value="${priceA1}" style="width: 100%">
+                                        <input type="text" name="priceA1" class="required" value="${priceA1}" style="width: 100%">
                                     </td>
                                     <td>
-                                        <input type="text" name="numA2" value="${numA2}" style="width: 100%">
+                                        <input type="text" name="numA2" class="not-required" value="${numA2}" style="width: 100%">
                                     </td>
                                     <td>
-                                        <input type="text" name="priceA2" value="${priceA2}" style="width: 100%">
+                                        <input type="text" name="priceA2" class="not-required" value="${priceA2}" style="width: 100%">
                                     </td>
                                     <td>
-                                        <input type="text" name="numA3" value="${numA3}" style="width: 100%">
+                                        <input type="text" name="numA3" class="not-required" value="${numA3}" style="width: 100%">
                                     </td>
                                     <td>
-                                        <input type="text" name="priceA3" value="${priceA3}" style="width: 100%">
+                                        <input type="text" name="priceA3" class="not-required" value="${priceA3}" style="width: 100%">
                                     </td>
                                 </tr>
                                 <tr>
@@ -92,22 +92,22 @@
                                         类型B
                                     </td>
                                     <td>
-                                        <input type="text" name="numB1" value="${numB1}" style="width: 100%">
+                                        <input type="text" name="numB1" class="required" value="${numB1}" style="width: 100%">
                                     </td>
                                     <td>
-                                        <input type="text" name="priceB1" value="${priceB1}" style="width: 100%">
+                                        <input type="text" name="priceB1" class="required" value="${priceB1}" style="width: 100%">
                                     </td>
                                     <td>
-                                        <input type="text" name="numB2" value="${numB2}" style="width: 100%">
+                                        <input type="text" name="numB2" class="not-required" value="${numB2}" style="width: 100%">
                                     </td>
                                     <td>
-                                        <input type="text" name="priceB2" value="${priceB2}" style="width: 100%">
+                                        <input type="text" name="priceB2" class="not-required" value="${priceB2}" style="width: 100%">
                                     </td>
                                     <td>
-                                        <input type="text" name="numB3" value="${numB3}" style="width: 100%">
+                                        <input type="text" name="numB3" class="not-required" value="${numB3}" style="width: 100%">
                                     </td>
                                     <td>
-                                        <input type="text" name="priceB3" value="${priceB3}" style="width: 100%">
+                                        <input type="text" name="priceB3" class="not-required" value="${priceB3}" style="width: 100%">
                                     </td>
                                 </tr>
                                 <tr>
@@ -115,22 +115,22 @@
                                         类型C
                                     </td>
                                     <td>
-                                        <input type="text" name="numC1" value="${numC1}" style="width: 100%">
+                                        <input type="text" name="numC1" class="required" value="${numC1}" style="width: 100%">
                                     </td>
                                     <td>
-                                        <input type="text" name="priceC1" value="${priceC1}" style="width: 100%">
+                                        <input type="text" name="priceC1" class="required" value="${priceC1}" style="width: 100%">
                                     </td>
                                     <td>
-                                        <input type="text" name="numC2" value="${numC2}" style="width: 100%">
+                                        <input type="text" name="numC2" class="not-required" value="${numC2}" style="width: 100%">
                                     </td>
                                     <td>
-                                        <input type="text" name="priceC2" value="${priceC2}" style="width: 100%">
+                                        <input type="text" name="priceC2" class="not-required" value="${priceC2}" style="width: 100%">
                                     </td>
                                     <td>
-                                        <input type="text" name="numC3" value="${numC3}" style="width: 100%">
+                                        <input type="text" name="numC3" class="not-required" value="${numC3}" style="width: 100%">
                                     </td>
                                     <td>
-                                        <input type="text" name="priceC3" value="${priceC3}" style="width: 100%">
+                                        <input type="text" name="priceC3" class="not-required" value="${priceC3}" style="width: 100%">
                                     </td>
                                 </tr>
                                 <tr>
@@ -138,22 +138,22 @@
                                         类型D
                                     </td>
                                     <td>
-                                        <input type="text" name="numD1" value="${numD1}" style="width: 100%">
+                                        <input type="text" name="numD1" class="required" value="${numD1}" style="width: 100%">
                                     </td>
                                     <td>
-                                        <input type="text" name="priceD1" value="${priceD1}" style="width: 100%">
+                                        <input type="text" name="priceD1" class="required" value="${priceD1}" style="width: 100%">
                                     </td>
                                     <td>
-                                        <input type="text" name="numD2" value="${numD2}" style="width: 100%">
+                                        <input type="text" name="numD2" class="not-required" value="${numD2}" style="width: 100%">
                                     </td>
                                     <td>
-                                        <input type="text" name="priceD2" value="${priceD2}" style="width: 100%">
+                                        <input type="text" name="priceD2" class="not-required" value="${priceD2}" style="width: 100%">
                                     </td>
                                     <td>
-                                        <input type="text" name="numD3" value="${numD3}" style="width: 100%">
+                                        <input type="text" name="numD3" class="not-required" value="${numD3}" style="width: 100%">
                                     </td>
                                     <td>
-                                        <input type="text" name="priceD3" value="${priceD3}" style="width: 100%">
+                                        <input type="text" name="priceD3" class="not-required" value="${priceD3}" style="width: 100%">
                                     </td>
                                 </tr>
                                 </tbody>
@@ -183,56 +183,70 @@
 <script src="${res_url}js/ztree/js/jquery.ztree.core-3.5.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#validation-form').find('input').each(function (index) {
+        $('.required').each(function (index) {
             var me = $(this);
             if ($.trim(me.val()) == '') {
                 me.removeClass().addClass('text-null');
             } else {
                 me.removeClass().addClass('text-not-null');
             }
+            me.addClass('required');
             me.on('blur', function () {
                 if ($.trim(me.val()) == '') {
                     me.removeClass().addClass('text-null');
                 } else {
                     me.removeClass().addClass('text-not-null');
                 }
+                me.addClass('required');
             });
         });
 
         var $btn = $("#submit-btn");
         $btn.on('click', function () {
+            var me = $(this);
+            if (me.hasClass("disabled")) return;
+
             var valid = true;
-            $('#validation-form').find('input').each(function (index) {
-                var me = $(this);
-                if ($.trim(me.val()) == '') {
+            $('.required').each(function (index) {
+                if ($.trim($(this).val()) == '') {
                     valid = false;
                     return;
                 }
             });
             if(!valid) {
-                alert("数量或价格不可为空!");
+                layer.alert("数量1或价格1不可为空!");
                 return;
             }
-            var me = $(this);
-            if (me.hasClass("disabled")) return;
 
-            me.addClass("disabled");
-            var postData = $('#validation-form').serializeJson();
-            $.post("${context_path}/mall/sku/saveSkuPrice", postData, function (data) {
-                if (data.code == 0) {
-                    layer.msg('操作成功', {
-                        icon: 1,
-                        time: 2000 //2秒关闭（如果不配置，默认是3秒）
-                    }, function () {
-                        parent.reloadGrid();
-                        var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-                        parent.layer.close(index); //再执行关闭
-                    });
+            $('.not-required').each(function (index) {
+                if ($.trim($(this).val()) == '') {
+                    valid = false;
+                    return;
                 }
-                $("#submit-btn").removeClass("disabled");
-            }, "json");
+            });
+            if(!valid) {
+                layer.confirm("其他未设置数据量或价格的，系统将自动设置为与数量1和价格1一致",function(index){
+                    layer.close(index);
+                    me.addClass("disabled");
+                    var postData = $('#validation-form').serializeJson();
+                    $.post("${context_path}/mall/sku/saveSkuPrice", postData, function (data) {
+                        if (data.code == 0) {
+                            layer.msg('操作成功', {
+                                icon: 1,
+                                time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                            }, function () {
+                                parent.reloadGrid();
+                                var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                                parent.layer.close(index); //再执行关闭
+                            });
+                        }
+                        $("#submit-btn").removeClass("disabled");
+                    }, "json");
+                });
+                return;
+            }
             return false;
-        })
+        });
 
     });
 </script>

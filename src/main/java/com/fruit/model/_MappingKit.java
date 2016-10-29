@@ -1,5 +1,9 @@
 package com.fruit.model;
 
+import com.fruit.model.stock.SkStock;
+import com.fruit.model.stock.SkStockLog;
+import com.fruit.model.stock.SkuInbound;
+import com.fruit.model.stock.SkuInboundDe;
 import com.fruit.model.mall.*;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 
@@ -36,6 +40,10 @@ public class _MappingKit {
         arp.addMapping("mall_customer_shop", "id", CustomerShop.class);
         arp.addMapping("mall_sku_nprice", "id", SkuNprice.class);
         arp.addMapping("mall_sku_sprice", "id", SkuSprice.class);
+        arp.addMapping("sku_inbound", "inboundID", SkuInbound.class);
+        arp.addMapping("sku_inbound_de", "id", SkuInboundDe.class);
+        arp.addMapping("sk_stock", "sku", SkStock.class);
+        arp.addMapping("sk_stock_log", "id", SkStockLog.class);
     }
 }
 

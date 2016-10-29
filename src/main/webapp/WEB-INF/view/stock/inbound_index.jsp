@@ -38,8 +38,9 @@
 																		<i class="ace-icon fa fa-check"></i>
 																	</span>
 
-                                            <input type="text" id="searchSku" name="searchSku" class="form-control search-query"
-                                                   placeholder="请输入关键字"/>
+                                            <input type="text" id="searchExecutor" name="searchExecutor"
+                                                   class="form-control search-query"
+                                                   placeholder="请输入操作人"/>
 																	<span class="input-group-btn">
 																		<button type="button" id="btn_search"
                                                                                 class="btn btn-purple btn-sm">
@@ -57,12 +58,10 @@
                 <div class="col-xs-12">
                     <div class="row-fluid" style="margin-bottom: 5px;">
                         <div class="span12 control-group">
-                            <jc:button className="btn btn-success" id="btn-up" textName="上架"/>
-                            <jc:button className="btn btn-danger" id="btn-down" textName="下架"/>
-                            <jc:button className="btn btn-primary" id="btn-add" textName="添加"/>
-                            <jc:button className="btn btn-info" id="btn-edit" textName="编辑"/>
-                            <jc:button className="btn btn-warning" id="btn-setting" textName="价格设置"/>
-                            <jc:button className="btn" id="btn-delete" textName="删除"/>
+                            <jc:button className="btn btn-success" id="btn-add" textName="入库"/>
+                            <jc:button className="btn btn-warning" id="btn-edit" textName="编辑"/>
+                            <jc:button className="btn btn-primary" id="btn-view" textName="查看"/>
+                            <jc:button className="btn btn-danger" id="btn-delete" textName="删除"/>
                         </div>
                     </div>
                     <!-- PAGE CONTENT BEGINS -->
@@ -98,18 +97,20 @@
         });
 
         $("#grid-table").jqGrid({
-            url: '${context_path}/mall/sku/getListData',
+            url: '${context_path}/stock/inbound/getListData',
             mtype: "GET",
             datatype: "json",
             colModel: [
-                {index: 'id', name: 'id', key: true, hidden: true, width: 75},
-                {label: '名称', name: 'skuName', width: 75},
-                {label: '编码', name: 'sku', width: 150},
-                {label: '规格', name: 'specName', width: 150},
-                {label: '类目', name: 'category', width: 150},
-                {label: '状态', name: 'status', formatter: fmatterStatus, width: 50}
+                {label: '入库编号', name: 'inboundID', key: true, width: 75},
+                {label: '操作人', name: 'executor', width: 150},
+                {
+                    label: '入库时间',
+                    name: 'extime',
+                    width: 150,
+                    formatter: "date",
+                    formatoptions: {srcformat: "ISO8601Long", newformat: "Y-m-d"}
+                }
             ],
-            viewrecords: true,
             height: 280,
             rowNum: 10,
             multiselect: true,//checkbox多选
@@ -127,51 +128,22 @@
         $(window).triggerHandler('resize.jqGrid');
         $("#btn_search").click(function () {
             //此处可以添加对查询数据的合法验证
-            var searchSku = $("#searchSku").val();
+            var searchExecutor = $("#searchExecutor").val();
             $("#grid-table").jqGrid('setGridParam', {
                 datatype: 'json',
-                postData: {'sku': searchSku}, //发送数据
+                postData: {'searchExecutor': searchExecutor}, //发送数据
                 page: 1
             }).trigger("reloadGrid"); //重新载入
         });
         $("#btn-add").click(function () {//添加页面
             parent.layer.open({
-                title: '新增商品',
+                title: '新增入库单',
                 type: 2,
-                area: ['370px', '430px'],
+                area: ['600px', '500px'],
                 fix: false, //不固定
                 maxmin: true,
-                content: '${context_path}/mall/sku/add'
+                content: '${context_path}/stock/inbound/add'
             });
-        });
-        $("#btn-setting").click(function () {
-            var rid = getOneSelectedRows();
-            if (rid == -1) {
-                layer.msg("请选择一个商品", {
-                    icon: 2,
-                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
-                });
-            } else if (rid == -2) {
-                layer.msg("只能选择一个商品", {
-                    icon: 2,
-                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
-                });
-            } else {
-                parent.layer.open({
-                    title: '价格设置',
-                    type: 2,
-                    area: ['650px', '350px'],
-                    fix: false, //不固定
-                    maxmin: true,
-                    content: '${context_path}/mall/sku/setting?id=' + rid
-                });
-            }
-        });
-        $("#btn-up").click(function () {
-            upOrDown(1);
-        });
-        $("#btn-down").click(function () {
-            upOrDown(0);
         });
 
         $("#btn-edit").click(function () {//添加页面
@@ -188,20 +160,45 @@
                 });
             } else {
                 parent.layer.open({
-                    title: '修改商品',
+                    title: '修改入库单',
                     type: 2,
-                    area: ['370px', '430px'],
+                    area: ['600px', '500px'],
                     fix: false, //不固定
                     maxmin: true,
-                    content: '${context_path}/mall/sku/add?id=' + rid
+                    content: '${context_path}/stock/inbound/add?inboundID=' + rid
                 });
             }
         });
+
+        $("#btn-view").click(function () {//添加页面
+            var rid = getOneSelectedRows();
+            if (rid == -1) {
+                layer.msg("请选择一个商品", {
+                    icon: 2,
+                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                });
+            } else if (rid == -2) {
+                layer.msg("只能选择一个商品", {
+                    icon: 2,
+                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                });
+            } else {
+                parent.layer.open({
+                    title: '查看明细',
+                    type: 2,
+                    area: ['600px', '500px'],
+                    fix: false, //不固定
+                    maxmin: true,
+                    content: '${context_path}/stock/inbound/view?inboundID=' + rid
+                });
+            }
+        });
+
         $("#btn-delete").click(function () {
             var submitData = {
                 "ids": getSelectedRows()
             };
-            $.post("${context_path}/mall/sku/delete", submitData, function (data) {
+            $.post("${context_path}/stock/inbound/delete", submitData, function (data) {
 
                 if (data.code == 0) {
                     layer.msg("操作成功", {
@@ -261,35 +258,6 @@
             } else {
                 return "-2";
             }
-        }
-    }
-    function upOrDown(status) {
-        var submitData = {
-            "ids": getSelectedRows(),
-            "status": status
-        };
-        $.post("${context_path}/mall/sku/upOrDown", submitData, function (data) {
-
-            if (data.code == 0) {
-                layer.msg("操作成功", {
-                    icon: 1,
-                    time: 1000 //1秒关闭（如果不配置，默认是3秒）
-                }, function () {
-                    //$("#grid-table").trigger("reloadGrid"); //重新载入
-                    reloadGrid();
-                });
-
-            } else {
-                layer.alert(data.msg);
-            }
-        }, "json");
-    }
-    //格式化状态显示
-    function fmatterStatus(cellvalue, options, rowObject) {
-        if (cellvalue == 0) {
-            return '<span class="label label-sm label-warning">下架</span>';
-        } else {
-            return '<span class="label label-sm label-success">上架</span>';
         }
     }
     function reloadGrid() {

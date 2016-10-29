@@ -9,44 +9,44 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings("serial")
 public abstract class BaseMallSkuSprice<M extends BaseMallSkuSprice<M>> extends BaseModel<M> implements IBean {
 
-	public void setId(Long id) {
-		set("id", id);
-	}
+    public void setId(Long id) {
+        set("id", id);
+    }
 
-	public Long getId() {
-		return get("id");
-	}
+    public Long getId() {
+        return get("id");
+    }
 
-	public void setSku(String sku) {
-		set("sku", sku);
-	}
+    public void setSku(String sku) {
+        set("sku", sku);
+    }
 
-	public String getSku() {
-		return get("sku");
-	}
+    public String getSku() {
+        return get("sku");
+    }
 
-	public void setCustomer(String customer) {
-		set("customer", customer);
-	}
+    public void setCustomer(String customer) {
+        set("customer", customer);
+    }
 
-	public String getCustomer() {
-		return get("customer");
-	}
+    public String getCustomer() {
+        return get("customer");
+    }
 
-	public void setFristbuy(Integer fristbuy) {
-		set("fristbuy", fristbuy);
-	}
+    public void setFirstbuy(String firstbuy) {
+        set("firstbuy", firstbuy);
+    }
 
-	public Integer getFristbuy() {
-		return get("fristbuy");
-	}
+    public String getFirstbuy() {
+        return get("firstbuy");
+    }
 
-	public void setPrice(java.math.BigDecimal price) {
-		set("price", price);
-	}
+    public void setPrice(java.math.BigDecimal price) {
+        set("price", price);
+    }
 
-	public java.math.BigDecimal getPrice() {
-		return get("price");
-	}
+    public java.math.BigDecimal getPrice() {
+        return get("price");
+    }
 
 }

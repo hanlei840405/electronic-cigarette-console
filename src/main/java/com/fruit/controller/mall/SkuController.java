@@ -62,6 +62,21 @@ public class SkuController extends BaseController {
     }
 
     @RequiresPermissions(value = {"/mall/sku"})
+    public void get() {
+        String sku = this.getPara("sku");
+        Sku entity = Sku.dao.findFirst("SELECT * FROM mall_sku WHERE sku=?", sku);
+        Map<String,Object> result = new HashMap<String, Object>();
+        if (entity != null) {
+            result.put("code", "200");
+            result.put("sku", entity);
+        }else {
+            result.put("code", "500");
+            result.put("msg", "商品不存在");
+        }
+        this.renderJson(result);
+    }
+
+    @RequiresPermissions(value = {"/mall/sku"})
     public void getListDataExt() {
         String category = this.getPara("category");
         String sku = this.getPara("sku");
@@ -212,29 +227,106 @@ public class SkuController extends BaseController {
         String sku = this.getPara("sku");
         Integer numA1 = this.getParaToInt("numA1");
         Integer numA2 = this.getParaToInt("numA2");
+        numA2 = numA2 == null ? numA1 : numA2;
         Integer numA3 = this.getParaToInt("numA3");
+        numA3 = numA3 == null ? numA1 : numA3;
         Integer numB1 = this.getParaToInt("numB1");
         Integer numB2 = this.getParaToInt("numB2");
+        numB2 = numB2 == null ? numB1 : numB2;
         Integer numB3 = this.getParaToInt("numB3");
+        numB3 = numB3 == null ? numB1 : numB3;
         Integer numC1 = this.getParaToInt("numC1");
         Integer numC2 = this.getParaToInt("numC2");
+        numC2 = numC2 == null ? numC1 : numC2;
         Integer numC3 = this.getParaToInt("numC3");
+        numC3 = numC3 == null ? numC1 : numC3;
         Integer numD1 = this.getParaToInt("numD1");
         Integer numD2 = this.getParaToInt("numD2");
+        numD2 = numD2 == null ? numC1 : numD2;
         Integer numD3 = this.getParaToInt("numD3");
+        numD3 = numD3 == null ? numC1 : numD3;
+        double tempPriceA1 = Double.parseDouble(this.getPara("priceA1"));
+        double tempPriceB1 = Double.parseDouble(this.getPara("priceB1"));
+        double tempPriceC1 = Double.parseDouble(this.getPara("priceC1"));
+        double tempPriceD1 = Double.parseDouble(this.getPara("priceD1"));
+        double tempPriceA2;
+        double tempPriceB2;
+        double tempPriceC2;
+        double tempPriceD2;
+        double tempPriceA3;
+        double tempPriceB3;
+        double tempPriceC3;
+        double tempPriceD3;
+        String valueA2 = this.getPara("priceA2");
+        String valueA3 = this.getPara("priceA3");
+        String valueB2 = this.getPara("priceB2");
+        String valueB3 = this.getPara("priceB3");
+        String valueC2 = this.getPara("priceC2");
+        String valueC3 = this.getPara("priceC3");
+        String valueD2 = this.getPara("priceD2");
+        String valueD3 = this.getPara("priceD3");
 
-        BigDecimal priceA1 = BigDecimal.valueOf(Double.parseDouble(this.getPara("priceA1")));
-        BigDecimal priceA2 = BigDecimal.valueOf(Double.parseDouble(this.getPara("priceA2")));
-        BigDecimal priceA3 = BigDecimal.valueOf(Double.parseDouble(this.getPara("priceA3")));
-        BigDecimal priceB1 = BigDecimal.valueOf(Double.parseDouble(this.getPara("priceB1")));
-        BigDecimal priceB2 = BigDecimal.valueOf(Double.parseDouble(this.getPara("priceB2")));
-        BigDecimal priceB3 = BigDecimal.valueOf(Double.parseDouble(this.getPara("priceB3")));
-        BigDecimal priceC1 = BigDecimal.valueOf(Double.parseDouble(this.getPara("priceC1")));
-        BigDecimal priceC2 = BigDecimal.valueOf(Double.parseDouble(this.getPara("priceC2")));
-        BigDecimal priceC3 = BigDecimal.valueOf(Double.parseDouble(this.getPara("priceC3")));
-        BigDecimal priceD1 = BigDecimal.valueOf(Double.parseDouble(this.getPara("priceD1")));
-        BigDecimal priceD2 = BigDecimal.valueOf(Double.parseDouble(this.getPara("priceD2")));
-        BigDecimal priceD3 = BigDecimal.valueOf(Double.parseDouble(this.getPara("priceD3")));
+        if (StringUtils.isEmpty(valueA2)) {
+            tempPriceA2 = tempPriceA1;
+        } else {
+            tempPriceA2 = Double.parseDouble(this.getPara("priceA2"));
+        }
+
+        if (StringUtils.isEmpty(valueA3)) {
+            tempPriceA3 = tempPriceA1;
+        } else {
+            tempPriceA3 = Double.parseDouble(this.getPara("priceA3"));
+        }
+
+        if (StringUtils.isEmpty(valueB2)) {
+            tempPriceB2 = tempPriceB1;
+        } else {
+            tempPriceB2 = Double.parseDouble(this.getPara("priceB2"));
+        }
+
+        if (StringUtils.isEmpty(valueB3)) {
+            tempPriceB3 = tempPriceB1;
+        } else {
+            tempPriceB3 = Double.parseDouble(this.getPara("priceB3"));
+        }
+
+        if (StringUtils.isEmpty(valueC2)) {
+            tempPriceC2 = tempPriceC1;
+        } else {
+            tempPriceC2 = Double.parseDouble(this.getPara("priceC2"));
+        }
+
+        if (StringUtils.isEmpty(valueC3)) {
+            tempPriceC3 = tempPriceC1;
+        } else {
+            tempPriceC3 = Double.parseDouble(this.getPara("priceC3"));
+        }
+
+        if (StringUtils.isEmpty(valueD2)) {
+            tempPriceD2 = tempPriceD1;
+        } else {
+            tempPriceD2 = Double.parseDouble(this.getPara("priceD2"));
+        }
+
+        if (StringUtils.isEmpty(valueD3)) {
+            tempPriceD3 = tempPriceA1;
+        } else {
+            tempPriceD3 = Double.parseDouble(this.getPara("priceD3"));
+        }
+
+        BigDecimal priceA1 = BigDecimal.valueOf(tempPriceA1);
+        BigDecimal priceA2 = BigDecimal.valueOf(tempPriceA2);
+        BigDecimal priceA3 = BigDecimal.valueOf(tempPriceA3);
+        BigDecimal priceB1 = BigDecimal.valueOf(tempPriceB1);
+        BigDecimal priceB2 = BigDecimal.valueOf(tempPriceB2);
+        BigDecimal priceB3 = BigDecimal.valueOf(tempPriceB3);
+        BigDecimal priceC1 = BigDecimal.valueOf(tempPriceC1);
+        BigDecimal priceC2 = BigDecimal.valueOf(tempPriceC2);
+        BigDecimal priceC3 = BigDecimal.valueOf(tempPriceC3);
+        BigDecimal priceD1 = BigDecimal.valueOf(tempPriceD1);
+        BigDecimal priceD2 = BigDecimal.valueOf(tempPriceD2);
+        BigDecimal priceD3 = BigDecimal.valueOf(tempPriceD3);
+
         Set<Condition> conditions = new HashSet<Condition>();
         conditions.add(new Condition("sku", Operators.EQ, sku));
         conditions.add(new Condition("priceType", Operators.EQ, "A"));
