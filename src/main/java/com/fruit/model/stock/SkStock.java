@@ -29,4 +29,8 @@ public class SkStock extends BaseSkStock<SkStock> {
     public void subtract(String sku, long quantity) {
         add(sku, 0 - quantity);
     }
+
+    public SkStock findBySku(String sku) {
+        return findFirst("SELECT * FROM sk_stock WHERE sku=?", sku);
+    }
 }

@@ -28,7 +28,8 @@
         } catch (e) {
         }
     </script>
-    <input type="hidden" id="inboundID" value="${inboundID}"/>
+    <input type="hidden" id="outboundID" value="${outboundID}"/>
+
     <div class="main-container-inner">
         <div class="main-content" style="margin-left: 0px;">
             <div class="page-content" id="page-content">
@@ -50,7 +51,7 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        var inboundID = $('#inboundID').val();
+        var outboundID = $('#outboundID').val();
         var grid_selector = "#grid-table";
         var pager_selector = "#grid-pager";
         //resize to fit page size
@@ -69,17 +70,15 @@
         });
 
         $("#grid-table").jqGrid({
-            url: '${context_path}/stock/inbound/getDetailData?inboundID=' + inboundID,
+            url: '${context_path}/stock/outbound/getDetailData?outboundID=' + outboundID,
             mtype: "GET",
             datatype: "json",
             colModel: [
                 {label: '商品', name: 'skuName', width: 150, sortable: false},
                 {label: '编号', name: 'sku', width: 80, sortable: false},
                 {label: '规格', name: 'specName', width: 150, sortable: false},
-                {label: '入库数量', name: 'quantity', width: 80, sortable: false},
-                {label: '初始总成本', name: 'historicalCost', width: 120, sortable: false},
-                {label: '剩余总成本', name: 'cost', width: 120, sortable: false},
-                {label: '剩余数量', name: 'leftQty', width: 80, sortable: false}
+                {label: '出库数量', name: 'quantity', width: 80, sortable: false},
+                {label: '成本', name: 'allcost', width: 80, sortable: false}
             ],
             height: 280,
             rowNum: 10,

@@ -18,10 +18,13 @@ package com.fruit.conf;
 import com.fruit.controller.ImageController;
 import com.fruit.controller.IndexController;
 import com.fruit.controller.app.AppVersionController;
-import com.fruit.controller.stock.InboundController;
 import com.fruit.controller.mall.CategoryController;
 import com.fruit.controller.mall.CustomerController;
+import com.fruit.controller.mall.OrderController;
 import com.fruit.controller.mall.SkuController;
+import com.fruit.controller.stock.InboundController;
+import com.fruit.controller.stock.OutboundController;
+import com.fruit.controller.stock.StockController;
 import com.fruit.controller.sys.*;
 import com.jfinal.config.Routes;
 
@@ -46,7 +49,9 @@ public class AdminRoutes extends Routes {
         add("/mall/sku", SkuController.class, "/WEB-INF/view/mall");
         add("/mall/customer", CustomerController.class, "/WEB-INF/view/mall");
         add("/stock/inbound", InboundController.class, "/WEB-INF/view/stock");
-
+        add("/stock/outbound", OutboundController.class, "/WEB-INF/view/stock");
+        add("/stock/stock", StockController.class, "/WEB-INF/view/stock");
+        add("/mall/order", OrderController.class, "/WEB-INF/view/mall");
     }
 
 }

@@ -9,92 +9,100 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings("serial")
 public abstract class BaseSysUser<M extends BaseSysUser<M>> extends BaseModel<M> implements IBean {
 
-	public void setId(Integer id) {
-		set("id", id);
-	}
+    public void setId(Integer id) {
+        set("id", id);
+    }
 
-	public Integer getId() {
-		return get("id");
-	}
+    public Integer getId() {
+        return get("id");
+    }
 
-	public void setName(String name) {
-		set("name", name);
-	}
+    public void setName(String name) {
+        set("name", name);
+    }
 
-	public String getName() {
-		return get("name");
-	}
+    public String getName() {
+        return get("name");
+    }
 
-	public void setPwd(String pwd) {
-		set("pwd", pwd);
-	}
+    public void setPwd(String pwd) {
+        set("pwd", pwd);
+    }
 
-	public String getPwd() {
-		return get("pwd");
-	}
+    public String getPwd() {
+        return get("pwd");
+    }
 
-	public void setDes(String des) {
-		set("des", des);
-	}
+    public void setDes(String des) {
+        set("des", des);
+    }
 
-	public String getDes() {
-		return get("des");
-	}
+    public String getDes() {
+        return get("des");
+    }
 
-	public void setStatus(Integer status) {
-		set("status", status);
-	}
+    public void setStatus(Integer status) {
+        set("status", status);
+    }
 
-	public Integer getStatus() {
-		return get("status");
-	}
+    public Integer getStatus() {
+        return get("status");
+    }
 
-	public void setIcon(String icon) {
-		set("icon", icon);
-	}
+    public void setIcon(String icon) {
+        set("icon", icon);
+    }
 
-	public String getIcon() {
-		return get("icon");
-	}
+    public String getIcon() {
+        return get("icon");
+    }
 
-	public void setEmail(String email) {
-		set("email", email);
-	}
+    public void setEmail(String email) {
+        set("email", email);
+    }
 
-	public String getEmail() {
-		return get("email");
-	}
+    public String getEmail() {
+        return get("email");
+    }
 
-	public void setCreatedate(java.util.Date createdate) {
-		set("createdate", createdate);
-	}
+    public void setCreatedate(java.util.Date createdate) {
+        set("createdate", createdate);
+    }
 
-	public java.util.Date getCreatedate() {
-		return get("createdate");
-	}
+    public java.util.Date getCreatedate() {
+        return get("createdate");
+    }
 
-	public void setPhone(String phone) {
-		set("phone", phone);
-	}
+    public void setPhone(String phone) {
+        set("phone", phone);
+    }
 
-	public String getPhone() {
-		return get("phone");
-	}
+    public String getPhone() {
+        return get("phone");
+    }
 
-	public void setToken(String token) {
-		set("token", token);
-	}
+    public void setToken(String token) {
+        set("token", token);
+    }
 
-	public String getToken() {
-		return get("token");
-	}
+    public String getToken() {
+        return get("token");
+    }
 
-	public void setWxid(String wxid) {
-		set("wxid", wxid);
-	}
+    public void setWxid(String wxid) {
+        set("wxid", wxid);
+    }
 
-	public String getWxid() {
-		return get("wxid");
-	}
+    public String getWxid() {
+        return get("wxid");
+    }
+
+    public void setRealName(String realName) {
+        set("realName", realName);
+    }
+
+    public String getRealName() {
+        return get("realName");
+    }
 
 }

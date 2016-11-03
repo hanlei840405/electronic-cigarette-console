@@ -38,22 +38,30 @@
                             <div class="widget-body">
                                 <div class="widget-main">
                                     <div class="row">
-                                        <form class="form-inline" role="form" id="saveInbound">
-                                            <input type="hidden" id="inboundID" name="inboundID" value="${inboundID}"/>
+                                        <form class="form-inline" role="form" id="saveOutbound">
+                                            <input type="hidden" id="outboundID" name="outboundID"
+                                                   value="${outboundID}"/>
+
                                             <div class="form-group col-xs-2">
-                                                <input type="text" class="form-control" name="sku" placeholder="商品编号" onblur="selectSku(this)">
+                                                <input type="text" class="form-control" name="sku" placeholder="商品编号"
+                                                       onblur="selectSku(this)">
                                             </div>
                                             <div class="form-group col-xs-6">
-                                                    <input type="text" class="form-control" id="info" placeholder="商品信息" readonly>
+                                                <input type="text" class="form-control" id="info" placeholder="商品信息"
+                                                       readonly>
                                             </div>
                                             <div class="form-group col-xs-2">
-                                                <input type="text" class="form-control" name="quantity" placeholder="入库数量">
+                                                <input type="text" class="form-control" name="quantity"
+                                                       placeholder="出库数量">
                                             </div>
                                             <div class="form-group col-xs-2">
-                                                <input type="text" class="form-control" name="historicalCost" placeholder="入库成本">
+                                                <input type="text" class="form-control" name="allcost"
+                                                       placeholder="出库成本">
                                             </div>
                                             <div class="form-group col-xs-2 pull-right">
-                                                <button id="submit-btn" type="submit" class="btn btn-primary" data-last="Finish">提交</button>
+                                                <button id="submit-btn" type="submit" class="btn btn-primary"
+                                                        data-last="Finish">提交
+                                                </button>
                                             </div>
                                         </form>
                                     </div>
@@ -83,7 +91,7 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#saveInbound').validate({
+        $('#saveOutbound').validate({
             errorElement: 'div',
             errorClass: 'help-block',
             focusInvalid: false,
@@ -137,18 +145,18 @@
                 var $btn = $("#submit-btn");
                 if ($btn.hasClass("disabled")) return;
                 $btn.addClass("disabled");
-                var postData = $("#saveInbound").serializeJson();
-                $.post("${context_path}/stock/inbound/save", postData, function (data) {
+                var postData = $("#saveOutbound").serializeJson();
+                $.post("${context_path}/stock/outbound/save", postData, function (data) {
                     if (data.code == '200') {
-                        $('#inboundID').val(data.inboundID);
+                        $('#outboundID').val(data.outboundID);
                         layer.msg('操作成功', {
                             icon: 1,
                             time: 2000 //2秒关闭（如果不配置，默认是3秒）
                         }, function () {
                             reloadGrid();
                         });
-                    }else {
-                        layer.msg(data.msg);
+                    } else {
+                        layer.msg("添加失败");
                     }
                     $("#submit-btn").removeClass("disabled");
                 }, "json");
@@ -158,7 +166,7 @@
             }
         });
 
-        var inboundID = $('#inboundID').val();
+        var outboundID = $('#outboundID').val();
         var grid_selector = "#detail-table";
         var pager_selector = "#grid-pager";
         //resize to fit page size
@@ -176,17 +184,15 @@
         });
 
         $("#detail-table").jqGrid({
-            url: '${context_path}/stock/inbound/getDetailData?inboundID=' + inboundID,
+            url: '${context_path}/stock/outbound/getDetailData?outboundID=' + outboundID,
             mtype: "GET",
             datatype: "json",
             colModel: [
                 {label: '商品', name: 'skuName', width: 150, sortable: false},
                 {label: '编号', name: 'sku', width: 80, sortable: false},
                 {label: '规格', name: 'specName', width: 150, sortable: false},
-                {label: '入库数量', name: 'quantity', width: 80, sortable: false},
-                {label: '初始总成本', name: 'historicalCost', width: 120, sortable: false},
-                {label: '剩余总成本', name: 'cost', width: 120, sortable: false},
-                {label: '剩余数量', name: 'leftQty', width: 80, sortable: false}
+                {label: '出库数量', name: 'quantity', width: 80, sortable: false},
+                {label: '累加成本', name: 'cost', width: 80, sortable: false}
             ],
             height: 280,
             rowNum: 10,
@@ -208,7 +214,7 @@
             var submitData = {
                 "ids": getSelectedRows()
             };
-            $.post("${context_path}/stock/inbound/deleteDetail", submitData, function (data) {
+            $.post("${context_path}/stock/outbound/deleteDetail", submitData, function (data) {
 
                 if (data.code == 0) {
                     layer.msg("操作成功", {
@@ -266,7 +272,7 @@
                     var skuName = entity.skuName;
                     var specName = entity.specName;
                     $('#info').val(skuName + ' ' + specName);
-                }else {
+                } else {
                     layer.msg(response.msg);
                 }
             }
@@ -274,7 +280,7 @@
     }
     function reloadGrid() {
         parent.reloadGrid();
-        $("#detail-table").jqGrid('setGridParam',{url: '${context_path}/stock/inbound/getDetailData?inboundID=' + $('#inboundID').val()}).trigger("reloadGrid");
+        $("#detail-table").jqGrid('setGridParam', {url: '${context_path}/stock/outbound/getDetailData?outboundID=' + $('#outboundID').val()}).trigger("reloadGrid");
         $("#detail-table").trigger("reloadGrid"); //重新载入
     }
 </script>

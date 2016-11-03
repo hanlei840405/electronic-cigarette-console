@@ -58,7 +58,7 @@
                 <div class="col-xs-12">
                     <div class="row-fluid" style="margin-bottom: 5px;">
                         <div class="span12 control-group">
-                            <jc:button className="btn btn-success" id="btn-add" textName="入库"/>
+                            <jc:button className="btn btn-success" id="btn-add" textName="出库"/>
                             <jc:button className="btn btn-warning" id="btn-edit" textName="编辑"/>
                             <jc:button className="btn btn-primary" id="btn-view" textName="查看"/>
                             <jc:button className="btn btn-danger" id="btn-delete" textName="删除"/>
@@ -97,14 +97,14 @@
         });
 
         $("#grid-table").jqGrid({
-            url: '${context_path}/stock/inbound/getListData',
+            url: '${context_path}/stock/outbound/getListData',
             mtype: "GET",
             datatype: "json",
             colModel: [
-                {label: '入库编号', name: 'inboundID', key: true, width: 75},
+                {label: '出库编号', name: 'outboundID', key: true, width: 75},
                 {label: '操作人', name: 'executor', width: 150},
                 {
-                    label: '入库时间',
+                    label: '出库时间',
                     name: 'extime',
                     width: 150,
                     formatter: "date",
@@ -137,12 +137,12 @@
         });
         $("#btn-add").click(function () {//添加页面
             parent.layer.open({
-                title: '新增入库单',
+                title: '新增出库单',
                 type: 2,
                 area: ['600px', '500px'],
                 fix: false, //不固定
                 maxmin: true,
-                content: '${context_path}/stock/inbound/add'
+                content: '${context_path}/stock/outbound/add'
             });
         });
 
@@ -160,12 +160,12 @@
                 });
             } else {
                 parent.layer.open({
-                    title: '修改入库单',
+                    title: '修改出库单',
                     type: 2,
-                    area: ['650px', '500px'],
+                    area: ['600px', '500px'],
                     fix: false, //不固定
                     maxmin: true,
-                    content: '${context_path}/stock/inbound/add?inboundID=' + rid
+                    content: '${context_path}/stock/outbound/add?outboundID=' + rid
                 });
             }
         });
@@ -186,10 +186,10 @@
                 parent.layer.open({
                     title: '查看明细',
                     type: 2,
-                    area: ['650px', '500px'],
+                    area: ['600px', '500px'],
                     fix: false, //不固定
                     maxmin: true,
-                    content: '${context_path}/stock/inbound/view?inboundID=' + rid
+                    content: '${context_path}/stock/outbound/view?outboundID=' + rid
                 });
             }
         });
@@ -198,7 +198,7 @@
             var submitData = {
                 "ids": getSelectedRows()
             };
-            $.post("${context_path}/stock/inbound/delete", submitData, function (data) {
+            $.post("${context_path}/stock/outbound/delete", submitData, function (data) {
 
                 if (data.code == 0) {
                     layer.msg("操作成功", {

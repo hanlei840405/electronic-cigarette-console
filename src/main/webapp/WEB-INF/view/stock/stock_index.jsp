@@ -38,9 +38,9 @@
 																		<i class="ace-icon fa fa-check"></i>
 																	</span>
 
-                                            <input type="text" id="searchExecutor" name="searchExecutor"
+                                            <input type="text" id="searchSku" name="searchSku"
                                                    class="form-control search-query"
-                                                   placeholder="请输入操作人"/>
+                                                   placeholder="请输入商品编号"/>
 																	<span class="input-group-btn">
 																		<button type="button" id="btn_search"
                                                                                 class="btn btn-purple btn-sm">
@@ -56,14 +56,6 @@
                     </div>
                 </div>
                 <div class="col-xs-12">
-                    <div class="row-fluid" style="margin-bottom: 5px;">
-                        <div class="span12 control-group">
-                            <jc:button className="btn btn-success" id="btn-add" textName="入库"/>
-                            <jc:button className="btn btn-warning" id="btn-edit" textName="编辑"/>
-                            <jc:button className="btn btn-primary" id="btn-view" textName="查看"/>
-                            <jc:button className="btn btn-danger" id="btn-delete" textName="删除"/>
-                        </div>
-                    </div>
                     <!-- PAGE CONTENT BEGINS -->
                     <table id="grid-table"></table>
 
@@ -97,19 +89,14 @@
         });
 
         $("#grid-table").jqGrid({
-            url: '${context_path}/stock/inbound/getListData',
+            url: '${context_path}/stock/stock/getListData',
             mtype: "GET",
             datatype: "json",
             colModel: [
-                {label: '入库编号', name: 'inboundID', key: true, width: 75},
-                {label: '操作人', name: 'executor', width: 150},
-                {
-                    label: '入库时间',
-                    name: 'extime',
-                    width: 150,
-                    formatter: "date",
-                    formatoptions: {srcformat: "ISO8601Long", newformat: "Y-m-d"}
-                }
+                {label: '商品编号', name: 'sku', key: true, width: 75},
+                {label: '商品名称', name: 'skuName', key: true, width: 75},
+                {label: '规格名称', name: 'specName', key: true, width: 75},
+                {label: '库存数量', name: 'quantity', key: true, width: 75}
             ],
             height: 280,
             rowNum: 10,
@@ -128,91 +115,12 @@
         $(window).triggerHandler('resize.jqGrid');
         $("#btn_search").click(function () {
             //此处可以添加对查询数据的合法验证
-            var searchExecutor = $("#searchExecutor").val();
+            var searchSku = $("#searchSku").val();
             $("#grid-table").jqGrid('setGridParam', {
                 datatype: 'json',
-                postData: {'searchExecutor': searchExecutor}, //发送数据
+                postData: {'searchSku': searchSku}, //发送数据
                 page: 1
             }).trigger("reloadGrid"); //重新载入
-        });
-        $("#btn-add").click(function () {//添加页面
-            parent.layer.open({
-                title: '新增入库单',
-                type: 2,
-                area: ['600px', '500px'],
-                fix: false, //不固定
-                maxmin: true,
-                content: '${context_path}/stock/inbound/add'
-            });
-        });
-
-        $("#btn-edit").click(function () {//添加页面
-            var rid = getOneSelectedRows();
-            if (rid == -1) {
-                layer.msg("请选择一个商品", {
-                    icon: 2,
-                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
-                });
-            } else if (rid == -2) {
-                layer.msg("只能选择一个商品", {
-                    icon: 2,
-                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
-                });
-            } else {
-                parent.layer.open({
-                    title: '修改入库单',
-                    type: 2,
-                    area: ['650px', '500px'],
-                    fix: false, //不固定
-                    maxmin: true,
-                    content: '${context_path}/stock/inbound/add?inboundID=' + rid
-                });
-            }
-        });
-
-        $("#btn-view").click(function () {//添加页面
-            var rid = getOneSelectedRows();
-            if (rid == -1) {
-                layer.msg("请选择一个商品", {
-                    icon: 2,
-                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
-                });
-            } else if (rid == -2) {
-                layer.msg("只能选择一个商品", {
-                    icon: 2,
-                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
-                });
-            } else {
-                parent.layer.open({
-                    title: '查看明细',
-                    type: 2,
-                    area: ['650px', '500px'],
-                    fix: false, //不固定
-                    maxmin: true,
-                    content: '${context_path}/stock/inbound/view?inboundID=' + rid
-                });
-            }
-        });
-
-        $("#btn-delete").click(function () {
-            var submitData = {
-                "ids": getSelectedRows()
-            };
-            $.post("${context_path}/stock/inbound/delete", submitData, function (data) {
-
-                if (data.code == 0) {
-                    layer.msg("操作成功", {
-                        icon: 1,
-                        time: 1000 //1秒关闭（如果不配置，默认是3秒）
-                    }, function () {
-                        //$("#grid-table").trigger("reloadGrid"); //重新载入
-                        reloadGrid();
-                    });
-
-                } else {
-                    layer.alert(data.msg);
-                }
-            }, "json");
         });
     });
     //replace icons with FontAwesome icons like above
@@ -229,36 +137,6 @@
             var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
             if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
         })
-    }
-    /**获取选中的列***/
-    function getSelectedRows() {
-        var grid = $("#grid-table");
-        var rowKey = grid.getGridParam("selrow");
-        if (!rowKey)
-            return "-1";
-        else {
-            var selectedIDs = grid.getGridParam("selarrrow");
-            var result = "";
-            for (var i = 0; i < selectedIDs.length; i++) {
-                result += selectedIDs[i] + ",";
-            }
-            return result;
-        }
-    }
-    function getOneSelectedRows() {
-        var grid = $("#grid-table");
-        var rowKey = grid.getGridParam("selrow");
-        if (!rowKey) {
-            return "-1";
-        } else {
-            var selectedIDs = grid.getGridParam("selarrrow");
-            var result = "";
-            if (selectedIDs.length == 1) {
-                return selectedIDs[0];
-            } else {
-                return "-2";
-            }
-        }
     }
     function reloadGrid() {
         $("#grid-table").trigger("reloadGrid"); //重新载入

@@ -33,7 +33,16 @@
                                 <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="name">用户名</label>
                                 <div class="col-xs-12 col-sm-9">
                                     <div class="clearfix">
-                                        <input type="text" name="name" ${id ne null?'readonly':'' } value="${item.name}"
+                                        <input type="text" id="name" name="name" ${id ne null?'readonly':'' } value="${item.name}"
+                                               class="col-xs-12 col-sm-6">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="realName">姓名</label>
+                                <div class="col-xs-12 col-sm-9">
+                                    <div class="clearfix">
+                                        <input type="text" name="realName" id="realName" value="${item.realName}"
                                                class="col-xs-12 col-sm-6">
                                     </div>
                                 </div>
@@ -44,7 +53,7 @@
                                            for="password">密码</label>
                                     <div class="col-xs-12 col-sm-9">
                                         <div class="clearfix">
-                                            <input type="text" name="password" class="col-xs-12 col-sm-6">
+                                            <input type="text" id="password" name="password" class="col-xs-12 col-sm-6">
                                         </div>
                                     </div>
                                 </div>
@@ -54,7 +63,7 @@
                                 <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="des">描述</label>
                                 <div class="col-xs-12 col-sm-9">
                                     <div class="clearfix">
-                                        <input type="text" name="des" value="${item.des}" class="col-xs-12 col-sm-6">
+                                        <input type="text" id="des" name="des" value="${item.des}" class="col-xs-12 col-sm-6">
                                     </div>
                                 </div>
                             </div>
@@ -62,7 +71,7 @@
                                 <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="phone">手机号</label>
                                 <div class="col-xs-12 col-sm-9">
                                     <div class="clearfix">
-                                        <input type="text" name="phone" value="${item.phone}"
+                                        <input type="text" id="phone" name="phone" value="${item.phone}"
                                                class="col-xs-12 col-sm-6">
                                     </div>
                                 </div>
@@ -71,7 +80,7 @@
                                 <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="email">邮箱</label>
                                 <div class="col-xs-12 col-sm-9">
                                     <div class="clearfix">
-                                        <input type="text" name="email" value="${item.email}"
+                                        <input type="text" id="email" name="email" value="${item.email}"
                                                class="col-xs-12 col-sm-6">
                                     </div>
                                 </div>
@@ -80,7 +89,7 @@
                                 <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="wxid">微信号</label>
                                 <div class="col-xs-12 col-sm-9">
                                     <div class="clearfix">
-                                        <input type="text" name="wxid" value="${item.wxid}"
+                                        <input type="text" name="wxid" id="wxid" value="${item.wxid}"
                                                class="col-xs-12 col-sm-6">
                                     </div>
                                 </div>

@@ -38,7 +38,7 @@
 																		<i class="ace-icon fa fa-check"></i>
 																	</span>
 
-                                            <input type="text" id="searchExecutor" name="searchExecutor"
+                                            <input type="text" id="search" name="search"
                                                    class="form-control search-query"
                                                    placeholder="请输入操作人"/>
 																	<span class="input-group-btn">
@@ -58,10 +58,8 @@
                 <div class="col-xs-12">
                     <div class="row-fluid" style="margin-bottom: 5px;">
                         <div class="span12 control-group">
-                            <jc:button className="btn btn-success" id="btn-add" textName="入库"/>
-                            <jc:button className="btn btn-warning" id="btn-edit" textName="编辑"/>
-                            <jc:button className="btn btn-primary" id="btn-view" textName="查看"/>
-                            <jc:button className="btn btn-danger" id="btn-delete" textName="删除"/>
+                            <jc:button className="btn btn-success" id="btn-audit" textName="审核"/>
+                            <jc:button className="btn btn-warning" id="btn-view" textName="查看"/>
                         </div>
                     </div>
                     <!-- PAGE CONTENT BEGINS -->
@@ -97,15 +95,21 @@
         });
 
         $("#grid-table").jqGrid({
-            url: '${context_path}/stock/inbound/getListData',
+            url: '${context_path}/mall/order/getListData',
             mtype: "GET",
             datatype: "json",
             colModel: [
-                {label: '入库编号', name: 'inboundID', key: true, width: 75},
-                {label: '操作人', name: 'executor', width: 150},
+                {label: '订单编号', name: 'orderID', key: true, width: 75},
+                {label: '商家编号', name: 'customer', width: 150},
+                {label: '商家名称', name: 'cusName', width: 150},
+                {label: '复核人', name: 'reviewer', width: 150},
+                {label: '数量', name: 'amount', width: 150},
+                {label: '快递公司', name: 'express', width: 150},
+                {label: '快递单号', name: 'courierNum', width: 150},
+                {label: '状态', name: 'status', width: 75, formatter: fmatterStatus},
                 {
-                    label: '入库时间',
-                    name: 'extime',
+                    label: '下单时间',
+                    name: 'odtime',
                     width: 150,
                     formatter: "date",
                     formatoptions: {srcformat: "ISO8601Long", newformat: "Y-m-d"}
@@ -128,44 +132,34 @@
         $(window).triggerHandler('resize.jqGrid');
         $("#btn_search").click(function () {
             //此处可以添加对查询数据的合法验证
-            var searchExecutor = $("#searchExecutor").val();
+            var search = $("#search").val();
             $("#grid-table").jqGrid('setGridParam', {
                 datatype: 'json',
-                postData: {'searchExecutor': searchExecutor}, //发送数据
+                postData: {'search': search}, //发送数据
                 page: 1
             }).trigger("reloadGrid"); //重新载入
         });
-        $("#btn-add").click(function () {//添加页面
-            parent.layer.open({
-                title: '新增入库单',
-                type: 2,
-                area: ['600px', '500px'],
-                fix: false, //不固定
-                maxmin: true,
-                content: '${context_path}/stock/inbound/add'
-            });
-        });
 
-        $("#btn-edit").click(function () {//添加页面
+        $("#btn-audit").click(function () {//审核页面
             var rid = getOneSelectedRows();
             if (rid == -1) {
-                layer.msg("请选择一个商品", {
+                layer.msg("请选择一个订单", {
                     icon: 2,
                     time: 2000 //2秒关闭（如果不配置，默认是3秒）
                 });
             } else if (rid == -2) {
-                layer.msg("只能选择一个商品", {
+                layer.msg("只能选择一个订单", {
                     icon: 2,
                     time: 2000 //2秒关闭（如果不配置，默认是3秒）
                 });
             } else {
                 parent.layer.open({
-                    title: '修改入库单',
+                    title: '查看明细',
                     type: 2,
-                    area: ['650px', '500px'],
+                    area: ['600px', '500px'],
                     fix: false, //不固定
                     maxmin: true,
-                    content: '${context_path}/stock/inbound/add?inboundID=' + rid
+                    content: '${context_path}/mall/order/view?orderID=' + rid
                 });
             }
         });
@@ -186,33 +180,12 @@
                 parent.layer.open({
                     title: '查看明细',
                     type: 2,
-                    area: ['650px', '500px'],
+                    area: ['600px', '500px'],
                     fix: false, //不固定
                     maxmin: true,
-                    content: '${context_path}/stock/inbound/view?inboundID=' + rid
+                    content: '${context_path}/mall/order/view?orderID=' + rid
                 });
             }
-        });
-
-        $("#btn-delete").click(function () {
-            var submitData = {
-                "ids": getSelectedRows()
-            };
-            $.post("${context_path}/stock/inbound/delete", submitData, function (data) {
-
-                if (data.code == 0) {
-                    layer.msg("操作成功", {
-                        icon: 1,
-                        time: 1000 //1秒关闭（如果不配置，默认是3秒）
-                    }, function () {
-                        //$("#grid-table").trigger("reloadGrid"); //重新载入
-                        reloadGrid();
-                    });
-
-                } else {
-                    layer.alert(data.msg);
-                }
-            }, "json");
         });
     });
     //replace icons with FontAwesome icons like above
@@ -262,6 +235,20 @@
     }
     function reloadGrid() {
         $("#grid-table").trigger("reloadGrid"); //重新载入
+    }
+    //格式化状态显示
+    function fmatterStatus(cellvalue, options, rowObject) {
+        if (cellvalue == 0) {
+            return '<span class="label label-sm label-warning">待付款</span>';
+        } else if (cellvalue == 1) {
+            return '<span class="label label-sm label-success">已付款</span>';
+        } else if (cellvalue == 2) {
+            return '<span class="label label-sm label-success">已审核</span>';
+        } else if (cellvalue == 3) {
+            return '<span class="label label-sm label-success">已发货</span>';
+        } else {
+            return '<span class="label label-sm label-success">关闭</span>';
+        }
     }
 </script>
 

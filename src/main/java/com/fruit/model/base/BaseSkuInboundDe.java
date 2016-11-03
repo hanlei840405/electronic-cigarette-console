@@ -9,60 +9,68 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings("serial")
 public abstract class BaseSkuInboundDe<M extends BaseSkuInboundDe<M>> extends BaseModel<M> implements IBean {
 
-	public void setId(Long id) {
-		set("id", id);
-	}
+    public void setId(Long id) {
+        set("id", id);
+    }
 
-	public Long getId() {
-		return get("id");
-	}
+    public Long getId() {
+        return get("id");
+    }
 
-	public void setInboundID(String inboundID) {
-		set("inboundID", inboundID);
-	}
+    public void setInboundID(String inboundID) {
+        set("inboundID", inboundID);
+    }
 
-	public String getInboundID() {
-		return get("inboundID");
-	}
+    public String getInboundID() {
+        return get("inboundID");
+    }
 
-	public void setStatus(Integer status) {
-		set("status", status);
-	}
+    public void setStatus(Integer status) {
+        set("status", status);
+    }
 
-	public Integer getStatus() {
-		return get("status");
-	}
+    public Integer getStatus() {
+        return get("status");
+    }
 
-	public void setSku(String sku) {
-		set("sku", sku);
-	}
+    public void setSku(String sku) {
+        set("sku", sku);
+    }
 
-	public String getSku() {
-		return get("sku");
-	}
+    public String getSku() {
+        return get("sku");
+    }
 
-	public void setQuantity(Integer quantity) {
-		set("quantity", quantity);
-	}
+    public void setQuantity(Integer quantity) {
+        set("quantity", quantity);
+    }
 
-	public Integer getQuantity() {
-		return get("quantity");
-	}
+    public Integer getQuantity() {
+        return get("quantity");
+    }
 
-	public void setCost(java.math.BigDecimal cost) {
-		set("cost", cost);
-	}
+    public void setCost(java.math.BigDecimal cost) {
+        set("cost", cost);
+    }
 
-	public java.math.BigDecimal getCost() {
-		return get("cost");
-	}
+    public java.math.BigDecimal getCost() {
+        return get("cost");
+    }
 
-	public void setLeftQty(Integer leftQty) {
-		set("leftQty", leftQty);
-	}
+    public void setHistoricalCost(java.math.BigDecimal historicalCost) {
+        set("historicalCost", historicalCost);
+    }
 
-	public Integer getLeftQty() {
-		return get("leftQty");
-	}
+    public java.math.BigDecimal getHistoricalCost() {
+        return get("historicalCost");
+    }
+
+    public void setLeftQty(Integer leftQty) {
+        set("leftQty", leftQty);
+    }
+
+    public Integer getLeftQty() {
+        return get("leftQty");
+    }
 
 }
