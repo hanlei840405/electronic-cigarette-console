@@ -7,7 +7,6 @@ import com.fruit.core.model.Condition;
 import com.fruit.core.model.Operators;
 import com.fruit.core.util.IWebUtils;
 import com.fruit.core.util.JqGridModelUtils;
-import com.fruit.core.view.InvokeResult;
 import com.fruit.model.ConsoleSequence;
 import com.fruit.model.SysUser;
 import com.fruit.model.stock.SkStock;
@@ -17,7 +16,6 @@ import com.fruit.transaction.SkuOutboundService;
 import com.jfinal.aop.Duang;
 import com.jfinal.plugin.activerecord.Page;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -75,7 +73,6 @@ public class OutboundController extends BaseController {
         String outboundID = this.getPara("outboundID");
         String sku = this.getPara("sku");
         Integer quantity = this.getParaToInt("quantity");
-        Double allcost = Double.parseDouble(this.getPara("allcost"));
 
         SkStock skStock = SkStock.dao.findBySku(sku);
         if (skStock.getQuantity() < quantity) {
@@ -86,8 +83,6 @@ public class OutboundController extends BaseController {
         }
 
         SkuOutboundService skuOutboundService = Duang.duang(SkuOutboundService.class);
-        SkuOutboundDe skuOutboundDe;
-
 
         // 检查表中是否有记录，如果有，合并数据，如果没有，新增数据
         Set<Condition> conditions = new HashSet<Condition>();
@@ -96,13 +91,14 @@ public class OutboundController extends BaseController {
 
 
         try {
-            skuOutboundDe = SkuOutboundDe.dao.get(conditions);
+            SkuOutboundDe skuOutboundDe = SkuOutboundDe.dao.get(conditions);
             if (skuOutboundDe != null) {
-                skuOutboundDe.setQuantity(skuOutboundDe.getQuantity() + quantity);
-                skuOutboundDe.setAllcost(BigDecimal.valueOf(allcost));
-                skuOutboundService.updateOutboundDetail(skuOutboundDe, quantity);
+                result.put("code", "500");
+                result.put("msg", "存在重复的商品出库");
+                this.renderJson(result);
+                return;
             } else {
-                skuOutboundDe = SkuOutboundDe.dao.clear().set("outboundID", outboundID).set("sku", sku).set("quantity", quantity).set("allcost", allcost);
+                skuOutboundDe = SkuOutboundDe.dao.clear().set("outboundID", outboundID).set("sku", sku).set("quantity", quantity);
                 if (StringUtils.isEmpty(outboundID)) { // 需要创建入库单主表信息
                     outboundID = ConsoleSequence.dao.generateSequence("入库");
                     skuOutboundDe.setOutboundID(outboundID);
@@ -118,39 +114,5 @@ public class OutboundController extends BaseController {
             result.put("msg", "保存失败");
         }
         this.renderJson(result);
-    }
-
-    @RequiresPermissions(value = {"/mall/outbound"})
-    public void delete() {
-        String[] array = this.getPara("ids").split(",");
-        List<String> outbounds = new ArrayList<String>();
-        for (String id : array) {
-            outbounds.add(SkuOutbound.dao.findById(Long.parseLong(id)).getOutboundID());
-        }
-
-        SkuOutboundService skuOutboundService = Duang.duang(SkuOutboundService.class);
-        try {
-            skuOutboundService.deleteOutbound(outbounds);
-            this.renderJson(InvokeResult.success());
-        } catch (Exception e) {
-            this.renderJson(InvokeResult.failure("删除失败"));
-        }
-    }
-
-    @RequiresPermissions(value = {"/mall/outbound"})
-    public void deleteDetail() {
-        String[] array = this.getPara("ids").split(",");
-        List<Long> ids = new ArrayList<Long>();
-        for (String id : array) {
-            ids.add(Long.parseLong(id));
-        }
-
-        SkuOutboundService skuOutboundService = Duang.duang(SkuOutboundService.class);
-        try {
-            skuOutboundService.deleteOutboundDetail(ids);
-            this.renderJson(InvokeResult.success());
-        } catch (Exception e) {
-            this.renderJson(InvokeResult.failure("删除失败"));
-        }
     }
 }

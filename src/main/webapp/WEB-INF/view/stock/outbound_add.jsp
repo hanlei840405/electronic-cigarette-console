@@ -54,10 +54,6 @@
                                                 <input type="text" class="form-control" name="quantity"
                                                        placeholder="出库数量">
                                             </div>
-                                            <div class="form-group col-xs-2">
-                                                <input type="text" class="form-control" name="allcost"
-                                                       placeholder="出库成本">
-                                            </div>
                                             <div class="form-group col-xs-2 pull-right">
                                                 <button id="submit-btn" type="submit" class="btn btn-primary"
                                                         data-last="Finish">提交
@@ -70,11 +66,6 @@
                         </div>
                     </div>
                     <div class="col-xs-12">
-                        <div class="row-fluid" style="margin-bottom: 5px;">
-                            <div class="span12 control-group">
-                                <jc:button className="btn btn-danger" id="btn-delete" textName="删除"/>
-                            </div>
-                        </div>
                         <!-- PAGE CONTENT BEGINS -->
                         <table id="detail-table"></table>
 
@@ -101,9 +92,6 @@
                 },
                 quantity: {
                     required: true
-                },
-                cost: {
-                    required: true
                 }
             },
             messages: {
@@ -111,9 +99,6 @@
                     required: ""
                 },
                 quantity: {
-                    required: ""
-                },
-                cost: {
                     required: ""
                 }
             },
@@ -156,7 +141,7 @@
                             reloadGrid();
                         });
                     } else {
-                        layer.msg("添加失败");
+                        layer.msg(data.msg);
                     }
                     $("#submit-btn").removeClass("disabled");
                 }, "json");
@@ -192,7 +177,7 @@
                 {label: '编号', name: 'sku', width: 80, sortable: false},
                 {label: '规格', name: 'specName', width: 150, sortable: false},
                 {label: '出库数量', name: 'quantity', width: 80, sortable: false},
-                {label: '累加成本', name: 'cost', width: 80, sortable: false}
+                {label: '累加成本', name: 'allcost', width: 80, sortable: false}
             ],
             height: 280,
             rowNum: 10,
@@ -209,26 +194,6 @@
             }
         });
         $(window).triggerHandler('resize.jqGrid');
-
-        $("#btn-delete").click(function () {
-            var submitData = {
-                "ids": getSelectedRows()
-            };
-            $.post("${context_path}/stock/outbound/deleteDetail", submitData, function (data) {
-
-                if (data.code == 0) {
-                    layer.msg("操作成功", {
-                        icon: 1,
-                        time: 1000 //1秒关闭（如果不配置，默认是3秒）
-                    }, function () {
-                        reloadGrid();
-                    });
-
-                } else {
-                    layer.alert(data.msg);
-                }
-            }, "json");
-        });
     });
     //replace icons with FontAwesome icons like above
     function updatePagerIcons(table) {
@@ -244,21 +209,6 @@
             var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
             if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
         })
-    }
-    /**获取选中的列***/
-    function getSelectedRows() {
-        var grid = $("#detail-table");
-        var rowKey = grid.getGridParam("selrow");
-        if (!rowKey)
-            return "-1";
-        else {
-            var selectedIDs = grid.getGridParam("selarrrow");
-            var result = "";
-            for (var i = 0; i < selectedIDs.length; i++) {
-                result += selectedIDs[i] + ",";
-            }
-            return result;
-        }
     }
 
     function selectSku(obj) {

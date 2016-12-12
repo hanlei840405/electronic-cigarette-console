@@ -59,9 +59,7 @@
                     <div class="row-fluid" style="margin-bottom: 5px;">
                         <div class="span12 control-group">
                             <jc:button className="btn btn-success" id="btn-add" textName="出库"/>
-                            <jc:button className="btn btn-warning" id="btn-edit" textName="编辑"/>
                             <jc:button className="btn btn-primary" id="btn-view" textName="查看"/>
-                            <jc:button className="btn btn-danger" id="btn-delete" textName="删除"/>
                         </div>
                     </div>
                     <!-- PAGE CONTENT BEGINS -->
@@ -146,30 +144,6 @@
             });
         });
 
-        $("#btn-edit").click(function () {//添加页面
-            var rid = getOneSelectedRows();
-            if (rid == -1) {
-                layer.msg("请选择一个商品", {
-                    icon: 2,
-                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
-                });
-            } else if (rid == -2) {
-                layer.msg("只能选择一个商品", {
-                    icon: 2,
-                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
-                });
-            } else {
-                parent.layer.open({
-                    title: '修改出库单',
-                    type: 2,
-                    area: ['600px', '500px'],
-                    fix: false, //不固定
-                    maxmin: true,
-                    content: '${context_path}/stock/outbound/add?outboundID=' + rid
-                });
-            }
-        });
-
         $("#btn-view").click(function () {//添加页面
             var rid = getOneSelectedRows();
             if (rid == -1) {
@@ -192,27 +166,6 @@
                     content: '${context_path}/stock/outbound/view?outboundID=' + rid
                 });
             }
-        });
-
-        $("#btn-delete").click(function () {
-            var submitData = {
-                "ids": getSelectedRows()
-            };
-            $.post("${context_path}/stock/outbound/delete", submitData, function (data) {
-
-                if (data.code == 0) {
-                    layer.msg("操作成功", {
-                        icon: 1,
-                        time: 1000 //1秒关闭（如果不配置，默认是3秒）
-                    }, function () {
-                        //$("#grid-table").trigger("reloadGrid"); //重新载入
-                        reloadGrid();
-                    });
-
-                } else {
-                    layer.alert(data.msg);
-                }
-            }, "json");
         });
     });
     //replace icons with FontAwesome icons like above

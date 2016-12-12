@@ -7,8 +7,10 @@ import com.fruit.model.stock.SkStock;
 import com.fruit.model.stock.SkuInbound;
 import com.fruit.model.stock.SkuInboundDe;
 import com.jfinal.aop.Before;
+import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.tx.Tx;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -29,7 +31,7 @@ public class SkuInboundService {
     @Before(Tx.class)
     public void updateInboundDetail(SkuInboundDe skuInboundDe, long quantity) {
         skuInboundDe.update();
-        SkStock.dao.add(skuInboundDe.getSku(), quantity);
+        SkStock.dao.reset(skuInboundDe.getSku(), quantity);
     }
 
     @Before(Tx.class)
@@ -60,5 +62,29 @@ public class SkuInboundService {
             SkStock.dao.subtract(skuInboundDe.getSku(), skuInboundDe.getQuantity());
         }
         SkuInboundDe.dao.delete(conditions);
+    }
+
+    @Before(Tx.class)
+    public BigDecimal subtractLeftQty(String sku, int quantity) {
+        BigDecimal allcost = new BigDecimal(0);
+        while (quantity > 0) {
+            SkuInboundDe skuInboundDe = SkuInboundDe.dao.findFirst("SELECT t1.* FROM sku_inbound_de t1 INNER JOIN sku_inbound t2 ON t1.inboundID = t2.inboundID WHERE sku=? AND status = 1 ORDER BY extime", sku);
+            Integer leftQty = skuInboundDe.getLeftQty();
+            Long id = skuInboundDe.getId();
+            // 计算总成本
+            if (leftQty - quantity > 0) {
+                // 入库明细单库存数量大于订单数量
+                allcost = allcost.add(skuInboundDe.getCost().multiply(BigDecimal.valueOf(quantity)));
+                // 设置入库单剩余数量
+                Db.update("UPDATE sku_inbound_de SET leftQty=leftQty - ? WHERE id=?", quantity, id);
+            } else {
+                // 如果入库数量小于或等于订单数量，将入库明细单状态设置为0,剩余数量设置为0
+                Db.update("UPDATE sku_inbound_de SET status=0, leftQty=0 WHERE id=?", id);
+                allcost = allcost.add(skuInboundDe.getCost().multiply(BigDecimal.valueOf(leftQty)));
+            }
+            // 订单中待分配的sku数量
+            quantity -= leftQty;
+        }
+        return allcost;
     }
 }

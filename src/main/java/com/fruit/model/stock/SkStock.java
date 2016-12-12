@@ -5,7 +5,9 @@ import com.fruit.core.model.Operators;
 import com.fruit.model.base.BaseSkStock;
 import com.jfinal.plugin.activerecord.Db;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -14,6 +16,14 @@ import java.util.Set;
 @SuppressWarnings("serial")
 public class SkStock extends BaseSkStock<SkStock> {
     public static final SkStock dao = new SkStock();
+
+    public void reset(String sku, long quantity) {
+        Set<Condition> conditions = new HashSet<Condition>();
+        conditions.add(new Condition("sku", Operators.EQ, sku));
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("quantity", quantity);
+        SkStock.dao.update(conditions, params);
+    }
 
     public void add(String sku, long quantity) {
         Set<Condition> conditions = new HashSet<Condition>();

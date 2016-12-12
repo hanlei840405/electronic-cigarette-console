@@ -57,14 +57,6 @@ public abstract class BaseSkuInboundDe<M extends BaseSkuInboundDe<M>> extends Ba
         return get("cost");
     }
 
-    public void setHistoricalCost(java.math.BigDecimal historicalCost) {
-        set("historicalCost", historicalCost);
-    }
-
-    public java.math.BigDecimal getHistoricalCost() {
-        return get("historicalCost");
-    }
-
     public void setLeftQty(Integer leftQty) {
         set("leftQty", leftQty);
     }

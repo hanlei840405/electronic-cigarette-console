@@ -69,15 +69,20 @@ public class InboundController extends BaseController {
         String inboundID = this.getPara("inboundID");
         String sku = this.getPara("sku");
         Integer quantity = this.getParaToInt("quantity");
-        Double historicalCost = Double.parseDouble(this.getPara("historicalCost"));
-        if (historicalCost * quantity < 0) {
+        Double cost = Double.parseDouble(this.getPara("cost"));
+        if (quantity <= 0) {
             result.put("code", "500");
-            result.put("msg", "入库数量与成本不可一正一负");
+            result.put("msg", "入库数量为正数");
+            this.renderJson(result);
+            return;
+        }
+        if (cost <= 0) {
+            result.put("code", "500");
+            result.put("msg", "成本为正数");
             this.renderJson(result);
             return;
         }
         SkuInboundService skuInboundService = Duang.duang(SkuInboundService.class);
-        SkuInboundDe skuInboundDe;
 
 
         // 检查表中是否有记录，如果有，合并数据，如果没有，新增数据
@@ -87,34 +92,19 @@ public class InboundController extends BaseController {
 
 
         try {
-            skuInboundDe = SkuInboundDe.dao.get(conditions);
-            if (skuInboundDe != null) {
-                if (skuInboundDe.getHistoricalCost().subtract(skuInboundDe.getCost()).intValue() <= 0) {
-                    skuInboundDe.setQuantity(skuInboundDe.getQuantity() + quantity);
-                    skuInboundDe.setHistoricalCost(skuInboundDe.getHistoricalCost().add(BigDecimal.valueOf(historicalCost)));
-                    if (skuInboundDe.getQuantity() < 0 || skuInboundDe.getCost().doubleValue() < 0 || skuInboundDe.getHistoricalCost().doubleValue() < 0) {
-                        result.put("code", "500");
-                        result.put("msg", "入库单总数量、剩余总成本、出事总成本不能为负");
-                        this.renderJson(result);
-                        return;
-                    }
-                }
-                skuInboundDe.setCost(skuInboundDe.getCost().add(BigDecimal.valueOf(historicalCost)));
-                skuInboundDe.setLeftQty(skuInboundDe.getLeftQty() + quantity);
+            SkuInboundDe skuInboundDe = SkuInboundDe.dao.get(conditions);
+            if (skuInboundDe != null) { // 更新明细
+                skuInboundDe.setQuantity(quantity);
+                skuInboundDe.setCost(BigDecimal.valueOf(cost));
+                skuInboundDe.setLeftQty(quantity);
                 skuInboundService.updateInboundDetail(skuInboundDe, quantity);
             } else {
-                skuInboundDe = SkuInboundDe.dao.clear().set("inboundID", inboundID).set("sku", sku).set("status", 1).set("quantity", quantity).set("historicalCost", historicalCost).set("cost", historicalCost).set("leftQty", quantity);
-                if (quantity < 0 || historicalCost.doubleValue() < 0) {
-                    result.put("code", "500");
-                    result.put("msg", "入库单总数量、剩余总成本、出事总成本不能为负");
-                    this.renderJson(result);
-                    return;
-                }
+                skuInboundDe = SkuInboundDe.dao.clear().set("inboundID", inboundID).set("sku", sku).set("status", 1).set("quantity", quantity).set("cost", cost).set("leftQty", quantity);
                 if (StringUtils.isEmpty(inboundID)) { // 需要创建入库单主表信息
                     inboundID = ConsoleSequence.dao.generateSequence("入库");
                     skuInboundDe.setInboundID(inboundID);
                     skuInboundService.saveInbound(inboundID, skuInboundDe, sysUser);
-                } else {
+                } else { // 追加明细（新建）
                     skuInboundService.saveInboundDetail(skuInboundDe, quantity);
                 }
             }

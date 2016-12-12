@@ -50,7 +50,7 @@
                                                 <input type="text" class="form-control" name="quantity" placeholder="入库数量">
                                             </div>
                                             <div class="form-group col-xs-2">
-                                                <input type="text" class="form-control" name="historicalCost" placeholder="入库成本">
+                                                <input type="text" class="form-control" name="cost" placeholder="入库成本">
                                             </div>
                                             <div class="form-group col-xs-2 pull-right">
                                                 <button id="submit-btn" type="submit" class="btn btn-primary" data-last="Finish">提交</button>
@@ -184,8 +184,7 @@
                 {label: '编号', name: 'sku', width: 80, sortable: false},
                 {label: '规格', name: 'specName', width: 150, sortable: false},
                 {label: '入库数量', name: 'quantity', width: 80, sortable: false},
-                {label: '初始总成本', name: 'historicalCost', width: 120, sortable: false},
-                {label: '剩余总成本', name: 'cost', width: 120, sortable: false},
+                {label: '成本', name: 'cost', width: 120, sortable: false},
                 {label: '剩余数量', name: 'leftQty', width: 80, sortable: false}
             ],
             height: 280,
