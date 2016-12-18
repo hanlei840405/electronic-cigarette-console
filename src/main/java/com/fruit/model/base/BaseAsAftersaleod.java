@@ -89,4 +89,12 @@ public abstract class BaseAsAftersaleod<M extends BaseAsAftersaleod<M>> extends 
 		return get("status");
 	}
 
+	public void setCusName(String cusName) {
+		set("cusName", cusName);
+	}
+
+	public String getCusName() {
+		return get("cusName");
+	}
+
 }

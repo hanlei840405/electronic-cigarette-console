@@ -24,56 +24,19 @@
             <div class="page-content" id="page-content">
                 <div class="row">
                     <div class="col-xs-12">
-                        <p>订单编号:${order.orderID}</p>
-
-                        <p class="col-xs-4">客户:${order.cusName}</p>
-
-                        <p class="col-xs-4">数量:${order.amount}</p>
-
-                        <p class="col-xs-4">
-                            <c:if test="${order.status == 0 }">
-                                <span class="label label-sm label-info">待付款</span>
-                            </c:if>
-                            <c:if test="${order.status == 1 }">
-                                <span class="label label-sm label-primary">已付款</span>
-                            </c:if>
-                            <c:if test="${order.status == 2 }">
-                                <span class="label label-sm label-success">已审核</span>
-                            </c:if>
-                            <c:if test="${order.status == 3 }">
-                                <span class="label label-sm label-danger">已发货</span>
-                            </c:if>
-                            <c:if test="${order.status == 4 }">
-                                <span class="label label-sm label-danger">已关闭</span>
-                            </c:if>
-                        </p>
-
-                        <c:if test="${order.status != 0 && order.status != 3 }">
-                            <img width="100px" src="${context_path}/${order.certificate}"/>
-                        </c:if>
-                        <p>${order.addr}</p>
-
-
-                        <c:if test="${order.status == 2 }">
-                            <input type="text" id="express" name="express" placeholder="快递公司"/>
-                            <input type="text" id="courierNum" name="courierNum" placeholder="快递编号"/>
-                        </c:if>
+                        <p>返修单号:${asAftersaleod.asodID}</p>
+                        <p class="col-xs-4">快递:${asAftersaleod.courierNum}</p>
+                        <p class="col-xs-4">客户:${asAftersaleod.cusName}</p>
+                        <p class="col-xs-4">接收人:${asAftersaleod.executer}</p>
+                        <p class="col-xs-12">${asAftersaleod.addr}</p>
                         <div class="row-fluid" style="margin-bottom: 5px;">
                             <div class="span12 control-group">
-                                <c:if test="${order.status == 1 }">
-                                    <jc:button className="btn btn-success" id="btn-ok" textName="审核通过"/>
-                                    <jc:button className="btn btn-warning" id="btn-refuse" textName="审核驳回"/>
-                                </c:if>
-                                <c:if test="${order.status == 2 }">
-                                    <jc:button className="btn btn-info" id="btn-send" textName="发货"/>
-                                </c:if>
-                                <c:if test="${order.status == 1 or order.status == 2 }">
-                                    <jc:button className="btn btn-danger" id="btn-cancel" textName="取消订单"/>
-                                </c:if>
+                                <input type="text" id="bkcourierNum" name="bkcourierNum" placeholder="回寄快递信息"/>
+                                <jc:button className="btn btn-success" id="btn-send" textName="发货"/>
                             </div>
                         </div>
                         <!-- PAGE CONTENT BEGINS -->
-                        <table id="grid-table"></table>
+                        <table id="detail-table"></table>
 
                         <div id="grid-pager"></div>
                         <!-- PAGE CONTENT ENDS -->
@@ -88,7 +51,7 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        var grid_selector = "#grid-table";
+        var grid_selector = "#detail-table";
         var pager_selector = "#grid-pager";
         //resize to fit page size
         $(window).on('resize.jqGrid', function () {
@@ -105,17 +68,18 @@
             }
         });
 
-        $("#grid-table").jqGrid({
-            url: '${context_path}/mall/order/orderDetail?orderID=${order.orderID}',
+        $(grid_selector).jqGrid({
+            url: '${context_path}/mall/aftersale/detail?asodID=${asAftersaleod.asodID}',
             mtype: "GET",
             datatype: "json",
             colModel: [
                 {label: '商品', name: 'skuName', width: 150, sortable: false},
                 {label: '编号', name: 'sku', width: 80, sortable: false},
                 {label: '规格', name: 'specName', width: 150, sortable: false},
-                {label: '购买数量', name: 'quantity', width: 80, sortable: false},
-                {label: '价格', name: 'price', width: 80, sortable: false},
-                {label: '成本', name: 'allcost', width: 80, sortable: false}
+                {label: '退回数量', name: 'quantity', width: 80, sortable: false},
+                {label: '换新数量', name: 'newQty', width: 80, sortable: false,formatter: function (cellvalue, options, rowObject) {
+                    return '<input class="newQtyInput" type="number" value="0" min="0" id="' + rowObject.id + '" max="' + rowObject.quantity + '" />';
+                }}
             ],
             height: 280,
             rowNum: 10,
@@ -131,17 +95,8 @@
             }
         });
         $(window).triggerHandler('resize.jqGrid');
-        $("#btn-ok").click(function () {//审核通过
-            auditOrder(2);
-        });
-        $("#btn-refuse").click(function () {//审核拒绝
-            auditOrder(1);
-        });
         $("#btn-send").click(function () {//发货
-            auditOrder(3, $('#express').val(), $('#courierNum').val());
-        });
-        $("#btn-cancel").click(function () {//关闭订单
-            auditOrder(4);
+            sendAfterSale();
         });
     });
     //replace icons with FontAwesome icons like above
@@ -160,13 +115,25 @@
         })
     }
 
-    function auditOrder(status, express, courierNum) {
-        var values = {status: status, orderID: '${order.orderID}'};
-        if (status == 3) {
-            values.express = express;
-            values.courierNum = courierNum;
+    function sendAfterSale() {
+        if ($("#btn-send").hasClass("disabled")) return;
+        $("#btn-send").addClass("disabled");
+        var array=[];
+        var flag = true;
+        $('.newQtyInput').each(function () {
+            if ($(this).val() < 0) {
+                flag = false;
+            }
+            array.push({id : $(this).attr('id'), newQty: $(this).val()});
+        });
+        if (!flag) {
+            layer.msg('换新数量需大于等于0');
+            $("#btn-send").removeClass("disabled");
+            return false;
         }
-        $.post("${context_path}/mall/order/audit", values, function (data) {
+        var values = {bkcourierNum: $('#bkcourierNum').val(), asodID: '${asAftersaleod.asodID}', skus: JSON.stringify(array)};
+        $.post("${context_path}/mall/aftersale/saveSend", values, function (data) {
+            debugger;
             if (data.code == 0) {
                 layer.msg('操作成功', {
                     icon: 1,
@@ -176,8 +143,10 @@
                     var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
                     parent.layer.close(index); //再执行关闭
                 });
+            }else {
+                layer.msg(data.msg);
             }
-            $("#submit-btn").removeClass("disabled");
+            $("#btn-send").removeClass("disabled");
         }, "json");
     }
 </script>

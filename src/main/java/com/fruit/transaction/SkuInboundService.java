@@ -76,21 +76,26 @@ public class SkuInboundService {
         BigDecimal allcost = new BigDecimal(0);
         while (quantity > 0) {
             SkuInboundDe skuInboundDe = SkuInboundDe.dao.findFirst("SELECT t1.* FROM sku_inbound_de t1 INNER JOIN sku_inbound t2 ON t1.inboundID = t2.inboundID WHERE sku=? AND status = 1 ORDER BY extime", sku);
-            Integer leftQty = skuInboundDe.getLeftQty();
-            Long id = skuInboundDe.getId();
-            // 计算总成本
-            if (leftQty - quantity > 0) {
-                // 入库明细单库存数量大于订单数量
-                allcost = allcost.add(skuInboundDe.getCost().multiply(BigDecimal.valueOf(quantity)));
-                // 设置入库单剩余数量
-                Db.update("UPDATE sku_inbound_de SET leftQty=leftQty - ? WHERE id=?", quantity, id);
-            } else {
-                // 如果入库数量小于或等于订单数量，将入库明细单状态设置为0,剩余数量设置为0
-                Db.update("UPDATE sku_inbound_de SET status=0, leftQty=0 WHERE id=?", id);
-                allcost = allcost.add(skuInboundDe.getCost().multiply(BigDecimal.valueOf(leftQty)));
+            if (skuInboundDe != null) {
+                Integer leftQty = skuInboundDe.getLeftQty();
+                Long id = skuInboundDe.getId();
+                // 计算总成本
+                if (leftQty - quantity > 0) {
+                    // 入库明细单库存数量大于订单数量
+                    allcost = allcost.add(skuInboundDe.getCost().multiply(BigDecimal.valueOf(quantity)));
+                    // 设置入库单剩余数量
+                    Db.update("UPDATE sku_inbound_de SET leftQty=leftQty - ? WHERE id=?", quantity, id);
+                } else {
+                    // 如果入库数量小于或等于订单数量，将入库明细单状态设置为0,剩余数量设置为0
+                    Db.update("UPDATE sku_inbound_de SET status=0, leftQty=0 WHERE id=?", id);
+                    allcost = allcost.add(skuInboundDe.getCost().multiply(BigDecimal.valueOf(leftQty)));
+                }
+                // 订单中待分配的sku数量
+                quantity -= leftQty;
+            } else { // 入库单剩余数量不足
+                quantity = 0;
+                allcost = new BigDecimal(0);
             }
-            // 订单中待分配的sku数量
-            quantity -= leftQty;
         }
         return allcost;
     }

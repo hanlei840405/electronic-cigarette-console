@@ -42,7 +42,7 @@ public class AfterSaleController extends BaseController {
     }
 
     @RequiresPermissions(value = {"/mall/aftersale"})
-    public void orderDetail() {
+    public void detail() {
         String asodID = this.getPara("asodID");
         String select = "select t1.*,t2.skuName,t2.specName";
         StringBuilder from = new StringBuilder("from as_aftersaleod_de t1 INNER JOIN mall_sku t2 on t1.sku = t2.sku where 1=1");
@@ -67,19 +67,32 @@ public class AfterSaleController extends BaseController {
     @RequiresPermissions(value = {"/mall/aftersale"})
     public void saveSend() {
         String asodID = this.getPara("asodID");
-        String array = this.getPara("array");
-        List<Map<String, String>> list = (List<Map<String, String>>) JSONUtils.parse(array);
+        String skus = this.getPara("skus");
+        List<Map<String, String>> list = (List<Map<String, String>>) JSONUtils.parse(skus);
         List<AsAftersaleodDe> asAftersaleodDes = new ArrayList<AsAftersaleodDe>();
         for (Map<String, String> map : list) {
             Long id = Long.valueOf(map.get("id"));
             Integer newQty = Integer.valueOf(map.get("newQty"));
             AsAftersaleodDe asAftersaleodDe = AsAftersaleodDe.dao.findById(id);
+            if (newQty < 0) {
+                this.renderJson(InvokeResult.failure("商品[" + asAftersaleodDe.getSku() + "]换新数量需大于等于0"));
+                return;
+            }
+            if (newQty > asAftersaleodDe.getQuantity()) {
+                this.renderJson(InvokeResult.failure("商品[" + asAftersaleodDe.getSku() + "]换新数量超过退回数量"));
+                return;
+            }
             asAftersaleodDe.setNewqty(newQty);
             asAftersaleodDes.add(asAftersaleodDe);
         }
         String bkcourierNum = this.getPara("bkcourierNum");
         AfterSaleService afterSaleService = Duang.duang(AfterSaleService.class);
-        afterSaleService.send(asodID, bkcourierNum, asAftersaleodDes);
+        try {
+            afterSaleService.send(asodID, bkcourierNum, asAftersaleodDes);
+        } catch (Exception e) {
+            this.renderJson(InvokeResult.failure(e.getMessage()));
+            return;
+        }
         this.renderJson(InvokeResult.success());
     }
 
