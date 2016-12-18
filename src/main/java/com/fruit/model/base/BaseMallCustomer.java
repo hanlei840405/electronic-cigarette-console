@@ -121,4 +121,20 @@ public abstract class BaseMallCustomer<M extends BaseMallCustomer<M>> extends Ba
 		return get("amount");
 	}
 
+	public void setPriceType(java.lang.String priceType) {
+		set("priceType", priceType);
+	}
+
+	public java.lang.String getPriceType() {
+		return get("priceType");
+	}
+
+	public void setCusType(java.lang.String cusType) {
+		set("cusType", cusType);
+	}
+
+	public java.lang.String getCusType() {
+		return get("cusType");
+	}
+
 }

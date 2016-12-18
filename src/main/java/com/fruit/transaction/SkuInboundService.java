@@ -64,6 +64,13 @@ public class SkuInboundService {
         SkuInboundDe.dao.delete(conditions);
     }
 
+    /**
+     * 获取quantity数量的最新总成本，并将quantity占用的入库数量做减法，根据FIFO原则，逐条抵扣数量，直至抵扣为0为止
+     *
+     * @param sku
+     * @param quantity
+     * @return
+     */
     @Before(Tx.class)
     public BigDecimal subtractLeftQty(String sku, int quantity) {
         BigDecimal allcost = new BigDecimal(0);

@@ -167,12 +167,12 @@
         $("#btn-view").click(function () {//添加页面
             var rid = getOneSelectedRows();
             if (rid == -1) {
-                layer.msg("请选择一个商品", {
+                layer.msg("请选择一个订单", {
                     icon: 2,
                     time: 2000 //2秒关闭（如果不配置，默认是3秒）
                 });
             } else if (rid == -2) {
-                layer.msg("只能选择一个商品", {
+                layer.msg("请选择一个订单", {
                     icon: 2,
                     time: 2000 //2秒关闭（如果不配置，默认是3秒）
                 });

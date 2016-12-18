@@ -1,7 +1,7 @@
 package com.fruit.model;
 
-import com.fruit.model.stock.*;
 import com.fruit.model.mall.*;
+import com.fruit.model.stock.*;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 
 /**
@@ -45,6 +45,8 @@ public class _MappingKit {
         arp.addMapping("od_order", "orderID", Order.class);
         arp.addMapping("od_order_addr", "orderID", OrderAddr.class);
         arp.addMapping("od_order_de", "id", OrderDe.class);
+        arp.addMapping("as_aftersaleod", "asodID", AsAftersaleod.class);
+        arp.addMapping("as_aftersaleod_de", "id", AsAftersaleodDe.class);
     }
 }
 

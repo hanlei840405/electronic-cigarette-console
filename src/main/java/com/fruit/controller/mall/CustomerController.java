@@ -9,6 +9,7 @@ import com.fruit.core.util.JqGridModelUtils;
 import com.fruit.core.view.InvokeResult;
 import com.fruit.model.mall.Category;
 import com.fruit.model.mall.Customer;
+import com.fruit.model.mall.CustomerShop;
 import com.fruit.model.mall.SkuSprice;
 import com.jfinal.plugin.activerecord.Page;
 
@@ -37,6 +38,16 @@ public class CustomerController extends BaseController {
     }
 
     @RequiresPermissions(value = {"/mall/customer"})
+    public void audit() {
+        Long id = this.getParaToLong("id");
+        Customer customer = Customer.dao.findById(id);
+        setAttr("customer", customer);
+        List<CustomerShop> customerShops = CustomerShop.dao.find("select * from mall_customer_shop where customer = ?", customer.getCusCode());
+        setAttr("customerShops", customerShops);
+        render("customer_audit.jsp");
+    }
+
+    @RequiresPermissions(value = {"/mall/customer"})
     public void setting() {
         Long id = this.getParaToLong("id");
         Customer customer = Customer.dao.findById(id);
@@ -44,6 +55,29 @@ public class CustomerController extends BaseController {
         List<Category> categories = Category.me.find("select * from mall_category where parentCode is not null");
         setAttr("categories", categories);
         render("customer_setting.jsp");
+    }
+
+    @RequiresPermissions(value = {"/mall/customer"})
+    public void saveAudit() {
+        Long id = this.getParaToLong("id");
+        String cusCode = this.getPara("cusCode");
+        String upCode = this.getPara("upCode");
+        String saler = this.getPara("saler");
+        Integer rate = this.getParaToInt("rate");
+        String priceType = this.getPara("priceType");
+        Set<Condition> conditions = new HashSet<Condition>();
+        Condition condition = new Condition("id", Operators.EQ, id);
+        conditions.add(condition);
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("cusCode", cusCode);
+        params.put("upCode", upCode);
+        params.put("saler", saler);
+        params.put("rate", rate);
+        params.put("priceType", priceType);
+        params.put("status", 1);
+        Customer.dao.update(conditions, params);
+
+        this.renderJson(InvokeResult.success());
     }
 
     @RequiresPermissions(value = {"/mall/customer"})
