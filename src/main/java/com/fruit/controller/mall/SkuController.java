@@ -65,11 +65,11 @@ public class SkuController extends BaseController {
     public void get() {
         String sku = this.getPara("sku");
         Sku entity = Sku.dao.findFirst("SELECT * FROM mall_sku WHERE sku=?", sku);
-        Map<String,Object> result = new HashMap<String, Object>();
+        Map<String, Object> result = new HashMap<String, Object>();
         if (entity != null) {
             result.put("code", "200");
             result.put("sku", entity);
-        }else {
+        } else {
             result.put("code", "500");
             result.put("msg", "商品不存在");
         }
@@ -134,9 +134,10 @@ public class SkuController extends BaseController {
         String category = this.getPara("category");
         String specName = this.getPara("specName");
         String attribute = this.getPara("attribute");
+        String exclusive = this.getPara("exclusive");
         String image = this.getPara("image");
         if (id == null) {
-            Sku.dao.clear().set("skuName", skuName).set("sku", sku).set("category", category).set("specName", specName).set("attribute", attribute).set("image", image).save();
+            Sku.dao.clear().set("skuName", skuName).set("sku", sku).set("category", category).set("specName", specName).set("attribute", attribute).set("image", image).set("exclusive", exclusive).save();
             if (!"1".equals(attribute)) {
                 SkuNprice.dao.clear().set("sku", sku).set("priceType", "A").save();
                 SkuNprice.dao.clear().set("sku", sku).set("priceType", "B").save();

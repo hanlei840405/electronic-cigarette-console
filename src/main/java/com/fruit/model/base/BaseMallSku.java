@@ -89,4 +89,12 @@ public abstract class BaseMallSku<M extends BaseMallSku<M>> extends BaseModel<M>
 		return get("image");
 	}
 
+	public void setExclusive(String exclusive) {
+		set("exclusive", exclusive);
+	}
+
+	public String getExclusive() {
+		return get("exclusive");
+	}
+
 }

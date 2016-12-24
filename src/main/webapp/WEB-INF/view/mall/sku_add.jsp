@@ -102,11 +102,21 @@
                             </div>
                             <div class="form-group">
                                 <label class="control-label col-xs-2 col-sm-12 no-padding-right"
+                                       for="file_upload">专属</label>
+
+                                <div class="col-xs-10 col-sm-12">
+                                    <div class="clearfix">
+                                        <input type="checkbox" name="exclusive" id="exclusive" value="1" <c:if test="${sku.exclusive == '1'}">checked </c:if>/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-xs-2 col-sm-12 no-padding-right"
                                        for="attribute">赠品</label>
 
                                 <div class="col-xs-10 col-sm-12">
                                     <div class="clearfix">
-                                        <input type="checkbox" name="attribute" id="attribute" value="1" <c:if test="${sku.attribute == '1'}">checked </c:if>
+                                        <input type="checkbox" name="attribute" id="attribute" value="1" <c:if test="${sku.attribute == '1'}">checked </c:if>/>
                                     </div>
                                 </div>
                             </div>

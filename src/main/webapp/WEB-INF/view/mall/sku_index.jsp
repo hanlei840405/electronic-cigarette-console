@@ -106,6 +106,7 @@
                 {label: '名称', name: 'skuName', width: 75},
                 {label: '编码', name: 'sku', width: 150},
                 {label: '规格', name: 'specName', width: 150},
+                {label: '专属', name: 'exclusive', formatter: exclusiveStatus, width: 50},
                 {label: '类目', name: 'category', width: 150},
                 {label: '状态', name: 'status', formatter: fmatterStatus, width: 50}
             ],
@@ -190,7 +191,7 @@
                 parent.layer.open({
                     title: '修改商品',
                     type: 2,
-                    area: ['370px', '430px'],
+                    area: ['400px', '500px'],
                     fix: false, //不固定
                     maxmin: true,
                     content: '${context_path}/mall/sku/add?id=' + rid
@@ -290,6 +291,14 @@
             return '<span class="label label-sm label-warning">下架</span>';
         } else {
             return '<span class="label label-sm label-success">上架</span>';
+        }
+    }
+    //格式化装束显示
+    function exclusiveStatus(cellvalue, options, rowObject) {
+        if (cellvalue == 1) {
+            return '<span class="label label-sm label-warning">是</span>';
+        } else {
+            return '<span class="label label-sm label-success">否</span>';
         }
     }
     function reloadGrid() {
