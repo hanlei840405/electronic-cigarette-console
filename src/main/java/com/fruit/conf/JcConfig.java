@@ -55,6 +55,7 @@ public class JcConfig extends JFinalConfig {
 		me.setViewType(ViewType.JSP);
 		me.setError404View("/page/404.jsp");
 		me.setError500View("/page/500.jsp");
+		me.setEncoding("UTF-8");
 	}
 
 	/**

@@ -80,14 +80,15 @@ public abstract class BaseController extends Controller {
 
     @Override
     public String getPara(String name) {
-        String value = null;
-        try {
-            value = new String(super.getPara(name).getBytes("iso8859_1"), "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } finally {
-            return value;
-        }
+        return super.getPara(name);
+//        String value = null;
+//        try {
+//            value = new String(super.getPara(name).getBytes("iso8859_1"), "utf-8");
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        } finally {
+//            return value;
+//        }
     }
 }
 

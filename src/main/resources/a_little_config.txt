@@ -1,5 +1,5 @@
-static_url=http://localhost:8080/upload/
-res_url=http://localhost:8080/res/
+static_url=http://localhost:9000/upload/
+res_url=http://localhost:9000/res/
 devMode=false
 app_key=80b8a85d78bf4f87baa0994a38b48825
 
