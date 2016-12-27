@@ -28,7 +28,7 @@
 
                         <p class="col-xs-4">客户:${order.cusName}</p>
 
-                        <p class="col-xs-4">数量:${order.amount}</p>
+                        <p class="col-xs-4">总金额:${order.amount}</p>
 
                         <p class="col-xs-4">
                             <c:if test="${order.status == 0 }">

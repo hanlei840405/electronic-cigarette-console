@@ -137,6 +137,13 @@ public class SkuController extends BaseController {
         String exclusive = this.getPara("exclusive");
         String image = this.getPara("image");
         if (id == null) {
+            Set<Condition> conditions = new HashSet<Condition>();
+            conditions.add(new Condition("sku", Operators.EQ, sku));
+            Sku exist = Sku.dao.get(conditions);
+            if (exist != null) {
+                this.renderJson(InvokeResult.failure("商品编号已存在！"));
+                return;
+            }
             Sku.dao.clear().set("skuName", skuName).set("sku", sku).set("category", category).set("specName", specName).set("attribute", attribute).set("image", image).set("exclusive", exclusive).save();
             if (!"1".equals(attribute)) {
                 SkuNprice.dao.clear().set("sku", sku).set("priceType", "A").save();

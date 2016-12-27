@@ -20,6 +20,27 @@ public class OrderService {
 
     @Before(Tx.class)
     public void auditOrder(String orderID, int status, String express, String courierNum) {
+
+        BigDecimal cost = new BigDecimal(0);
+        if (status == 3) {
+            List<OrderDe> orderDes = OrderDe.dao.find("SELECT * FROM od_order_de WHERE orderID=?", orderID);
+            SkuInboundService skuInboundService = Duang.duang(SkuInboundService.class);
+            for (OrderDe orderDe : orderDes) {
+                int quantity = orderDe.getQuantity();
+                String sku = orderDe.getSku();
+                orderDe.setAllcost(skuInboundService.subtractLeftQty(sku, quantity));
+                cost.add(orderDe.getAllcost());
+            }
+
+            Db.batchUpdate(orderDes, 20);
+        }
+        if (status == 4) { // 回退库存
+            List<OrderDe> orderDes = OrderDe.dao.find("SELECT * FROM od_order_de WHERE orderID=?", orderID);
+            for (OrderDe orderDe : orderDes) {
+                Db.update("UPDATE sk_stock SET quantity=quantity + ? WHERE sku=?", orderDe.getQuantity(), orderDe.getSku());
+            }
+        }
+
         Set<Condition> conditions = new HashSet<Condition>();
         conditions.add(new Condition("orderID", Operators.EQ, orderID));
         Map<String, Object> params = new HashMap<String, Object>();
@@ -30,23 +51,9 @@ public class OrderService {
         if (!StringUtils.isEmpty(courierNum)) {
             params.put("courierNum", courierNum);
         }
+        if (cost.doubleValue() > 0.00d) { // 更新订单总成本
+            params.put("cost", cost);
+        }
         Order.dao.update(conditions, params);
-
-        if (status == 3) {
-            List<OrderDe> orderDes = OrderDe.dao.find("SELECT * FROM od_order_de WHERE orderID=?", orderID);
-            SkuInboundService skuInboundService = Duang.duang(SkuInboundService.class);
-            for (OrderDe orderDe : orderDes) {
-                int quantity = orderDe.getQuantity();
-                String sku = orderDe.getSku();
-                orderDe.setAllcost(skuInboundService.subtractLeftQty(sku, quantity));
-            }
-            Db.batchUpdate(orderDes, 20);
-        }
-        if (status == 4) {
-            List<OrderDe> orderDes = OrderDe.dao.find("SELECT * FROM od_order_de WHERE orderID=?", orderID);
-            for (OrderDe orderDe : orderDes) {
-                Db.update("UPDATE sk_stock SET quantity=quantity + ? WHERE sku=?", orderDe.getQuantity(), orderDe.getSku());
-            }
-        }
     }
 }
