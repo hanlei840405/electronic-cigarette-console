@@ -9,69 +9,69 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings("serial")
 public abstract class BaseMallSku<M extends BaseMallSku<M>> extends BaseModel<M> implements IBean {
 
-	public void setId(Long id) {
-		set("id", id);
-	}
+    public void setId(Long id) {
+        set("id", id);
+    }
 
-	public Long getId() {
-		return get("id");
-	}
+    public Long getId() {
+        return get("id");
+    }
 
-	public void setSkuName(String skuName) {
-		set("skuName", skuName);
-	}
+    public void setSkuName(String skuName) {
+        set("skuName", skuName);
+    }
 
-	public String getSkuName() {
-		return get("skuName");
-	}
+    public String getSkuName() {
+        return get("skuName");
+    }
 
-	public void setSku(String sku) {
-		set("sku", sku);
-	}
+    public void setSku(String sku) {
+        set("sku", sku);
+    }
 
-	public String getSku() {
-		return get("sku");
-	}
+    public String getSku() {
+        return get("sku");
+    }
 
-	public void setCategory(String category) {
-		set("category", category);
-	}
+    public void setCategory(String category) {
+        set("category", category);
+    }
 
-	public String getCategory() {
-		return get("category");
-	}
+    public String getCategory() {
+        return get("category");
+    }
 
-	public void setAttribute(String attribute) {
-		set("attribute", attribute);
-	}
+    public void setAttribute(String attribute) {
+        set("attribute", attribute);
+    }
 
-	public String getAttribute() {
-		return get("attribute");
-	}
+    public String getAttribute() {
+        return get("attribute");
+    }
 
-	public void setStatus(Integer status) {
-		set("status", status);
-	}
+    public void setStatus(Integer status) {
+        set("status", status);
+    }
 
-	public Integer getStatus() {
-		return get("status");
-	}
+    public Integer getStatus() {
+        return get("status");
+    }
 
-	public void setSpecName(String specName) {
-		set("specName", specName);
-	}
+    public void setSpecName(String specName) {
+        set("specName", specName);
+    }
 
-	public String getSpecName() {
-		return get("specName");
-	}
+    public String getSpecName() {
+        return get("specName");
+    }
 
-	public void setRemark(String remark) {
-		set("remark", remark);
-	}
+    public void setRemark(String remark) {
+        set("remark", remark);
+    }
 
-	public String getRemark() {
-		return get("remark");
-	}
+    public String getRemark() {
+        return get("remark");
+    }
 
     public void setCateName(String cateName) {
         set("cateName", cateName);
@@ -81,20 +81,28 @@ public abstract class BaseMallSku<M extends BaseMallSku<M>> extends BaseModel<M>
         return get("cateName");
     }
 
-	public void setImage(String image) {
-		set("image", image);
-	}
+    public void setImage(String image) {
+        set("image", image);
+    }
 
-	public String getImage() {
-		return get("image");
-	}
+    public String getImage() {
+        return get("image");
+    }
 
-	public void setExclusive(String exclusive) {
-		set("exclusive", exclusive);
-	}
+    public void setExclusive(String exclusive) {
+        set("exclusive", exclusive);
+    }
 
-	public String getExclusive() {
-		return get("exclusive");
-	}
+    public String getExclusive() {
+        return get("exclusive");
+    }
+
+    public void setCustomer(String customer) {
+        set("customer", customer);
+    }
+
+    public String getCustomer() {
+        return get("customer");
+    }
 
 }

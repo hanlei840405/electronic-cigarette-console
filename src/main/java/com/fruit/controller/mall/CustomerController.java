@@ -7,10 +7,7 @@ import com.fruit.core.model.Condition;
 import com.fruit.core.model.Operators;
 import com.fruit.core.util.JqGridModelUtils;
 import com.fruit.core.view.InvokeResult;
-import com.fruit.model.mall.Category;
-import com.fruit.model.mall.Customer;
-import com.fruit.model.mall.CustomerShop;
-import com.fruit.model.mall.SkuSprice;
+import com.fruit.model.mall.*;
 import com.jfinal.plugin.activerecord.Page;
 
 import java.math.BigDecimal;
@@ -58,6 +55,16 @@ public class CustomerController extends BaseController {
     }
 
     @RequiresPermissions(value = {"/mall/customer"})
+    public void exclusive() {
+        Long id = this.getParaToLong("id");
+        Customer customer = Customer.dao.findById(id);
+        setAttr("customer", customer.getCusCode());
+        List<Category> categories = Category.me.find("select * from mall_category where parentCode is not null");
+        setAttr("categories", categories);
+        render("customer_exclusive.jsp");
+    }
+
+    @RequiresPermissions(value = {"/mall/customer"})
     public void saveAudit() {
         Long id = this.getParaToLong("id");
         String cusCode = this.getPara("cusCode");
@@ -99,6 +106,22 @@ public class CustomerController extends BaseController {
             SkuSprice.dao.clear().set("customer", customer).set("sku", sku).set("price", price).save();
         }
 
+        this.renderJson(InvokeResult.success());
+    }
+
+    @RequiresPermissions(value = {"/mall/customer"})
+    public void saveCustomerExclusive() {
+        String customer = this.getPara("customer");
+        String sku = this.getPara("sku");
+        Set<Condition> conditions = new HashSet<Condition>();
+        conditions.add(new Condition("customer", Operators.EQ, customer));
+        conditions.add(new Condition("sku", Operators.EQ, sku));
+        CustomerSku customerSku = CustomerSku.dao.get(conditions);
+        if (customerSku != null) {
+            CustomerSku.dao.deleteById(customerSku.getId());
+        } else {
+            CustomerSku.dao.clear().set("customer", customer).set("sku", sku).save();
+        }
         this.renderJson(InvokeResult.success());
     }
 }

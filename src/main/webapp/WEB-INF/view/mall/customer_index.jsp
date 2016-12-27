@@ -59,6 +59,7 @@
                         <div class="span12 control-group">
                             <jc:button className="btn btn-success" id="btn-audit" textName="审核"/>
                             <jc:button className="btn btn-danger" id="btn-setting" textName="价格设置"/>
+                            <jc:button className="btn btn-info" id="btn-exclusive" textName="专属商品"/>
                             <jc:button className="btn" id="btn-disable" textName="禁用"/>
                         </div>
                     </div>
@@ -181,6 +182,29 @@
                     fix: false, //不固定
                     maxmin: true,
                     content: '${context_path}/mall/customer/setting?id=' + rid
+                });
+            }
+        });
+        $("#btn-exclusive").click(function () {//选择专属商品
+            var rid = getOneSelectedRows();
+            if (rid == -1) {
+                layer.msg("请选择一个商户", {
+                    icon: 2,
+                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                });
+            } else if (rid == -2) {
+                layer.msg("只能选择一个商户", {
+                    icon: 2,
+                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                });
+            } else {
+                parent.layer.open({
+                    title: '设置商品特殊价格',
+                    type: 2,
+                    area: ['800px', '600px'],
+                    fix: false, //不固定
+                    maxmin: true,
+                    content: '${context_path}/mall/customer/exclusive?id=' + rid
                 });
             }
         });

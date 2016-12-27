@@ -225,6 +225,7 @@
                 }
             });
             if(!valid) {
+
                 layer.confirm("其他未设置数据量或价格的，系统将自动设置为与数量1和价格1一致",function(index){
                     layer.close(index);
                     me.addClass("disabled");
@@ -243,9 +244,24 @@
                         $("#submit-btn").removeClass("disabled");
                     }, "json");
                 });
-                return;
+            }else {
+                me.addClass("disabled");
+                var postData = $('#validation-form').serializeJson();
+                $.post("${context_path}/mall/sku/saveSkuPrice", postData, function (data) {
+                    if (data.code == 0) {
+                        layer.msg('操作成功', {
+                            icon: 1,
+                            time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                        }, function () {
+                            parent.reloadGrid();
+                            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                            parent.layer.close(index); //再执行关闭
+                        });
+                    }
+                    $("#submit-btn").removeClass("disabled");
+                }, "json");
             }
-            return false;
+            return;
         });
 
     });

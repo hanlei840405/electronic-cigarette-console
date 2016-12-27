@@ -35,6 +35,7 @@ public class _MappingKit {
         arp.addMapping("mall_customer", "id", Customer.class);
         arp.addMapping("mall_customer_addr", "id", CustomerAddr.class);
         arp.addMapping("mall_customer_shop", "id", CustomerShop.class);
+        arp.addMapping("mall_customer_sku", "id", CustomerSku.class);
         arp.addMapping("mall_sku_nprice", "id", SkuNprice.class);
         arp.addMapping("mall_sku_sprice", "id", SkuSprice.class);
         arp.addMapping("sku_inbound", "inboundID", SkuInbound.class);

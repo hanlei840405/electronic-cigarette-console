@@ -10,11 +10,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
     <jsp:include page="/WEB-INF/view/common/basecss.jsp" flush="true"/>
     <style type="text/css">
-        .text-null {
+        .button-select {
             border-color: #ff0000 !important;
         }
 
-        .text-not-null {
+        .button-not-select {
             border-color: #008000 !important;
         }
     </style>
@@ -107,15 +107,15 @@
         });
 
         $("#grid-table").jqGrid({
-            url: '${context_path}/mall/sku/getListDataForSp?customer=' + customer,
+            url: '${context_path}/mall/sku/getListDataForEx?customer=' + customer,
             mtype: "GET",
             datatype: "json",
             colModel: [
                 {index: 'id', name: 'id', key: true, hidden: true, width: 75},
                 {label: '编码', name: 'sku', width: 75},
                 {label: '名称', name: 'skuName', key: true, width: 150},
-                {label: '类目', name: 'cateName', key: true, width: 150},
-                {label: '价格', name: 'price', width: 50, formatter: formatterPrice, edittype: 'text'}
+                {label: '类目', name: 'categoryName', width: 75},
+                {label: '专属', name: 'customer', width: 50, formatter: operation, edittype: 'button'}
             ],
             viewrecords: true,
             height: 600,
@@ -174,34 +174,26 @@
             }
         }
     }
-    function formatterPrice(cellvalue, options, rowObject) {
+    function operation(cellvalue, options, rowObject) {
         var cssName;
-        if (cellvalue == '') {
-            cssName = 'text-null';
+        var text;
+        if (cellvalue == '' || cellvalue == null) {
+            text = '设定';
+            cssName = 'btn btn-primary';
         } else {
-            cssName = 'text-not-null';
+            text = '取消';
+            cssName = 'btn btn-warning';
         }
-        return '<input type="text" class="' + cssName + '" value="' + cellvalue + ' " old="' + cellvalue + '" onblur="savePriceAsync(this)" id="' + rowObject.sku + '"/>';
+        return '<input type="button" class="' + cssName + '" value="' + text + ' " onclick="saveExclusive(\'' + rowObject.sku + '\')"/>';
     }
-    function savePriceAsync(obj) {
-        var text = $(obj);
-        if(text.val() == text.attr('old')) {
-            return false;
-        }
+    function saveExclusive(sku) {
         var customer = $('#customer').val();
-        $.post("${context_path}/mall/customer/saveCustomerPrice", {
+        $.post("${context_path}/mall/customer/saveCustomerExclusive", {
             customer: customer,
-            sku: text.attr('id'),
-            price: text.val()
+            sku: sku
         }, function (data) {
-
             if (data.code == 0) {
-                if (text.val() != '') {
-                    text.removeClass('text-null').addClass('text-not-null');
-                } else {
-                    text.removeClass('text-not-null').addClass('text-null');
-                }
-
+                reloadGrid();
             }
         }, "json");
     }

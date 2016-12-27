@@ -77,12 +77,41 @@ public class SkuController extends BaseController {
     }
 
     @RequiresPermissions(value = {"/mall/sku"})
-    public void getListDataExt() {
+    public void getListDataForSp() {
         String category = this.getPara("category");
+        String customer = this.getPara("customer");
         String sku = this.getPara("sku");
-        String select = "select t1.*,IFNULL(t2.price,'') as price";
-        StringBuilder from = new StringBuilder("from mall_sku t1 LEFT JOIN mall_sku_sprice t2 on t1.sku = t2.sku where 1=1");
+        String select = "SELECT t1.*,IFNULL(t2.price,'') AS price, t3.cateName";
+        StringBuilder from = new StringBuilder("FROM mall_sku t1");
+        from.append(" LEFT JOIN mall_sku_sprice t2 ON t1.sku = t2.sku AND t2.customer = ?");
+        from.append(" LEFT JOIN mall_category t3 ON t1.category = t3.cateCode");
+        from.append(" WHERE 1=1");
         List<String> params = new ArrayList<String>();
+        params.add(customer);
+        if (!StringUtils.isEmpty(category)) {
+            from.append(" ").append("and t1.category = ?");
+            params.add(category);
+        }
+        if (!StringUtils.isEmpty(sku)) {
+            from.append(" ").append("and t1.sku = ?");
+            params.add(sku);
+        }
+        Page<Sku> pageInfo = Sku.dao.getPage(getPage(), this.getRows(), select, from.toString(), null, params.toArray());
+        this.renderJson(JqGridModelUtils.toJqGridView(pageInfo));
+    }
+
+    @RequiresPermissions(value = {"/mall/sku"})
+    public void getListDataForEx() {
+        String category = this.getPara("category");
+        String customer = this.getPara("customer");
+        String sku = this.getPara("sku");
+        String select = "SELECT t1.*,t2.customer,t3.cateName";
+        StringBuilder from = new StringBuilder("FROM mall_sku t1");
+        from.append(" LEFT JOIN mall_customer_sku t2 ON t1.sku = t2.sku AND t2.customer = ?");
+        from.append(" LEFT JOIN mall_category t3 ON t1.category = t3.cateCode");
+        from.append(" WHERE 1=1");
+        List<String> params = new ArrayList<String>();
+        params.add(customer);
         if (!StringUtils.isEmpty(category)) {
             from.append(" ").append("and t1.category = ?");
             params.add(category);
