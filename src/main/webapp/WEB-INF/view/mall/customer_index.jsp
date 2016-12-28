@@ -61,6 +61,7 @@
                             <jc:button className="btn btn-danger" id="btn-setting" textName="价格设置"/>
                             <jc:button className="btn btn-info" id="btn-exclusive" textName="专属商品"/>
                             <jc:button className="btn" id="btn-disable" textName="禁用"/>
+                            <jc:button className="btn" id="btn-reset" textName="密码重置"/>
                         </div>
                     </div>
                     <!-- PAGE CONTENT BEGINS -->
@@ -208,9 +209,44 @@
                 });
             }
         });
+        $("#btn-reset").click(function () {//重置密码
+            var rid = getOneSelectedRows();
+            if (rid == -1) {
+                layer.msg("请选择一个商户", {
+                    icon: 2,
+                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                });
+            } else if (rid == -2) {
+                layer.msg("只能选择一个商户", {
+                    icon: 2,
+                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                });
+            } else {
+                var submitData = {
+                    "id": getOneSelectedRows()
+                };
+                layer.confirm("确定修改其密码？",function(index){
+                    layer.close(index);
+                    $.post("${context_path}/mall/customer/reset", submitData, function (data) {
+                        if (data.code == 0) {
+                            layer.msg("重置成功", {
+                                icon: 1,
+                                time: 1000 //1秒关闭（如果不配置，默认是3秒）
+                            }, function () {
+                                //$("#grid-table").trigger("reloadGrid"); //重新载入
+                                reloadGrid();
+                            });
+
+                        } else {
+                            layer.alert(data.msg);
+                        }
+                    }, "json");
+                });
+            }
+        });
         $("#btn-disable").click(function () {
             var submitData = {
-                "ids": getSelectedRows()
+                "id": getOneSelectedRows()
             };
             $.post("${context_path}/mall/customer/disable", submitData, function (data) {
 

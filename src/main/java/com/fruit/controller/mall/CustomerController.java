@@ -6,6 +6,8 @@ import com.fruit.core.controller.BaseController;
 import com.fruit.core.model.Condition;
 import com.fruit.core.model.Operators;
 import com.fruit.core.util.JqGridModelUtils;
+import com.fruit.core.util.MD5Utils;
+import com.fruit.core.util.security.MessageDigestPasswordEncoder;
 import com.fruit.core.view.InvokeResult;
 import com.fruit.model.mall.*;
 import com.jfinal.plugin.activerecord.Page;
@@ -122,6 +124,35 @@ public class CustomerController extends BaseController {
         } else {
             CustomerSku.dao.clear().set("customer", customer).set("sku", sku).save();
         }
+        this.renderJson(InvokeResult.success());
+    }
+
+    @RequiresPermissions(value = {"/mall/customer"})
+    public void reset() {
+        Long id = this.getParaToLong("id");
+        Customer customer = Customer.dao.findById(id);
+
+        String password = "123456";
+        MessageDigestPasswordEncoder encoder = new MessageDigestPasswordEncoder("MD5");
+        password = encoder.encodePassword(password, customer.getCusCode());
+        Set<Condition> conditions = new HashSet<Condition>();
+        conditions.add(new Condition("id", Operators.EQ, id));
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("passwd", password);
+        Customer.dao.update(conditions, params);
+
+        this.renderJson(InvokeResult.success());
+    }
+
+    @RequiresPermissions(value = {"/mall/customer"})
+    public void disable() {
+        Long id = this.getParaToLong("id");
+        Set<Condition> conditions = new HashSet<Condition>();
+        conditions.add(new Condition("id", Operators.EQ, id));
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("status", 0);
+        Customer.dao.update(conditions, params);
+
         this.renderJson(InvokeResult.success());
     }
 }
