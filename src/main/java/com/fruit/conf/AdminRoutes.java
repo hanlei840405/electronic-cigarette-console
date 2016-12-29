@@ -50,6 +50,7 @@ public class AdminRoutes extends Routes {
         add("/stock/stock", StockController.class, "/WEB-INF/view/stock");
         add("/mall/order", OrderController.class, "/WEB-INF/view/mall");
         add("/mall/aftersale", AfterSaleController.class, "/WEB-INF/view/mall");
+        add("/mall/rate", AfterSaleController.class, "/WEB-INF/view/mall");
     }
 
 }

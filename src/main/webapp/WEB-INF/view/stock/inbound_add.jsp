@@ -41,7 +41,7 @@
                                         <form class="form-inline" role="form" id="saveInbound">
                                             <input type="hidden" id="inboundID" name="inboundID" value="${inboundID}"/>
                                             <div class="form-group col-xs-2">
-                                                <input type="text" class="form-control" name="sku" placeholder="商品编号" onblur="selectSku(this)">
+                                                <input type="text" class="form-control" name="sku" placeholder="商品编号" onchange="selectSku(this)">
                                             </div>
                                             <div class="form-group col-xs-6">
                                                     <input type="text" class="form-control" id="info" placeholder="商品信息" readonly>

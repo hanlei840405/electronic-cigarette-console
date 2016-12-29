@@ -3,8 +3,10 @@ package com.fruit.controller.mall;
 import com.alibaba.druid.util.StringUtils;
 import com.fruit.core.auth.anno.RequiresPermissions;
 import com.fruit.core.controller.BaseController;
+import com.fruit.core.util.IWebUtils;
 import com.fruit.core.util.JqGridModelUtils;
 import com.fruit.core.view.InvokeResult;
+import com.fruit.model.SysUser;
 import com.fruit.model.mall.Order;
 import com.fruit.model.mall.OrderDe;
 import com.fruit.transaction.OrderService;
@@ -53,12 +55,13 @@ public class OrderController extends BaseController {
 
     @RequiresPermissions(value = {"/mall/order"})
     public void audit() {
+        SysUser sysUser = IWebUtils.getCurrentSysUser(getRequest());
         String orderID = this.getPara("orderID");
         Integer status = this.getParaToInt("status");
         String express = this.getPara("express");
         String courierNum = this.getPara("courierNum");
         OrderService orderService = Duang.duang(OrderService.class);
-        orderService.auditOrder(orderID, status, express, courierNum);
+        orderService.auditOrder(orderID, status, express, courierNum, sysUser.getName());
         this.renderJson(InvokeResult.success());
     }
 

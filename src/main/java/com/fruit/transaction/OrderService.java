@@ -19,7 +19,7 @@ import java.util.*;
 public class OrderService {
 
     @Before(Tx.class)
-    public void auditOrder(String orderID, int status, String express, String courierNum) {
+    public void auditOrder(String orderID, int status, String express, String courierNum, String reviewer) {
 
         BigDecimal cost = new BigDecimal(0);
         if (status == 3) {
@@ -51,9 +51,21 @@ public class OrderService {
         if (!StringUtils.isEmpty(courierNum)) {
             params.put("courierNum", courierNum);
         }
+        params.put("reviewer", reviewer);
         if (cost.doubleValue() > 0.00d) { // 更新订单总成本
             params.put("cost", cost);
         }
+        Order.dao.update(conditions, params);
+    }
+
+    @Before(Tx.class)
+    public void rated(String saler, String yearAndMonth) {
+        Set<Condition> conditions = new HashSet<Condition>();
+        conditions.add(new Condition("saler", Operators.EQ, saler));
+        conditions.add(new Condition("odtime", Operators.LIKE, yearAndMonth));
+        conditions.add(new Condition("rated", Operators.EQ, null));
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("rated", new Date());
         Order.dao.update(conditions, params);
     }
 }

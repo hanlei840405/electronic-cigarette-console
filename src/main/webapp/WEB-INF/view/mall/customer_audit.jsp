@@ -85,10 +85,10 @@
                                     <div class="clearfix">
                                         <select name="priceType" id="priceType" class="col-xs-12 col-sm-12">
                                             <option value="">---请选择---</option>
-                                            <option value="A">A</option>
-                                            <option value="B">B</option>
-                                            <option value="C">C</option>
-                                            <option value="D">D</option>
+                                            <option value="A" ${customer.priceType eq 'A'?'selected':''}>A</option>
+                                            <option value="B" ${customer.priceType eq 'B'?'selected':''}>B</option>
+                                            <option value="C" ${customer.priceType eq 'C'?'selected':''}>C</option>
+                                            <option value="D" ${customer.priceType eq 'D'?'selected':''}>D</option>
                                         </select>
                                     </div>
                                 </div>

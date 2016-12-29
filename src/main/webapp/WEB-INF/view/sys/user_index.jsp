@@ -104,6 +104,7 @@
                 mtype: "GET",
                 datatype: "json",
                 colModel: [
+                    { label: '编号', name: 'id', width: 75 },
                     { label: '用户名', name: 'name', width: 75 },
                     { label: '联系电话', name: 'phone', width: 75 ,sortable:false},
 					{ label: '微信号', name: 'wxid', width: 75 , sortable:false},
