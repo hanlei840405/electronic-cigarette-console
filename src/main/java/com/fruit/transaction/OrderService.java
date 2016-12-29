@@ -5,6 +5,7 @@ import com.fruit.core.model.Condition;
 import com.fruit.core.model.Operators;
 import com.fruit.model.mall.Order;
 import com.fruit.model.mall.OrderDe;
+import com.fruit.model.mall.UserRated;
 import com.jfinal.aop.Before;
 import com.jfinal.aop.Duang;
 import com.jfinal.plugin.activerecord.Db;
@@ -59,14 +60,14 @@ public class OrderService {
     }
 
     @Before(Tx.class)
-    public void rated(String saler, String yearAndMonth) {
-        Set<Condition> conditions = new HashSet<Condition>();
-        conditions.add(new Condition("saler", Operators.EQ, saler));
-        conditions.add(new Condition("odtime", Operators.LIKE, yearAndMonth));
-        conditions.add(new Condition("rated", Operators.EQ, null));
-        conditions.add(new Condition("status", Operators.IN, new int[]{1, 2, 3}));
-        Map<String, Object> params = new HashMap<String, Object>();
-        params.put("rated", new Date());
-        Order.dao.update(conditions, params);
+    public void rated(Long searchUser, String searchYear, String searchMonth) {
+        List<Order> orders = Order.dao.find("select t1.* from od_order t1 INNER JOIN mall_customer t2 on t1.customer = t2.cusCode where t1.status in (1,2,3) and t1.rated is null and t2.saler=? and t1.odtime like ?", searchUser, searchYear + '-' + searchMonth + "%");
+        BigDecimal amount = new BigDecimal(0);
+        for (Order order : orders) {
+            amount = amount.add(order.getAmount());
+        }
+        Db.update("update od_order t1 inner join mall_customer t2 on t1.customer = t2.cusCode set t1.rated= now() where t1.status in (1,2,3) and t1.rated is null and t2.saler= ? and date_format(t1.odtime,'%Y-%m')=?", searchUser, searchYear + '-' + searchMonth);
+
+        UserRated.dao.set("saler", searchUser).set("rated", searchYear + '-' + searchMonth).set("amount", amount).save();
     }
 }

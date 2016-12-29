@@ -22,42 +22,37 @@
     <div class="main-content" id="page-wrapper">
         <div class="page-content" id="page-content">
             <div class="row">
-                <div class="col-xs-12">
-                    <!-- PAGE CONTENT BEGINS -->
-                    <div class="widget-box">
-                        <div class="widget-header widget-header-small">
-                            <h5 class="widget-title lighter">筛选</h5>
-                        </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <!-- PAGE CONTENT BEGINS -->
+                        <div class="widget-box">
+                            <div class="widget-header widget-header-small">
+                                <h5 class="widget-title lighter">筛选</h5>
+                            </div>
 
-                        <div class="widget-body">
-                            <div class="widget-main">
-                                <div class="row">
-                                    <div class="col-xs-12 col-sm-8">
-                                        <div class="input-group">
-                                            员工:<select id="search_user">
-                                            <option value="">请选择员工</option>
-                                            <c:forEach items="${sysUsers }" var="item">
-                                                <option value="${item.id }">${item.realName }</option>
-                                            </c:forEach>
-                                        </select>
+                            <div class="widget-body">
+                                <div class="widget-main">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-8">
+                                            <div class="input-group">
 
-                                            年:<select id="search_year">
-                                        </select>
+                                                年:<select id="search_year">
+                                            </select>
 
-                                            月:<select id="search_month">
-                                            <option value="01">一月</option>
-                                            <option value="02">二月</option>
-                                            <option value="03">三月</option>
-                                            <option value="04">四月</option>
-                                            <option value="05">五月</option>
-                                            <option value="06">六月</option>
-                                            <option value="07">七月</option>
-                                            <option value="08">八月</option>
-                                            <option value="09">九月</option>
-                                            <option value="10">十月</option>
-                                            <option value="11">十一月</option>
-                                            <option value="12">十二月</option>
-                                        </select>
+                                                月:<select id="search_month">
+                                                <option value="01">一月</option>
+                                                <option value="02">二月</option>
+                                                <option value="03">三月</option>
+                                                <option value="04">四月</option>
+                                                <option value="05">五月</option>
+                                                <option value="06">六月</option>
+                                                <option value="07">七月</option>
+                                                <option value="08">八月</option>
+                                                <option value="09">九月</option>
+                                                <option value="10">十月</option>
+                                                <option value="11">十一月</option>
+                                                <option value="12">十二月</option>
+                                            </select>
 																	<span class="input-group-btn">
 																		<button type="button" id="btn_search"
                                                                                 class="btn btn-purple btn-sm">
@@ -65,6 +60,7 @@
                                                                             搜索
                                                                         </button>
 																	</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -75,8 +71,6 @@
                 <div class="col-xs-12">
                     <div class="row-fluid" style="margin-bottom: 5px;">
                         <div class="span12 control-group">
-                            <jc:button className="btn btn-success" id="btn-view" textName="查看订单"/>
-                            <jc:button className="btn btn-warning" id="btn-rated" textName="员工提成"/>
                         </div>
                     </div>
                     <!-- PAGE CONTENT BEGINS -->
@@ -121,25 +115,12 @@
         });
 
         $("#grid-table").jqGrid({
-            url: '${context_path}/mall/rate/getListData',
+            url: '${context_path}/mall/rate/getRatedData',
             mtype: "GET",
             datatype: "local",
             colModel: [
-                {label: '订单编号', name: 'orderID', key: true, width: 75},
-                {label: '商家编号', name: 'customer', width: 150},
-                {label: '商家名称', name: 'cusName', width: 150},
-                {label: '总金额', name: 'amount', width: 150},
-                {label: '总成本', name: 'cost', width: 150},
-                {label: '复核人', name: 'reviewer', width: 150},
-                {label: '快递公司', name: 'express', width: 150},
-                {label: '快递单号', name: 'courierNum', width: 150},
-                {
-                    label: '下单时间',
-                    name: 'odtime',
-                    width: 150,
-                    formatter: "date",
-                    formatoptions: {srcformat: "ISO8601Long", newformat: "Y-m-d"}
-                }
+                {label: '月份', name: 'rated', width: 150},
+                {label: '计提金额', name: 'amount', width: 150}
             ],
             height: 280,
             rowNum: 10,
@@ -158,7 +139,7 @@
         $(window).triggerHandler('resize.jqGrid');
         $("#btn_search").click(function () {
             //此处可以添加对查询数据的合法验证
-            var search_user = $("#search_user").val();
+            var search_user = '${userId}';
             var search_year = $("#search_year").val();
             var search_month = $("#search_month").val();
             $("#grid-table").jqGrid('setGridParam', {
@@ -166,54 +147,6 @@
                 postData: {'search_user': search_user,'search_year': search_year,'search_month': search_month}, //发送数据
                 page: 1
             }).trigger("reloadGrid"); //重新载入
-        });
-        $("#btn-view").click(function () {//添加页面
-            var rid = getOneSelectedRows();
-            if (rid == -1) {
-                layer.msg("请选择一个订单", {
-                    icon: 2,
-                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
-                });
-            } else if (rid == -2) {
-                layer.msg("只能选择一个订单", {
-                    icon: 2,
-                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
-                });
-            } else {
-                parent.layer.open({
-                    title: '查看订单',
-                    type: 2,
-                    area: ['600px', '500px'],
-                    fix: false, //不固定
-                    maxmin: true,
-                    content: '${context_path}/mall/order/view?orderID=' + rid
-                });
-            }
-        });
-        $("#btn-rated").click(function () {
-            var search_user = $("#search_user").val();
-            var search_year = $("#search_year").val();
-            var search_month = $("#search_month").val();
-            var submitData = {
-                "search_user": search_user,
-                "search_year": search_year,
-                "search_month": search_month
-            };
-            $.post("${context_path}/mall/rate/rated", submitData, function (data) {
-
-                if (data.code == 0) {
-                    layer.msg("操作成功", {
-                        icon: 1,
-                        time: 1000 //1秒关闭（如果不配置，默认是3秒）
-                    }, function () {
-                        //$("#grid-table").trigger("reloadGrid"); //重新载入
-                        reloadGrid();
-                    });
-
-                } else {
-                    layer.alert(data.msg);
-                }
-            }, "json");
         });
     });
     //replace icons with FontAwesome icons like above
@@ -260,17 +193,6 @@
                 return "-2";
             }
         }
-    }
-    function reloadGrid() {
-        //此处可以添加对查询数据的合法验证
-        var search_user = $("#search_user").val();
-        var search_year = $("#search_year").val();
-        var search_month = $("#search_month").val();
-        $("#grid-table").jqGrid('setGridParam', {
-            datatype: 'json',
-            postData: {'search_user': search_user,'search_year': search_year,'search_month': search_month}, //发送数据
-            page: 1
-        }).trigger("reloadGrid"); //重新载入
     }
 </script>
 

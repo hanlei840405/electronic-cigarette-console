@@ -48,6 +48,7 @@ public class _MappingKit {
         arp.addMapping("od_order_de", "id", OrderDe.class);
         arp.addMapping("as_aftersaleod", "asodID", AsAftersaleod.class);
         arp.addMapping("as_aftersaleod_de", "id", AsAftersaleodDe.class);
+        arp.addMapping("user_rated", "id", UserRated.class);
     }
 }
 

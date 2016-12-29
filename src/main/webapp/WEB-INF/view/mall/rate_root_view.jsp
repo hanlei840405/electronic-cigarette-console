@@ -72,22 +72,21 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xs-12">
-                    <div class="row-fluid" style="margin-bottom: 5px;">
-                        <div class="span12 control-group">
-                            <jc:button className="btn btn-success" id="btn-view" textName="查看订单"/>
-                            <jc:button className="btn btn-warning" id="btn-rated" textName="员工提成"/>
-                        </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="row-fluid" style="margin-bottom: 5px;">
+                    <div class="span12 control-group">
                     </div>
-                    <!-- PAGE CONTENT BEGINS -->
-                    <table id="grid-table"></table>
+                </div>
+                <!-- PAGE CONTENT BEGINS -->
+                <table id="grid-table"></table>
 
-                    <div id="grid-pager"></div>
-                    <!-- PAGE CONTENT ENDS -->
-                </div><!-- /.col -->
-            </div><!-- /.row -->
-        </div>
+                <div id="grid-pager"></div>
+                <!-- PAGE CONTENT ENDS -->
+            </div><!-- /.col -->
+        </div><!-- /.row -->
     </div>
+</div>
 </div><!-- /.main-container -->
 <!-- basic scripts -->
 <jsp:include page="/WEB-INF/view/common/basejs.jsp" flush="true"/>
@@ -121,25 +120,12 @@
         });
 
         $("#grid-table").jqGrid({
-            url: '${context_path}/mall/rate/getListData',
+            url: '${context_path}/mall/rate/getRatedData',
             mtype: "GET",
             datatype: "local",
             colModel: [
-                {label: '订单编号', name: 'orderID', key: true, width: 75},
-                {label: '商家编号', name: 'customer', width: 150},
-                {label: '商家名称', name: 'cusName', width: 150},
-                {label: '总金额', name: 'amount', width: 150},
-                {label: '总成本', name: 'cost', width: 150},
-                {label: '复核人', name: 'reviewer', width: 150},
-                {label: '快递公司', name: 'express', width: 150},
-                {label: '快递单号', name: 'courierNum', width: 150},
-                {
-                    label: '下单时间',
-                    name: 'odtime',
-                    width: 150,
-                    formatter: "date",
-                    formatoptions: {srcformat: "ISO8601Long", newformat: "Y-m-d"}
-                }
+                {label: '月份', name: 'rated', width: 150},
+                {label: '计提金额', name: 'amount', width: 150}
             ],
             height: 280,
             rowNum: 10,
@@ -157,63 +143,14 @@
         });
         $(window).triggerHandler('resize.jqGrid');
         $("#btn_search").click(function () {
-            //此处可以添加对查询数据的合法验证
-            var search_user = $("#search_user").val();
+            var search_user = $('#search_user').val();
             var search_year = $("#search_year").val();
             var search_month = $("#search_month").val();
             $("#grid-table").jqGrid('setGridParam', {
                 datatype: 'json',
-                postData: {'search_user': search_user,'search_year': search_year,'search_month': search_month}, //发送数据
+                postData: {'search_user': search_user, 'search_year': search_year, 'search_month': search_month}, //发送数据
                 page: 1
             }).trigger("reloadGrid"); //重新载入
-        });
-        $("#btn-view").click(function () {//添加页面
-            var rid = getOneSelectedRows();
-            if (rid == -1) {
-                layer.msg("请选择一个订单", {
-                    icon: 2,
-                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
-                });
-            } else if (rid == -2) {
-                layer.msg("只能选择一个订单", {
-                    icon: 2,
-                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
-                });
-            } else {
-                parent.layer.open({
-                    title: '查看订单',
-                    type: 2,
-                    area: ['600px', '500px'],
-                    fix: false, //不固定
-                    maxmin: true,
-                    content: '${context_path}/mall/order/view?orderID=' + rid
-                });
-            }
-        });
-        $("#btn-rated").click(function () {
-            var search_user = $("#search_user").val();
-            var search_year = $("#search_year").val();
-            var search_month = $("#search_month").val();
-            var submitData = {
-                "search_user": search_user,
-                "search_year": search_year,
-                "search_month": search_month
-            };
-            $.post("${context_path}/mall/rate/rated", submitData, function (data) {
-
-                if (data.code == 0) {
-                    layer.msg("操作成功", {
-                        icon: 1,
-                        time: 1000 //1秒关闭（如果不配置，默认是3秒）
-                    }, function () {
-                        //$("#grid-table").trigger("reloadGrid"); //重新载入
-                        reloadGrid();
-                    });
-
-                } else {
-                    layer.alert(data.msg);
-                }
-            }, "json");
         });
     });
     //replace icons with FontAwesome icons like above
@@ -260,17 +197,6 @@
                 return "-2";
             }
         }
-    }
-    function reloadGrid() {
-        //此处可以添加对查询数据的合法验证
-        var search_user = $("#search_user").val();
-        var search_year = $("#search_year").val();
-        var search_month = $("#search_month").val();
-        $("#grid-table").jqGrid('setGridParam', {
-            datatype: 'json',
-            postData: {'search_user': search_user,'search_year': search_year,'search_month': search_month}, //发送数据
-            page: 1
-        }).trigger("reloadGrid"); //重新载入
     }
 </script>
 
