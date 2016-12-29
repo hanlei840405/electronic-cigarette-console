@@ -64,6 +64,7 @@ public class OrderService {
         conditions.add(new Condition("saler", Operators.EQ, saler));
         conditions.add(new Condition("odtime", Operators.LIKE, yearAndMonth));
         conditions.add(new Condition("rated", Operators.EQ, null));
+        conditions.add(new Condition("status", Operators.IN, new int[]{1, 2, 3}));
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("rated", new Date());
         Order.dao.update(conditions, params);

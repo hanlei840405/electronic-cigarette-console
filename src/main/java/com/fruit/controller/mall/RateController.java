@@ -32,7 +32,7 @@ public class RateController extends BaseController {
         String searchYear = this.getPara("search_year");
         String searchMonth = this.getPara("search_month");
         String select = "select t1.*,t2.cusName,t2.phone,t2.wechat,t3.addr";
-        StringBuilder from = new StringBuilder("from od_order t1 INNER JOIN mall_customer t2 on t1.customer = t2.cusCode INNER JOIN od_order_addr t3 on t1.orderID = t3.orderID where t1.rated is null and t2.saler=? and t1.odtime like ?");
+        StringBuilder from = new StringBuilder("from od_order t1 INNER JOIN mall_customer t2 on t1.customer = t2.cusCode INNER JOIN od_order_addr t3 on t1.orderID = t3.orderID where t1.status in (1,2,3) and t1.rated is null and t2.saler=? and t1.odtime like ?");
         List<String> params = new ArrayList<String>();
         params.add(searchUser);
         params.add(searchYear + "-" + searchMonth + "%");
