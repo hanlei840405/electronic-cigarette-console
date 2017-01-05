@@ -22,26 +22,37 @@
     <div class="main-content" id="page-wrapper">
         <div class="page-content" id="page-content">
             <div class="row">
-                <div class="col-xs-12">
-                    <!-- PAGE CONTENT BEGINS -->
-                    <div class="widget-box">
-                        <div class="widget-header widget-header-small">
-                            <h5 class="widget-title lighter">筛选</h5>
-                        </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <!-- PAGE CONTENT BEGINS -->
+                        <div class="widget-box">
+                            <div class="widget-header widget-header-small">
+                                <h5 class="widget-title lighter">筛选</h5>
+                            </div>
 
-                        <div class="widget-body">
-                            <div class="widget-main">
-                                <div class="row">
-                                    <div class="col-xs-12 col-sm-8">
-                                        <div class="input-group">
-                                            <input type="text" id="search_customer" name="search_customer"
-                                                   class="form-control search-query"
-                                                   placeholder="请输入商户号"/>
+                            <div class="widget-body">
+                                <div class="widget-main">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-8">
+                                            <div class="input-group">
 
-                                            状态:<select id="search_status">
-                                            <option value="0">未审核</option>
-                                            <option value="1">已审核</option>
-                                        </select>
+                                                年:<select id="search_year">
+                                            </select>
+
+                                                月:<select id="search_month">
+                                                <option value="01">一月</option>
+                                                <option value="02">二月</option>
+                                                <option value="03">三月</option>
+                                                <option value="04">四月</option>
+                                                <option value="05">五月</option>
+                                                <option value="06">六月</option>
+                                                <option value="07">七月</option>
+                                                <option value="08">八月</option>
+                                                <option value="09">九月</option>
+                                                <option value="10">十月</option>
+                                                <option value="11">十一月</option>
+                                                <option value="12">十二月</option>
+                                            </select>
 																	<span class="input-group-btn">
 																		<button type="button" id="btn_search"
                                                                                 class="btn btn-purple btn-sm">
@@ -49,6 +60,7 @@
                                                                             搜索
                                                                         </button>
 																	</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -59,8 +71,6 @@
                 <div class="col-xs-12">
                     <div class="row-fluid" style="margin-bottom: 5px;">
                         <div class="span12 control-group">
-                            <jc:button className="btn btn-success" id="btn-view" textName="查看明细"/>
-                            <jc:button className="btn btn-warning" id="btn-audit" textName="审核"/>
                         </div>
                     </div>
                     <!-- PAGE CONTENT BEGINS -->
@@ -105,22 +115,12 @@
         });
 
         $("#grid-table").jqGrid({
-            url: '${context_path}/mall/customerRate/getListData',
+            url: '${context_path}/mall/rate/getRatedData',
             mtype: "GET",
-            datatype: "json",
+            datatype: "local",
             colModel: [
-                {label: '商家编号', name: 'customer', width: 150},
-                {label: '商家名称', name: 'cusName', width: 150},
-                {label: '订单编号', name: 'orderID', key: true, width: 75},
-                {label: '计提金额', name: 'amount', width: 150},
-                {
-                    label: '下单时间',
-                    name: 'odtime',
-                    width: 150,
-                    formatter: "date",
-                    formatoptions: {srcformat: "ISO8601Long", newformat: "Y-m-d"}
-                },
-                {label: '状态', name: 'status', width: 75, formatter: fmatterStatus}
+                {label: '月份', name: 'rated', width: 150},
+                {label: '计提金额', name: 'amount', width: 150}
             ],
             height: 280,
             rowNum: 10,
@@ -139,56 +139,14 @@
         $(window).triggerHandler('resize.jqGrid');
         $("#btn_search").click(function () {
             //此处可以添加对查询数据的合法验证
-            var search_customer = $("#search_customer").val();
-            var search_status = $("#search_status").val();
+            var search_user = '${userId}';
+            var search_year = $("#search_year").val();
+            var search_month = $("#search_month").val();
             $("#grid-table").jqGrid('setGridParam', {
                 datatype: 'json',
-                postData: {'search_customer': search_customer, 'search_status': search_status}, //发送数据
+                postData: {'search_user': search_user,'search_year': search_year,'search_month': search_month}, //发送数据
                 page: 1
             }).trigger("reloadGrid"); //重新载入
-        });
-        $("#btn-view").click(function () {//添加页面
-            var rid = getOneSelectedRows();
-            if (rid == -1) {
-                layer.msg("请选择一个订单", {
-                    icon: 2,
-                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
-                });
-            } else if (rid == -2) {
-                layer.msg("只能选择一个订单", {
-                    icon: 2,
-                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
-                });
-            } else {
-                parent.layer.open({
-                    title: '查看订单',
-                    type: 2,
-                    area: ['600px', '500px'],
-                    fix: false, //不固定
-                    maxmin: true,
-                    content: '${context_path}/mall/customerRate/view?rateId=' + rid
-                });
-            }
-        });
-        $("#btn-audit").click(function () {
-            var submitData = {
-                "ids": getOneSelectedRows()
-            };
-            $.post("${context_path}/mall/customerRate/audit", submitData, function (data) {
-
-                if (data.code == 0) {
-                    layer.msg("操作成功", {
-                        icon: 1,
-                        time: 1000 //1秒关闭（如果不配置，默认是3秒）
-                    }, function () {
-                        //$("#grid-table").trigger("reloadGrid"); //重新载入
-                        reloadGrid();
-                    });
-
-                } else {
-                    layer.alert(data.msg);
-                }
-            }, "json");
         });
     });
     //replace icons with FontAwesome icons like above
@@ -235,17 +193,6 @@
                 return "-2";
             }
         }
-    }
-    //格式化状态显示
-    function fmatterStatus(cellvalue, options, rowObject) {
-        if (cellvalue == 0) {
-            return '<span class="label label-sm label-warning">待审核</span>';
-        } else {
-            return '<span class="label label-sm label-success">审核不通过</span>';
-        }
-    }
-    function reloadGrid() {
-        $("#grid-table").trigger("reloadGrid"); //重新载入
     }
 </script>
 
