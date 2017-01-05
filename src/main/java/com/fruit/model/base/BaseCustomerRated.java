@@ -9,36 +9,44 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings("serial")
 public abstract class BaseCustomerRated<M extends BaseCustomerRated<M>> extends BaseModel<M> implements IBean {
 
-	public void setId(Integer id) {
-		set("id", id);
-	}
+    public void setId(Integer id) {
+        set("id", id);
+    }
 
-	public Integer getId() {
-		return get("id");
-	}
+    public Integer getId() {
+        return get("id");
+    }
 
-	public void setCustomer(String customer) {
-		set("customer", customer);
-	}
+    public void setCustomer(String customer) {
+        set("customer", customer);
+    }
 
-	public String getCustomer() {
-		return get("customer");
-	}
+    public String getCustomer() {
+        return get("customer");
+    }
 
-	public void setOrderID(String orderID) {
-		set("orderID", orderID);
-	}
+    public void setOrderID(String orderID) {
+        set("orderID", orderID);
+    }
 
-	public String getOrderID() {
-		return get("orderID");
-	}
+    public String getOrderID() {
+        return get("orderID");
+    }
 
-	public void setAmount(java.math.BigDecimal amount) {
-		set("amount", amount);
-	}
+    public void setAmount(java.math.BigDecimal amount) {
+        set("amount", amount);
+    }
 
-	public java.math.BigDecimal getAmount() {
-		return get("amount");
-	}
+    public java.math.BigDecimal getAmount() {
+        return get("amount");
+    }
+
+    public void setStatus(String status) {
+        set("status", status);
+    }
+
+    public String getStatus() {
+        return get("status");
+    }
 
 }
