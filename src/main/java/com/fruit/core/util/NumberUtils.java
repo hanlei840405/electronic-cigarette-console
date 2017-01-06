@@ -41,10 +41,20 @@ public class NumberUtils {
 		nf.setMaximumFractionDigits(2);
 		return nf.format(num);
 	}
+
 	public static String formatDecimalsToStr(Number num,int digits){
 		DecimalFormat nf = new DecimalFormat();
 		nf.setMaximumFractionDigits(digits);
 		return nf.format(num);
+	}
+
+	public static BigDecimal round(BigDecimal v, int scale) {
+		if (scale < 0) {
+			throw new IllegalArgumentException(
+					"The scale must be a positive integer or zero");
+		}
+		BigDecimal one = new BigDecimal("1");
+		return v.divide(one, scale, BigDecimal.ROUND_HALF_UP);
 	}
 	public static void main(String[] args) {
 		System.out.println(formatDecimalsToStr(2.16d,1));

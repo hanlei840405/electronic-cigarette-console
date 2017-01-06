@@ -3,6 +3,7 @@ package com.fruit.transaction;
 import com.alibaba.druid.util.StringUtils;
 import com.fruit.core.model.Condition;
 import com.fruit.core.model.Operators;
+import com.fruit.core.util.NumberUtils;
 import com.fruit.model.mall.Order;
 import com.fruit.model.mall.OrderDe;
 import com.fruit.model.mall.UserRated;
@@ -61,10 +62,10 @@ public class OrderService {
 
     @Before(Tx.class)
     public void rated(Long searchUser, String searchYear, String searchMonth) {
-        List<Order> orders = Order.dao.find("select t1.* from od_order t1 INNER JOIN mall_customer t2 on t1.customer = t2.cusCode where t1.status in (1,2,3) and t1.rated is null and t2.saler=? and t1.odtime like ?", searchUser, searchYear + '-' + searchMonth + "%");
+        List<Order> orders = Order.dao.find("select t1.*,t2.rate from od_order t1 INNER JOIN mall_customer t2 on t1.customer = t2.cusCode where t1.status in (1,2,3) and t1.rated is null and t2.saler=? and t1.odtime like ?", searchUser, searchYear + '-' + searchMonth + "%");
         BigDecimal amount = new BigDecimal(0);
         for (Order order : orders) {
-            amount = amount.add(order.getAmount());
+            amount = NumberUtils.round(amount.add(order.getAmount().multiply(new BigDecimal(order.getRate() == null ? 0 : order.getRate() / 100))), 2);
         }
         Db.update("update od_order t1 inner join mall_customer t2 on t1.customer = t2.cusCode set t1.rated= now() where t1.status in (1,2,3) and t1.rated is null and t2.saler= ? and date_format(t1.odtime,'%Y-%m')=?", searchUser, searchYear + '-' + searchMonth);
 

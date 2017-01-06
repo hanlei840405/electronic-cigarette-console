@@ -131,4 +131,12 @@ public abstract class BaseOdOrder<M extends BaseOdOrder<M>> extends BaseModel<M>
     public Date getRebated() {
         return get("rebated");
     }
+
+    public void setRate(Integer rate) {
+        set("rate", rate);
+    }
+
+    public Integer getRate() {
+        return get("rate");
+    }
 }
