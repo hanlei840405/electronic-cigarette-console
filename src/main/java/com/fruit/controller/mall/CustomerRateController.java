@@ -5,6 +5,7 @@ import com.fruit.core.controller.BaseController;
 import com.fruit.core.util.JqGridModelUtils;
 import com.fruit.core.view.InvokeResult;
 import com.fruit.model.mall.CustomerRated;
+import com.fruit.model.mall.CustomerRatedDe;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 
@@ -38,6 +39,17 @@ public class CustomerRateController extends BaseController {
         params.add(searchStatus);
         params.add(searchCustomer);
         Page<CustomerRated> pageInfo = CustomerRated.dao.getPage(getPage(), this.getRows(), select, from.toString(), null, params.toArray());
+        this.renderJson(JqGridModelUtils.toJqGridView(pageInfo));
+    }
+
+    @RequiresPermissions(value = {"/mall/customerRate"})
+    public void getDetailListData() {
+        Long rateId = this.getParaToLong("rateId");
+        String select = "select t1.*,t2.skuName,t3.quantity, t3.price";
+        StringBuilder from = new StringBuilder("from customer_rated_de t1 INNER JOIN mall_sku t2 on t1.sku = t2.sku INNER JOIN od_order_de t3 on t1.orderID = t3.orderID where t1.rateId = ?");
+        List<Object> params = new ArrayList<Object>();
+        params.add(rateId);
+        Page<CustomerRatedDe> pageInfo = CustomerRatedDe.dao.getPage(getPage(), this.getRows(), select, from.toString(), null, params.toArray());
         this.renderJson(JqGridModelUtils.toJqGridView(pageInfo));
     }
 

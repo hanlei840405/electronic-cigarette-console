@@ -22,52 +22,6 @@
     <div class="main-content" id="page-wrapper">
         <div class="page-content" id="page-content">
             <div class="row">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <!-- PAGE CONTENT BEGINS -->
-                        <div class="widget-box">
-                            <div class="widget-header widget-header-small">
-                                <h5 class="widget-title lighter">筛选</h5>
-                            </div>
-
-                            <div class="widget-body">
-                                <div class="widget-main">
-                                    <div class="row">
-                                        <div class="col-xs-12 col-sm-8">
-                                            <div class="input-group">
-
-                                                年:<select id="search_year">
-                                            </select>
-
-                                                月:<select id="search_month">
-                                                <option value="01">一月</option>
-                                                <option value="02">二月</option>
-                                                <option value="03">三月</option>
-                                                <option value="04">四月</option>
-                                                <option value="05">五月</option>
-                                                <option value="06">六月</option>
-                                                <option value="07">七月</option>
-                                                <option value="08">八月</option>
-                                                <option value="09">九月</option>
-                                                <option value="10">十月</option>
-                                                <option value="11">十一月</option>
-                                                <option value="12">十二月</option>
-                                            </select>
-																	<span class="input-group-btn">
-																		<button type="button" id="btn_search"
-                                                                                class="btn btn-purple btn-sm">
-                                                                            <span class="ace-icon fa fa-search icon-on-right bigger-110"></span>
-                                                                            搜索
-                                                                        </button>
-																	</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="col-xs-12">
                     <div class="row-fluid" style="margin-bottom: 5px;">
                         <div class="span12 control-group">
@@ -88,15 +42,6 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        // 初始化年和月
-        var date = new Date();
-        var currentYear = date.getFullYear();
-        var currentMonth = date.getMonth() + 1;
-        for (var year = currentYear; year >= 2010; year--) {
-            $("#search_year").append("<option value='" + year + "'>" + year + "</option>");
-        }
-        $('#search_month').val(currentMonth);
-
         var grid_selector = "#grid-table";
         var pager_selector = "#grid-pager";
         //resize to fit page size
@@ -115,11 +60,13 @@
         });
 
         $("#grid-table").jqGrid({
-            url: '${context_path}/mall/rate/getRatedData',
+            url: '${context_path}/mall/rate/getDetailListData',
             mtype: "GET",
             datatype: "local",
             colModel: [
-                {label: '月份', name: 'rated', width: 150},
+                {label: '商品名称', name: 'skuName', width: 150},
+                {label: '销售数量', name: 'quantity', width: 150},
+                {label: '销售价格', name: 'price', width: 150},
                 {label: '计提金额', name: 'amount', width: 150}
             ],
             height: 280,
@@ -137,17 +84,6 @@
             }
         });
         $(window).triggerHandler('resize.jqGrid');
-        $("#btn_search").click(function () {
-            //此处可以添加对查询数据的合法验证
-            var search_user = '${userId}';
-            var search_year = $("#search_year").val();
-            var search_month = $("#search_month").val();
-            $("#grid-table").jqGrid('setGridParam', {
-                datatype: 'json',
-                postData: {'search_user': search_user,'search_year': search_year,'search_month': search_month}, //发送数据
-                page: 1
-            }).trigger("reloadGrid"); //重新载入
-        });
     });
     //replace icons with FontAwesome icons like above
     function updatePagerIcons(table) {
@@ -163,36 +99,6 @@
             var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
             if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
         })
-    }
-    /**获取选中的列***/
-    function getSelectedRows() {
-        var grid = $("#grid-table");
-        var rowKey = grid.getGridParam("selrow");
-        if (!rowKey)
-            return "-1";
-        else {
-            var selectedIDs = grid.getGridParam("selarrrow");
-            var result = "";
-            for (var i = 0; i < selectedIDs.length; i++) {
-                result += selectedIDs[i] + ",";
-            }
-            return result;
-        }
-    }
-    function getOneSelectedRows() {
-        var grid = $("#grid-table");
-        var rowKey = grid.getGridParam("selrow");
-        if (!rowKey) {
-            return "-1";
-        } else {
-            var selectedIDs = grid.getGridParam("selarrrow");
-            var result = "";
-            if (selectedIDs.length == 1) {
-                return selectedIDs[0];
-            } else {
-                return "-2";
-            }
-        }
     }
 </script>
 

@@ -78,15 +78,6 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        // 初始化年和月
-        var date = new Date();
-        var currentYear = date.getFullYear();
-        var currentMonth = date.getMonth() + 1;
-        for (var year = currentYear; year >= 2010; year--) {
-            $("#search_year").append("<option value='" + year + "'>" + year + "</option>");
-        }
-        $('#search_month').val(currentMonth);
-
         var grid_selector = "#grid-table";
         var pager_selector = "#grid-pager";
         //resize to fit page size
