@@ -34,7 +34,7 @@ public class CustomerRateController extends BaseController {
         String searchCustomer = this.getPara("search_customer");
         String searchStatus = this.getPara("search_status");
         String select = "select t1.*,t2.cusName,t3.odtime";
-        StringBuilder from = new StringBuilder("from customer_rated t1 INNER JOIN mall_customer t2 on t1.customer = t2.cusCode INNER JOIN od_order t3 on t1.orderID = t3.orderID where t1.status = ? and t1.customer = ?");
+        StringBuilder from = new StringBuilder("from customer_rated t1 INNER JOIN mall_customer t2 on t1.customer = t2.cusCode INNER JOIN od_order t3 on t1.orderID = t3.orderID where t1.status = ? and t1.customer = ? order by t1.id desc");
         List<Object> params = new ArrayList<Object>();
         params.add(searchStatus);
         params.add(searchCustomer);

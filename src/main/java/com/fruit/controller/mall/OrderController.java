@@ -37,6 +37,7 @@ public class OrderController extends BaseController {
             params.add(search);
             params.add(search);
         }
+        from.append(" order by t1.odtime desc");
         Page<Order> pageInfo = Order.dao.getPage(getPage(), this.getRows(), select, from.toString(), null, params.toArray());
         this.renderJson(JqGridModelUtils.toJqGridView(pageInfo));
     }

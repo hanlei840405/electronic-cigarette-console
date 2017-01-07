@@ -45,13 +45,16 @@ public class RateController extends BaseController {
         render("rate_root_view.jsp");
     }
 
+    /**
+     * 查询等待计提的订单
+     */
     @RequiresPermissions(value = {"/mall/rate"})
     public void getListData() {
         Long searchUser = this.getParaToLong("search_user");
         String searchYear = this.getPara("search_year");
         String searchMonth = this.getPara("search_month");
         String select = "select t1.*,t2.cusName,t2.phone,t2.wechat,t3.addr";
-        StringBuilder from = new StringBuilder("from od_order t1 INNER JOIN mall_customer t2 on t1.customer = t2.cusCode INNER JOIN od_order_addr t3 on t1.orderID = t3.orderID where t1.status in (1,2,3) and t1.rated is null and t2.saler=? and t1.odtime like ?");
+        StringBuilder from = new StringBuilder("from od_order t1 INNER JOIN mall_customer t2 on t1.customer = t2.cusCode INNER JOIN od_order_addr t3 on t1.orderID = t3.orderID where t1.status in (1,2,3) and t1.rated is null and t2.saler=? and t1.odtime like ? order by t1.odtime desc");
         List<Object> params = new ArrayList<Object>();
         params.add(searchUser);
         params.add(searchYear + "-" + searchMonth + "%");
@@ -59,6 +62,9 @@ public class RateController extends BaseController {
         this.renderJson(JqGridModelUtils.toJqGridView(pageInfo));
     }
 
+    /**
+     * 查询已经计提的数据
+     */
     @RequiresPermissions(value = {"/mall/rate"})
     public void getRatedData() {
         Long searchUser = this.getParaToLong("search_user");

@@ -37,6 +37,7 @@ public class AfterSaleController extends BaseController {
             params.add(search);
             params.add(search);
         }
+        from.append(" order by t1.asodID desc");
         Page<AsAftersaleod> pageInfo = AsAftersaleod.dao.getPage(getPage(), this.getRows(), select, from.toString(), null, params.toArray());
         this.renderJson(JqGridModelUtils.toJqGridView(pageInfo));
     }
