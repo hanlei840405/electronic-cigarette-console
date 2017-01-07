@@ -70,12 +70,12 @@
                             </div>
                             <div class="form-group">
                                 <label class="control-label col-xs-2 col-sm-2 no-padding-right"
-                                       for="rate">比率</label>
+                                       for="rate">销售提成</label>
 
                                 <div class="col-xs-3 col-sm-3">
                                     <div class="clearfix">
                                         <input type="text" name="rate" id="rate" value="${customer.rate}"
-                                               class="col-xs-12 col-sm-12" placeholder="大于零整数">
+                                               class="col-xs-12 col-sm-12" placeholder="大于零整数">%
                                     </div>
                                 </div>
                                 <label class="control-label col-xs-2 col-sm-2 no-padding-right"

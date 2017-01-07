@@ -10,6 +10,8 @@ import com.fruit.core.util.JqGridModelUtils;
 import com.fruit.core.view.InvokeResult;
 import com.fruit.model.ConsoleSequence;
 import com.fruit.model.SysUser;
+import com.fruit.model.mall.Category;
+import com.fruit.model.mall.Sku;
 import com.fruit.model.stock.SkuInbound;
 import com.fruit.model.stock.SkuInboundDe;
 import com.fruit.transaction.SkuInboundService;
@@ -32,6 +34,11 @@ public class InboundController extends BaseController {
     @RequiresPermissions(value = {"/stock/inbound"})
     public void add() {
         String inboundID = this.getPara("inboundID");
+        List<Category> categories = Category.me.find("select * from mall_category where parentCode is not null");
+        for (Category category : categories) {
+            category.setSkus(Sku.dao.find("select * from mall_sku where category=?", category.getCateCode()));
+        }
+        setAttr("categories", categories);
         setAttr("inboundID", inboundID);
         render("inbound_add.jsp");
     }

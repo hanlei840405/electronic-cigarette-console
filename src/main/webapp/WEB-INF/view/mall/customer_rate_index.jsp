@@ -34,11 +34,12 @@
                                 <div class="row">
                                     <div class="col-xs-12 col-sm-8">
                                         <div class="input-group">
-                                            <input type="text" id="search_customer" name="search_customer"
-                                                   class="form-control search-query"
+                                            <input style="width: 150px" type="text" id="search_customer"
+                                                   name="search_customer"
                                                    placeholder="请输入商户号"/>
 
-                                            状态:<select id="search_status">
+                                            状态:<select id="search_status" style="width: 150px">
+                                            <option value=""></option>
                                             <option value="0">未审核</option>
                                             <option value="1">已审核</option>
                                         </select>
@@ -96,13 +97,13 @@
         });
 
         $("#grid-table").jqGrid({
-            url: '${context_path}/mall/customerRate/getListData',
+            url: '${context_path}/mall/customerRate/getListData?search_customer=' + $('#search_customer').val() + '&search_status=' + $('#search_status').val(),
             mtype: "GET",
             datatype: "json",
             colModel: [
                 {label: '商家编号', name: 'customer', width: 150},
                 {label: '商家名称', name: 'cusName', width: 150},
-                {label: '订单编号', name: 'orderID', key: true, width: 75},
+                {label: '订单编号', name: 'orderID', width: 75},
                 {label: '计提金额', name: 'amount', width: 150},
                 {
                     label: '下单时间',
@@ -141,12 +142,12 @@
         $("#btn-view").click(function () {//添加页面
             var rid = getOneSelectedRows();
             if (rid == -1) {
-                layer.msg("请选择一个订单", {
+                layer.msg("请选择一个计提单", {
                     icon: 2,
                     time: 2000 //2秒关闭（如果不配置，默认是3秒）
                 });
             } else if (rid == -2) {
-                layer.msg("只能选择一个订单", {
+                layer.msg("只能选择一个计提单", {
                     icon: 2,
                     time: 2000 //2秒关闭（如果不配置，默认是3秒）
                 });
@@ -157,7 +158,7 @@
                     area: ['600px', '500px'],
                     fix: false, //不固定
                     maxmin: true,
-                    content: '${context_path}/mall/customerRate/view?rateId=' + rid
+                    content: '${context_path}/mall/customerRate/view?id=' + rid
                 });
             }
         });

@@ -25,12 +25,13 @@
                 <div class="col-xs-12">
                     <div class="row-fluid" style="margin-bottom: 5px;">
                         <div class="span12 control-group">
+                            <input type="hidden" id="ratedID" value="${ratedID}"/>
                         </div>
                     </div>
                     <!-- PAGE CONTENT BEGINS -->
-                    <table id="grid-table"></table>
+                    <table id="detail-table"></table>
 
-                    <div id="grid-pager"></div>
+                    <div id="detail-pager"></div>
                     <!-- PAGE CONTENT ENDS -->
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -42,8 +43,8 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        var grid_selector = "#grid-table";
-        var pager_selector = "#grid-pager";
+        var grid_selector = "#detail-table";
+        var pager_selector = "#detail-pager";
         //resize to fit page size
         $(window).on('resize.jqGrid', function () {
             $(grid_selector).jqGrid('setGridWidth', $(".page-content").width());
@@ -58,11 +59,11 @@
                 }, 0);
             }
         });
-
-        $("#grid-table").jqGrid({
-            url: '${context_path}/mall/rate/getDetailListData',
+        debugger;
+        $("#detail-table").jqGrid({
+            url: '${context_path}/mall/customerRate/getDetailListData?ratedID=' + $('#ratedID').val(),
             mtype: "GET",
-            datatype: "local",
+            datatype: "json",
             colModel: [
                 {label: '商品名称', name: 'skuName', width: 150},
                 {label: '销售数量', name: 'quantity', width: 150},

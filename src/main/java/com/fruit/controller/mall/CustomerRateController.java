@@ -1,5 +1,6 @@
 package com.fruit.controller.mall;
 
+import com.alibaba.druid.util.StringUtils;
 import com.fruit.core.auth.anno.RequiresPermissions;
 import com.fruit.core.controller.BaseController;
 import com.fruit.core.util.JqGridModelUtils;
@@ -24,8 +25,8 @@ public class CustomerRateController extends BaseController {
 
     @RequiresPermissions(value = {"/mall/customerRate"})
     public void view() {
-        Long rateId = getParaToLong("rateId");
-        setAttr("rateId", rateId);
+        Long id = getParaToLong("id");
+        setAttr("ratedID", id);
         render("customer_rate_view.jsp");
     }
 
@@ -34,21 +35,28 @@ public class CustomerRateController extends BaseController {
         String searchCustomer = this.getPara("search_customer");
         String searchStatus = this.getPara("search_status");
         String select = "select t1.*,t2.cusName,t3.odtime";
-        StringBuilder from = new StringBuilder("from customer_rated t1 INNER JOIN mall_customer t2 on t1.customer = t2.cusCode INNER JOIN od_order t3 on t1.orderID = t3.orderID where t1.status = ? and t1.customer = ? order by t1.id desc");
+        StringBuilder from = new StringBuilder("from customer_rated t1 INNER JOIN mall_customer t2 on t1.customer = t2.cusCode INNER JOIN od_order t3 on t1.orderID = t3.orderID where 1=1");
         List<Object> params = new ArrayList<Object>();
-        params.add(searchStatus);
-        params.add(searchCustomer);
+        if (!StringUtils.isEmpty(searchCustomer)) {
+            from.append(" and t1.status = ?");
+            params.add(searchStatus);
+        }
+        if (!StringUtils.isEmpty(searchStatus)) {
+            from.append(" and t1.customer = ?");
+            params.add(searchStatus);
+        }
+        from.append(" order by t1.id desc");
         Page<CustomerRated> pageInfo = CustomerRated.dao.getPage(getPage(), this.getRows(), select, from.toString(), null, params.toArray());
         this.renderJson(JqGridModelUtils.toJqGridView(pageInfo));
     }
 
     @RequiresPermissions(value = {"/mall/customerRate"})
     public void getDetailListData() {
-        Long rateId = this.getParaToLong("rateId");
+        Long ratedID = this.getParaToLong("ratedID");
         String select = "select t1.*,t2.skuName,t3.quantity, t3.price";
-        StringBuilder from = new StringBuilder("from customer_rated_de t1 INNER JOIN mall_sku t2 on t1.sku = t2.sku INNER JOIN od_order_de t3 on t1.orderID = t3.orderID where t1.rateId = ?");
+        StringBuilder from = new StringBuilder("from customer_rated_de t1 INNER JOIN mall_sku t2 on t1.sku = t2.sku INNER JOIN od_order_de t3 on t1.orderDeID = t3.id where t1.ratedID = ?");
         List<Object> params = new ArrayList<Object>();
-        params.add(rateId);
+        params.add(ratedID);
         Page<CustomerRatedDe> pageInfo = CustomerRatedDe.dao.getPage(getPage(), this.getRows(), select, from.toString(), null, params.toArray());
         this.renderJson(JqGridModelUtils.toJqGridView(pageInfo));
     }

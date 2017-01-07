@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <jsp:include page="/WEB-INF/view/common/basecss.jsp" flush="true"/>
-    <link rel="stylesheet" href="${res_url}js/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+    <link rel="stylesheet" href="${res_url}css/select2/select2.min.css" type="text/css">
     <style type="text/css">
         .text-null {
             border-color: #ff0000 !important;
@@ -40,11 +40,17 @@
                                     <div class="row">
                                         <form class="form-inline" role="form" id="saveInbound">
                                             <input type="hidden" id="inboundID" name="inboundID" value="${inboundID}"/>
-                                            <div class="form-group col-xs-2">
-                                                <input type="text" class="form-control" name="sku" placeholder="商品编号" onchange="selectSku(this)">
+                                            <div class="form-group col-xs-4">
+                                                <select class="category_sku" style="width: 200px;" name="sku">
+                                                    <c:forEach items="${categories }" var="item">
+                                                        <optgroup label="${item.cateName }"></optgroup>
+                                                        <c:forEach items="${item.skus }" var="sku">
+                                                            <option value="${sku.sku }">${sku.skuName }</option>
+                                                        </c:forEach>
+                                                    </c:forEach>
+                                                </select>
                                             </div>
-                                            <div class="form-group col-xs-6">
-                                                    <input type="text" class="form-control" id="info" placeholder="商品信息" readonly>
+                                            <div class="form-group col-xs-1">
                                             </div>
                                             <div class="form-group col-xs-2">
                                                 <input type="text" class="form-control" name="quantity" placeholder="入库数量">
@@ -80,9 +86,10 @@
 </div><!-- /.main-container -->
 <!-- basic scripts -->
 <jsp:include page="/WEB-INF/view/common/basejs.jsp" flush="true"/>
-
+<script src="${res_url}js/select2/select2.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
+        $(".category_sku").select2();
         $('#saveInbound').validate({
             errorElement: 'div',
             errorClass: 'help-block',
@@ -254,23 +261,6 @@
         }
     }
 
-    function selectSku(obj) {
-        $.ajax({
-            url: '${context_path}/mall/sku/get?sku=' + obj.value,
-            type: 'GET',
-            success: function (response) {
-                var code = response.code;
-                if (code == "200") {
-                    var entity = response.sku;
-                    var skuName = entity.skuName;
-                    var specName = entity.specName;
-                    $('#info').val(skuName + ' ' + specName);
-                }else {
-                    layer.msg(response.msg);
-                }
-            }
-        });
-    }
     function reloadGrid() {
         parent.reloadGrid();
         $("#detail-table").jqGrid('setGridParam',{url: '${context_path}/stock/inbound/getDetailData?inboundID=' + $('#inboundID').val()}).trigger("reloadGrid");

@@ -1,26 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/WEB-INF/taglib.jsp" %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <!-- Standard Meta -->
-    <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta charset="utf-8"/>
+    <title>电子烟管理平台</title>
+    <meta name="description" content="overview &amp; stats"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
     <jsp:include page="/WEB-INF/view/common/basecss.jsp" flush="true"/>
     <link rel="stylesheet" href="${res_url}css/select2/select2.min.css" type="text/css">
-    <style type="text/css">
-        .text-null {
-            border-color: #ff0000 !important;
-        }
-
-        .text-not-null {
-            border-color: #008000 !important;
-        }
-    </style>
 </head>
-
 <body class="no-skin">
+<!-- /section:basics/navbar.layout -->
 <div class="main-container" id="main-container">
     <script type="text/javascript">
         try {
@@ -38,9 +30,8 @@
                             <div class="widget-body">
                                 <div class="widget-main">
                                     <div class="row">
-                                        <form class="form-inline" role="form" id="saveOutbound">
-                                            <input type="hidden" id="outboundID" name="outboundID"
-                                                   value="${outboundID}"/>
+                                        <form class="form-inline" role="form" id="saveCustomerUpRated">
+                                            <input type="hidden" name="customer" id="customer" value="${customer}"/>
                                             <div class="form-group col-xs-4">
                                                 <select class="category_sku" style="width: 200px;" name="sku">
                                                     <c:forEach items="${categories }" var="item">
@@ -54,8 +45,11 @@
                                             <div class="form-group col-xs-1">
                                             </div>
                                             <div class="form-group col-xs-2">
-                                                <input type="text" class="form-control" name="quantity"
-                                                       placeholder="出库数量">
+                                                <input type="text" class="form-control" readonly value="${upName}">
+                                            </div>
+                                            <div class="form-group col-xs-2">
+                                                <input type="number" class="form-control" name="rated" min="0"
+                                                       placeholder="上家固定提成金额">
                                             </div>
                                             <div class="form-group col-xs-2 pull-right">
                                                 <button id="submit-btn" type="submit" class="btn btn-primary"
@@ -69,24 +63,31 @@
                         </div>
                     </div>
                     <div class="col-xs-12">
+                        <div class="row-fluid" style="margin-bottom: 5px;">
+                            <div class="span12 control-group">
+                                <jc:button className="btn btn-danger" id="btn-delete" textName="删除"/>
+                            </div>
+                        </div>
                         <!-- PAGE CONTENT BEGINS -->
                         <table id="detail-table"></table>
 
-                        <div id="grid-pager"></div>
+                        <div id="detail-grid-pager"></div>
                         <!-- PAGE CONTENT ENDS -->
                     </div><!-- /.col -->
                 </div><!-- /.row -->
             </div>
         </div><!-- /.main-content -->
     </div><!-- /.main-container-inner -->
+</div>
 </div><!-- /.main-container -->
 <!-- basic scripts -->
 <jsp:include page="/WEB-INF/view/common/basejs.jsp" flush="true"/>
+
 <script src="${res_url}js/select2/select2.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
         $(".category_sku").select2();
-        $('#saveOutbound').validate({
+        $('#saveCustomerUpRated').validate({
             errorElement: 'div',
             errorClass: 'help-block',
             focusInvalid: false,
@@ -94,7 +95,7 @@
                 sku: {
                     required: true
                 },
-                quantity: {
+                rated: {
                     required: true
                 }
             },
@@ -102,7 +103,7 @@
                 sku: {
                     required: ""
                 },
-                quantity: {
+                rated: {
                     required: ""
                 }
             },
@@ -134,10 +135,9 @@
                 var $btn = $("#submit-btn");
                 if ($btn.hasClass("disabled")) return;
                 $btn.addClass("disabled");
-                var postData = $("#saveOutbound").serializeJson();
-                $.post("${context_path}/stock/outbound/save", postData, function (data) {
-                    if (data.code == '200') {
-                        $('#outboundID').val(data.outboundID);
+                var postData = $("#saveCustomerUpRated").serializeJson();
+                $.post("${context_path}/mall/customer/saveUpRated", postData, function (data) {
+                    if (data.code == 0) {
                         layer.msg('操作成功', {
                             icon: 1,
                             time: 2000 //2秒关闭（如果不配置，默认是3秒）
@@ -154,10 +154,10 @@
             invalidHandler: function (form) {
             }
         });
-
-        var outboundID = $('#outboundID').val();
+        debugger;
+        var customer = $('#customer').val();
         var grid_selector = "#detail-table";
-        var pager_selector = "#grid-pager";
+        var pager_selector = "#detail-grid-pager";
         //resize to fit page size
         $(window).on('resize.jqGrid', function () {
             $(grid_selector).jqGrid('setGridWidth', $(".page-content").width());
@@ -173,15 +173,15 @@
         });
 
         $("#detail-table").jqGrid({
-            url: '${context_path}/stock/outbound/getDetailData?outboundID=' + outboundID,
+            url: '${context_path}/mall/customer/getCustomerUpRatedListData?customer=' + customer,
             mtype: "GET",
             datatype: "json",
             colModel: [
-                {label: '商品', name: 'skuName', width: 150, sortable: false},
-                {label: '编号', name: 'sku', width: 80, sortable: false},
-                {label: '规格', name: 'specName', width: 150, sortable: false},
-                {label: '出库数量', name: 'quantity', width: 80, sortable: false},
-                {label: '累加成本', name: 'allcost', width: 80, sortable: false}
+                {index: 'id', name: 'id', key: true, hidden: true},
+                {label: '上级商家', name: 'up', key: true, width: 100},
+                {label: '商品编号', name: 'sku', width: 100},
+                {label: '商品名称', name: 'skuName', width: 150},
+                {label: '上家固定提成金额', name: 'rated', width: 100}
             ],
             height: 280,
             rowNum: 10,
@@ -198,6 +198,26 @@
             }
         });
         $(window).triggerHandler('resize.jqGrid');
+
+        $("#btn-delete").click(function () {
+            var submitData = {
+                "ids": getSelectedRows()
+            };
+            $.post("${context_path}/mall/customer/deleteCustomerUpRated", submitData, function (data) {
+
+                if (data.code == 0) {
+                    layer.msg("操作成功", {
+                        icon: 1,
+                        time: 1000 //1秒关闭（如果不配置，默认是3秒）
+                    }, function () {
+                        reloadGrid();
+                    });
+
+                } else {
+                    layer.alert(data.msg);
+                }
+            }, "json");
+        });
     });
     //replace icons with FontAwesome icons like above
     function updatePagerIcons(table) {
@@ -214,31 +234,29 @@
             if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
         })
     }
-
-    function selectSku(obj) {
-        $.ajax({
-            url: '${context_path}/mall/sku/get?sku=' + obj.value,
-            type: 'GET',
-            success: function (response) {
-                var code = response.code;
-                if (code == "200") {
-                    var entity = response.sku;
-                    var skuName = entity.skuName;
-                    var specName = entity.specName;
-                    $('#info').val(skuName + ' ' + specName);
-                } else {
-                    layer.msg(response.msg);
-                }
+    /**获取选中的列***/
+    function getSelectedRows() {
+        var grid = $("#detail-table");
+        var rowKey = grid.getGridParam("selrow");
+        if (!rowKey)
+            return "-1";
+        else {
+            var selectedIDs = grid.getGridParam("selarrrow");
+            var result = "";
+            for (var i = 0; i < selectedIDs.length; i++) {
+                result += selectedIDs[i] + ",";
             }
-        });
+            return result;
+        }
     }
+
     function reloadGrid() {
-        parent.reloadGrid();
-        $("#detail-table").jqGrid('setGridParam', {url: '${context_path}/stock/outbound/getDetailData?outboundID=' + $('#outboundID').val()}).trigger("reloadGrid");
         $("#detail-table").trigger("reloadGrid"); //重新载入
     }
 </script>
-</body>
 
+</body>
 </html>
+
+
 

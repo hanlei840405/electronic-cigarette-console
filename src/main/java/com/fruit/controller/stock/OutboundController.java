@@ -9,6 +9,8 @@ import com.fruit.core.util.IWebUtils;
 import com.fruit.core.util.JqGridModelUtils;
 import com.fruit.model.ConsoleSequence;
 import com.fruit.model.SysUser;
+import com.fruit.model.mall.Category;
+import com.fruit.model.mall.Sku;
 import com.fruit.model.stock.SkStock;
 import com.fruit.model.stock.SkuOutbound;
 import com.fruit.model.stock.SkuOutboundDe;
@@ -31,6 +33,11 @@ public class OutboundController extends BaseController {
     @RequiresPermissions(value = {"/stock/outbound"})
     public void add() {
         String outboundID = this.getPara("outboundID");
+        List<Category> categories = Category.me.find("select * from mall_category where parentCode is not null");
+        for (Category category : categories) {
+            category.setSkus(Sku.dao.find("select * from mall_sku where category=?", category.getCateCode()));
+        }
+        setAttr("categories", categories);
         setAttr("outboundID", outboundID);
         render("outbound_add.jsp");
     }
