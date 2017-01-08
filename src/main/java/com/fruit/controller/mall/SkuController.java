@@ -24,6 +24,7 @@ import com.fruit.core.util.JqGridModelUtils;
 import com.fruit.core.view.InvokeResult;
 import com.fruit.core.view.ZtreeView;
 import com.fruit.model.mall.Category;
+import com.fruit.model.mall.Order;
 import com.fruit.model.mall.Sku;
 import com.fruit.model.mall.SkuNprice;
 import com.jfinal.kit.JsonKit;
@@ -57,7 +58,15 @@ public class SkuController extends BaseController {
     @RequiresPermissions(value = {"/mall/sku"})
     public void getListData() {
         String sku = this.getPara("sku");
-        Page<Sku> pageInfo = Sku.dao.getPage(getPage(), this.getRows(), sku);
+        String select = "select t1.*,t2.cateName";
+        StringBuilder from = new StringBuilder("from mall_sku t1 INNER JOIN mall_category t2 on t1.category = t2.cateCode where 1=1");
+        List<String> params = new ArrayList<String>();
+        if (!StringUtils.isEmpty(sku)) {
+            from.append(" and (t1.sku = ? OR t2.skuName = ?)");
+            params.add(sku);
+            params.add(sku);
+        }
+        Page<Sku> pageInfo = Sku.dao.getPage(getPage(), this.getRows(), select, from.toString(), null, params.toArray());
         this.renderJson(JqGridModelUtils.toJqGridView(pageInfo));
     }
 
@@ -223,38 +232,45 @@ public class SkuController extends BaseController {
     public void setting() {
         Sku sku = Sku.dao.findById(this.getParaToLong("id"));
         SkuNprice skuNpriceA = SkuNprice.dao.findFirst("select * from mall_sku_nprice where sku = ? and priceType='A'", sku.getSku());
-        SkuNprice skuNpriceB = SkuNprice.dao.findFirst("select * from mall_sku_nprice where sku = ? and priceType='A'", sku.getSku());
-        SkuNprice skuNpriceC = SkuNprice.dao.findFirst("select * from mall_sku_nprice where sku = ? and priceType='A'", sku.getSku());
-        SkuNprice skuNpriceD = SkuNprice.dao.findFirst("select * from mall_sku_nprice where sku = ? and priceType='A'", sku.getSku());
-
-        setAttr("typeA", "A");
-        setAttr("numA1", skuNpriceA.getNum1());
-        setAttr("priceA1", skuNpriceA.getPrice1());
-        setAttr("numA2", skuNpriceA.getNum2());
-        setAttr("priceA2", skuNpriceA.getPrice2());
-        setAttr("numA3", skuNpriceA.getNum3());
-        setAttr("priceA3", skuNpriceA.getPrice3());
-        setAttr("typeB", "B");
-        setAttr("numB1", skuNpriceB.getNum1());
-        setAttr("priceB1", skuNpriceB.getPrice1());
-        setAttr("numB2", skuNpriceB.getNum2());
-        setAttr("priceB2", skuNpriceB.getPrice2());
-        setAttr("numB3", skuNpriceB.getNum3());
-        setAttr("priceB3", skuNpriceB.getPrice3());
-        setAttr("typeC", "C");
-        setAttr("numC1", skuNpriceC.getNum1());
-        setAttr("priceC1", skuNpriceC.getPrice1());
-        setAttr("numC2", skuNpriceC.getNum2());
-        setAttr("priceC2", skuNpriceC.getPrice2());
-        setAttr("numC3", skuNpriceC.getNum3());
-        setAttr("priceC3", skuNpriceC.getPrice3());
-        setAttr("typeD", "D");
-        setAttr("numD1", skuNpriceD.getNum1());
-        setAttr("priceD1", skuNpriceD.getPrice1());
-        setAttr("numD2", skuNpriceD.getNum2());
-        setAttr("priceD2", skuNpriceD.getPrice2());
-        setAttr("numD3", skuNpriceD.getNum3());
-        setAttr("priceD3", skuNpriceD.getPrice3());
+        SkuNprice skuNpriceB = SkuNprice.dao.findFirst("select * from mall_sku_nprice where sku = ? and priceType='B'", sku.getSku());
+        SkuNprice skuNpriceC = SkuNprice.dao.findFirst("select * from mall_sku_nprice where sku = ? and priceType='C'", sku.getSku());
+        SkuNprice skuNpriceD = SkuNprice.dao.findFirst("select * from mall_sku_nprice where sku = ? and priceType='D'", sku.getSku());
+        if (skuNpriceA != null) {
+            setAttr("typeA", "A");
+            setAttr("numA1", skuNpriceA.getNum1());
+            setAttr("priceA1", skuNpriceA.getPrice1());
+            setAttr("numA2", skuNpriceA.getNum2());
+            setAttr("priceA2", skuNpriceA.getPrice2());
+            setAttr("numA3", skuNpriceA.getNum3());
+            setAttr("priceA3", skuNpriceA.getPrice3());
+        }
+        if (skuNpriceB != null) {
+            setAttr("typeB", "B");
+            setAttr("numB1", skuNpriceB.getNum1());
+            setAttr("priceB1", skuNpriceB.getPrice1());
+            setAttr("numB2", skuNpriceB.getNum2());
+            setAttr("priceB2", skuNpriceB.getPrice2());
+            setAttr("numB3", skuNpriceB.getNum3());
+            setAttr("priceB3", skuNpriceB.getPrice3());
+        }
+        if (skuNpriceC != null) {
+            setAttr("typeC", "C");
+            setAttr("numC1", skuNpriceC.getNum1());
+            setAttr("priceC1", skuNpriceC.getPrice1());
+            setAttr("numC2", skuNpriceC.getNum2());
+            setAttr("priceC2", skuNpriceC.getPrice2());
+            setAttr("numC3", skuNpriceC.getNum3());
+            setAttr("priceC3", skuNpriceC.getPrice3());
+        }
+        if (skuNpriceD != null) {
+            setAttr("typeD", "D");
+            setAttr("numD1", skuNpriceD.getNum1());
+            setAttr("priceD1", skuNpriceD.getPrice1());
+            setAttr("numD2", skuNpriceD.getNum2());
+            setAttr("priceD2", skuNpriceD.getPrice2());
+            setAttr("numD3", skuNpriceD.getNum3());
+            setAttr("priceD3", skuNpriceD.getPrice3());
+        }
         setAttr("sku", sku.getSku());
         render("sku_setting.jsp");
     }

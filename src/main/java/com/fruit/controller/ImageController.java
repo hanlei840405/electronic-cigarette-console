@@ -13,7 +13,7 @@ import com.jfinal.core.Controller;
  *
  */
 public class ImageController extends Controller{
-	
+
 	public void getCode() throws IOException{
 		HttpServletResponse response=this.getResponse();
 		response.setHeader("Pragma", "No-cache");  

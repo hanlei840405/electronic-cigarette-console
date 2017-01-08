@@ -108,7 +108,8 @@
                 {label: '规格', name: 'specName', width: 150},
                 {label: '专属', name: 'exclusive', formatter: exclusiveStatus, width: 50},
                 {label: '类目', name: 'category', width: 150},
-                {label: '状态', name: 'status', formatter: fmatterStatus, width: 50}
+                {label: '状态', name: 'status', formatter: fmatterStatus, width: 50},
+                {label: '图片', name: 'image', formatter: fmatterImage, width: 50}
             ],
             viewrecords: true,
             height: 280,
@@ -292,6 +293,10 @@
         } else {
             return '<span class="label label-sm label-success">上架</span>';
         }
+    }
+    //格式化状态显示
+    function fmatterImage(cellvalue, options, rowObject) {
+        return '<img src="${context_path}ext/public/' + rowObject.image + '"/>';
     }
     //格式化装束显示
     function exclusiveStatus(cellvalue, options, rowObject) {

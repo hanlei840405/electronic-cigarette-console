@@ -1,6 +1,5 @@
 package com.fruit.controller.mall;
 
-import com.fruit.core.auth.anno.RequiresPermissions;
 import com.fruit.core.controller.BaseController;
 import com.fruit.core.model.Condition;
 import com.fruit.core.model.Operators;
@@ -24,21 +23,18 @@ import java.util.Set;
  */
 public class RateController extends BaseController {
 
-    @RequiresPermissions(value = {"/mall/rate"})
     public void index() {
         List<SysUser> sysUsers = SysUser.me.find("select * from sys_user where status<>2");
         setAttr("sysUsers", sysUsers);
         render("rate_index.jsp");
     }
 
-    @RequiresPermissions(value = {"/mall/rate"})
     public void view() {
         SysUser sysUser = IWebUtils.getCurrentSysUser(getRequest());
         setAttr("userId", sysUser.getId());
         render("rate_view.jsp");
     }
 
-    @RequiresPermissions(value = {"/mall/rate"})
     public void viewRoot() {
         List<SysUser> sysUsers = SysUser.me.find("select * from sys_user where status<>2");
         setAttr("sysUsers", sysUsers);
@@ -48,12 +44,11 @@ public class RateController extends BaseController {
     /**
      * 查询等待计提的订单
      */
-    @RequiresPermissions(value = {"/mall/rate"})
     public void getListData() {
         Long searchUser = this.getParaToLong("search_user");
         String searchYear = this.getPara("search_year");
         String searchMonth = this.getPara("search_month");
-        String select = "select t1.*,t2.cusName,t2.phone,t2.wechat,t3.addr";
+        String select = "select t1.*,t2.cusName,t2.phone,t2.wechat,t3.addr, t1.amount * t2.rate / 100 as rate";
         StringBuilder from = new StringBuilder("from od_order t1 INNER JOIN mall_customer t2 on t1.customer = t2.cusCode INNER JOIN od_order_addr t3 on t1.orderID = t3.orderID where t1.status in (1,2,3) and t1.rated is null and t2.saler=? and t1.odtime like ? order by t1.odtime desc");
         List<Object> params = new ArrayList<Object>();
         params.add(searchUser);
@@ -65,7 +60,6 @@ public class RateController extends BaseController {
     /**
      * 查询已经计提的数据
      */
-    @RequiresPermissions(value = {"/mall/rate"})
     public void getRatedData() {
         Long searchUser = this.getParaToLong("search_user");
         String searchYear = this.getPara("search_year");
@@ -77,7 +71,6 @@ public class RateController extends BaseController {
         this.renderJson(JqGridModelUtils.toJqGridView(pageInfo));
     }
 
-    @RequiresPermissions(value = {"/mall/rate"})
     public void rated() {
         Long searchUser = this.getParaToLong("search_user");
         String searchYear = this.getPara("search_year");

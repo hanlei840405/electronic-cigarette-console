@@ -126,6 +126,7 @@
             datatype: "local",
             colModel: [
                 {label: '订单编号', name: 'orderID', key: true, width: 75},
+                {label: '提成金额', name: 'rate', width: 75},
                 {label: '商家编号', name: 'customer', width: 150},
                 {label: '商家名称', name: 'cusName', width: 150},
                 {label: '总金额', name: 'amount', width: 150},

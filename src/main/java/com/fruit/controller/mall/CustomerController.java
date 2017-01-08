@@ -97,7 +97,8 @@ public class CustomerController extends BaseController {
         String cusCode = this.getPara("cusCode");
         String upCode = this.getPara("upCode");
         String saler = this.getPara("saler");
-        Integer rate = this.getParaToInt("rate");
+        String strRate = this.getPara("rate");
+        Float rate = Float.parseFloat(strRate);
         String priceType = this.getPara("priceType");
         Set<Condition> conditions = new HashSet<Condition>();
         Condition condition = new Condition("id", Operators.EQ, id);

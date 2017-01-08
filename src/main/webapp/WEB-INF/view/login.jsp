@@ -197,7 +197,7 @@
 				      $.post("dologin", submitData, function(data) {
 								$btn.removeClass("disabled");
 								if (data.code == 0) {
-									window.top.location.href = "${context_path}";
+									window.top.location.href = "/";
 								} else {
 									alert(data.msg);
 								}
