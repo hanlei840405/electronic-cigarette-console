@@ -36,7 +36,7 @@ public class ConsoleSequence extends BaseConsoleSequence<ConsoleSequence> {
                     sequence = new ConsoleSequence();
                     sequence.set("category", category).set("code", code).save();
                 } else {
-                    dao.update(conditions, keyValue);
+                    dao.clear().update(conditions, keyValue);
                 }
                 loop = false;
             } catch (Exception e) {

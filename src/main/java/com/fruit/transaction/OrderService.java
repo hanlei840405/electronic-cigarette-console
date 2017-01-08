@@ -60,7 +60,7 @@ public class OrderService {
         if (cost.doubleValue() > 0.00d) { // 更新订单总成本
             params.put("cost", cost);
         }
-        Order.dao.update(conditions, params);
+        Order.dao.clear().update(conditions, params);
     }
 
     @Before(Tx.class)
@@ -73,6 +73,6 @@ public class OrderService {
         }
         Db.update("update od_order t1 inner join mall_customer t2 on t1.customer = t2.cusCode set t1.rated= now() where t1.status in (1,2,3) and t1.rated is null and t2.saler= ? and date_format(t1.odtime,'%Y-%m')=?", searchUser, searchYear + '-' + searchMonth);
 
-        UserRated.dao.set("saler", searchUser).set("rated", searchYear + '-' + searchMonth).set("amount", amount).save();
+        UserRated.dao.clear().set("saler", searchUser).set("rated", searchYear + '-' + searchMonth).set("amount", amount).save();
     }
 }

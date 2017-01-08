@@ -118,7 +118,7 @@ public class SkuController extends BaseController {
         StringBuilder from = new StringBuilder("FROM mall_sku t1");
         from.append(" LEFT JOIN mall_customer_sku t2 ON t1.sku = t2.sku AND t2.customer = ?");
         from.append(" LEFT JOIN mall_category t3 ON t1.category = t3.cateCode");
-        from.append(" WHERE 1=1");
+        from.append(" WHERE t1.exclusive=1");
         List<String> params = new ArrayList<String>();
         params.add(customer);
         if (!StringUtils.isEmpty(category)) {
@@ -148,7 +148,7 @@ public class SkuController extends BaseController {
         conditions.add(new Condition("id", Operators.IN, ids));
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("status", status);
-        Sku.dao.update(conditions, params);
+        Sku.dao.clear().update(conditions, params);
         this.renderJson(InvokeResult.success());
     }
 
@@ -199,7 +199,7 @@ public class SkuController extends BaseController {
             values.put("specName", specName);
             values.put("attribute", attribute);
             values.put("image", image);
-            Sku.dao.update(conditions, values);
+            Sku.dao.clear().update(conditions, values);
         }
         this.renderJson(InvokeResult.success());
     }
@@ -390,7 +390,7 @@ public class SkuController extends BaseController {
         params.put("price1", priceA1);
         params.put("price2", priceA2);
         params.put("price3", priceA3);
-        SkuNprice.dao.update(conditions, params);
+        SkuNprice.dao.clear().update(conditions, params);
         conditions.clear();
         params.clear();
         conditions.add(new Condition("sku", Operators.EQ, sku));
@@ -401,7 +401,7 @@ public class SkuController extends BaseController {
         params.put("price1", priceB1);
         params.put("price2", priceB2);
         params.put("price3", priceB3);
-        SkuNprice.dao.update(conditions, params);
+        SkuNprice.dao.clear().update(conditions, params);
         conditions.clear();
         params.clear();
         conditions.add(new Condition("sku", Operators.EQ, sku));
@@ -412,7 +412,7 @@ public class SkuController extends BaseController {
         params.put("price1", priceC1);
         params.put("price2", priceC2);
         params.put("price3", priceC3);
-        SkuNprice.dao.update(conditions, params);
+        SkuNprice.dao.clear().update(conditions, params);
         conditions.clear();
         params.clear();
         conditions.add(new Condition("sku", Operators.EQ, sku));
@@ -423,7 +423,7 @@ public class SkuController extends BaseController {
         params.put("price1", priceD1);
         params.put("price2", priceD2);
         params.put("price3", priceD3);
-        SkuNprice.dao.update(conditions, params);
+        SkuNprice.dao.clear().update(conditions, params);
 
         this.renderJson(InvokeResult.success());
     }

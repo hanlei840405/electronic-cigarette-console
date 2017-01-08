@@ -128,7 +128,7 @@
                                     <td><c:if test="${item.category == '0' || item.category == null}">否</c:if><c:if
                                             test="${item.category == '1'}">是</c:if></td>
                                     <td>${item.shopAddr}</td>
-                                    <td><img src="/mall/ext/private/${item.shopPic}"></td>
+                                    <td><img width="80" height="80" src="/mall/ext/private/${item.shopPic}"></td>
                                 </tr>
                             </c:forEach>
                             </tbody>

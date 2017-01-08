@@ -22,7 +22,7 @@ public class SkStock extends BaseSkStock<SkStock> {
         conditions.add(new Condition("sku", Operators.EQ, sku));
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("quantity", quantity);
-        SkStock.dao.update(conditions, params);
+        SkStock.dao.clear().update(conditions, params);
     }
 
     public void add(String sku, long quantity) {

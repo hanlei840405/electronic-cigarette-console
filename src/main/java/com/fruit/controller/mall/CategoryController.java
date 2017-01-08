@@ -82,7 +82,7 @@ public class CategoryController extends BaseController {
             Map<String, Object> values = new HashMap<String, Object>();
             values.put("cateName", cateName);
             values.put("parentCode", parentCode);
-            Category.me.update(conditions, values);
+            Category.me.clear().update(conditions, values);
         }
         this.renderJson(InvokeResult.success());
     }

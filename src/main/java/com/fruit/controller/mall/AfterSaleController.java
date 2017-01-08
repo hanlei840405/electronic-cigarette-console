@@ -61,7 +61,7 @@ public class AfterSaleController extends BaseController {
         conditions.add(new Condition("asodID", Operators.EQ, asodID));
         Map<String, Object> values = new HashMap<String, Object>();
         values.put("status", 1);
-        AsAftersaleod.dao.update(conditions, values);
+        AsAftersaleod.dao.clear().update(conditions, values);
         this.renderJson(InvokeResult.success());
     }
 

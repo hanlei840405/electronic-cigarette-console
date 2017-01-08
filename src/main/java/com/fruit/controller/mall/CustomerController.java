@@ -110,7 +110,7 @@ public class CustomerController extends BaseController {
         params.put("rate", rate);
         params.put("priceType", priceType);
         params.put("status", 1);
-        Customer.dao.update(conditions, params);
+        Customer.dao.clear().update(conditions, params);
 
         this.renderJson(InvokeResult.success());
     }
@@ -155,7 +155,7 @@ public class CustomerController extends BaseController {
         if (isExist) {
             Map<String, Object> params = new HashMap<String, Object>();
             params.put("price", price);
-            SkuSprice.dao.update(conditions, params);
+            SkuSprice.dao.clear().update(conditions, params);
         } else {
             SkuSprice.dao.clear().set("customer", customer).set("sku", sku).set("price", price).save();
         }
@@ -191,7 +191,7 @@ public class CustomerController extends BaseController {
         conditions.add(new Condition("id", Operators.EQ, id));
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("passwd", password);
-        Customer.dao.update(conditions, params);
+        Customer.dao.clear().update(conditions, params);
 
         this.renderJson(InvokeResult.success());
     }
@@ -203,7 +203,7 @@ public class CustomerController extends BaseController {
         conditions.add(new Condition("id", Operators.EQ, id));
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("status", 0);
-        Customer.dao.update(conditions, params);
+        Customer.dao.clear().update(conditions, params);
 
         this.renderJson(InvokeResult.success());
     }

@@ -41,10 +41,10 @@ public class AfterSaleService {
                 SkStock.dao.subtract(sku, quantity);
                 amount.add(temp);
             }
-            AsAftersaleodDe.dao.update();
+            AsAftersaleodDe.dao.clear().update();
         }
         params.put("amount", amount);
-        AsAftersaleod.dao.update(conditions, params);
+        AsAftersaleod.dao.clear().update(conditions, params);
         Db.batchUpdate(asAftersaleodDes, 20);
     }
 }
