@@ -131,9 +131,9 @@ public class CustomerController extends BaseController {
             if (customerUpRated != null) {
                 Map<String, Object> params = new HashMap<String, Object>();
                 params.put("rated", rated);
-                CustomerUpRated.dao.update(conditions, params);
+                CustomerUpRated.dao.clear().update(conditions, params);
             } else {
-                CustomerUpRated.dao.set("customer", customer).set("up", up.getCusCode()).set("sku", sku).set("rated", rated).save();
+                CustomerUpRated.dao.clear().set("customer", customer).set("up", up.getCusCode()).set("sku", sku).set("rated", rated).save();
             }
             this.renderJson(InvokeResult.success());
         }catch (Exception e) {

@@ -296,7 +296,7 @@
     }
     //格式化状态显示
     function fmatterImage(cellvalue, options, rowObject) {
-        return '<img src="${context_path}ext/public/' + rowObject.image + '"/>';
+        return '<img width="50" height="50" src="/mall/ext/public/' + rowObject.image + '"/>';
     }
     //格式化装束显示
     function exclusiveStatus(cellvalue, options, rowObject) {
