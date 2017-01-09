@@ -6,7 +6,7 @@
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
-		<title>JC系统登陆</title>
+		<title>电子烟实体经销网</title>
 
 		<meta name="description" content="User login page" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
@@ -63,12 +63,11 @@
 								<div id="login-box" class="login-box visible widget-box no-border">
 									<div class="widget-body">
 										<div class="widget-main">
-											<h4 class="header blue lighter bigger">
-												<i class="ace-icon fa fa-coffee green"></i>
-												电子烟管理平台
+											<h4 class="header blue lighter bigger" >
+												<img src="/res/image/logo.png" style="width: 100%">
 											</h4>
 
-											<div class="space-6"></div>
+											<div class="space-6" ></div>
 
 											<form>
 												<fieldset>

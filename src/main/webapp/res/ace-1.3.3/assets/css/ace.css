@@ -12505,7 +12505,8 @@ td .lbl:only-child {
 }
 .login-layout .widget-box .widget-main {
   padding: 16px 36px 36px;
-  background: #F7F7F7;
+  background: #FCFCFA;
+  /*background: #F7F7F7;*/
 }
 .login-layout .widget-box .widget-main form {
   margin: 0;

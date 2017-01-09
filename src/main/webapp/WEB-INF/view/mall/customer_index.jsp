@@ -185,7 +185,7 @@
                     });
                 }else {
                     parent.layer.open({
-                        title: '设置商品特殊价格',
+                        title: '设置上级商家商品固定提成',
                         type: 2,
                         area: ['800px', '600px'],
                         fix: false, //不固定
@@ -232,7 +232,7 @@
                 });
             } else {
                 parent.layer.open({
-                    title: '设置商品特殊价格',
+                    title: '设置专属商品',
                     type: 2,
                     area: ['800px', '600px'],
                     fix: false, //不固定
