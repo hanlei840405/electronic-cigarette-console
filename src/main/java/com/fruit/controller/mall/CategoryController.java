@@ -71,8 +71,8 @@ public class CategoryController extends BaseController {
     @RequiresPermissions(value = {"/mall/category"})
     public void save() {
         Long id = this.getParaToLong("id");
-        String parentCode = this.getPara("parentCode");
-        String cateName = this.getPara("cateName");
+        String parentCode = this.getPara("parentCode").trim();
+        String cateName = this.getPara("cateName").trim();
         if (id == null) {
             String cateCode = ConsoleSequence.dao.generateSequence("类目");
             Category.me.clear().set("cateCode", cateCode).set("cateName", cateName).set("parentCode", StringUtils.isEmpty(parentCode) ? null : parentCode).save();

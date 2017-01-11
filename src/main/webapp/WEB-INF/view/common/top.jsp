@@ -1,10 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <div class="navbar-header pull-left">
 					<a href="javascript:;" class="navbar-brand">
-						<small>
-							<i class="fa fa-leaf"></i>
-							电子烟管理平台
-						</small>
+						<img src="/res/image/logo.png" style="width: 40%">
 					</a>
 				</div>
 				<div class="navbar-buttons navbar-header pull-right" role="navigation">
