@@ -140,4 +140,12 @@ public abstract class BaseMallCustomer<M extends BaseMallCustomer<M>> extends Ba
         return get("cusType");
     }
 
+    public void setAgency(java.lang.String agency) {
+        set("agency", agency);
+    }
+
+    public java.lang.String getAgency() {
+        return get("agency");
+    }
+
 }

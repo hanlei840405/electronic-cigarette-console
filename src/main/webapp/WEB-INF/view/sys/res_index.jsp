@@ -139,9 +139,10 @@
 					} 
 				},
             });
-            $("#grid-table").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" });
+            $("#grid-table").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden"});
 			$(window).triggerHandler('resize.jqGrid');
-			
+			$("#grid-table").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden","height" : "auto" });
+
 			$("#bnt-add").click(function(){
 				parent.layer.open({
 				    type: 2,

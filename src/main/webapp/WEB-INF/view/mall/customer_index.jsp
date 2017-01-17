@@ -38,7 +38,8 @@
 																		<i class="ace-icon fa fa-check"></i>
 																	</span>
 
-                                            <input type="text" id="searchCustomer" name="searchCustomer" class="form-control search-query"
+                                            <input type="text" id="searchCustomer" name="searchCustomer"
+                                                   class="form-control search-query"
                                                    placeholder="请输入商户号"/>
 																	<span class="input-group-btn">
 																		<button type="button" id="btn_search"
@@ -105,6 +106,7 @@
                 {index: 'id', name: 'id', key: true, hidden: true},
                 {label: '商户号', name: 'cusCode', key: true, width: 50},
                 {label: '商户名称', name: 'cusName', width: 100},
+                {label: '供应商', name: 'agency', width: 50, formatter: fmatterAgency},
                 {label: '性别', name: 'sex', width: 50, formatter: fmatterSex},
                 {label: '生日', name: 'birthday', width: 80},
                 {label: '微信', name: 'wechat', width: 100},
@@ -183,7 +185,7 @@
                         icon: 2,
                         time: 2000 //2秒关闭（如果不配置，默认是3秒）
                     });
-                }else {
+                } else {
                     parent.layer.open({
                         title: '设置上级商家商品固定提成',
                         type: 2,
@@ -257,7 +259,7 @@
                 var submitData = {
                     "id": getOneSelectedRows()
                 };
-                layer.confirm("确定修改其密码？",function(index){
+                layer.confirm("确定修改其密码？", function (index) {
                     layer.close(index);
                     $.post("${context_path}/mall/customer/reset", submitData, function (data) {
                         if (data.code == 0) {
@@ -362,6 +364,14 @@
                 layer.alert(data.msg);
             }
         }, "json");
+    }
+    //格式化状态显示
+    function fmatterAgency(cellvalue, options, rowObject) {
+        if (cellvalue == '0') {
+            return '否';
+        } else {
+            return '是';
+        }
     }
     //格式化状态显示
     function fmatterSex(cellvalue, options, rowObject) {

@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <div class="navbar-header pull-left">
 					<a href="javascript:;" class="navbar-brand">
-						<img src="/res/image/logo.png" style="width: 40%">
+						<img src="/res/image/logo.png" style="height: 29px;">
 					</a>
 				</div>
 				<div class="navbar-buttons navbar-header pull-right" role="navigation">

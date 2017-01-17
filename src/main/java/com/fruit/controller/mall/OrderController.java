@@ -27,11 +27,26 @@ public class OrderController extends BaseController {
     }
 
     @RequiresPermissions(value = {"/mall/order"})
+    public void auditIndex() {
+        render("order_audit_index.jsp");
+    }
+
+    @RequiresPermissions(value = {"/mall/order"})
+    public void sendIndex() {
+        render("order_send_index.jsp");
+    }
+
+    @RequiresPermissions(value = {"/mall/order"})
     public void getListData() {
+        String status = this.getPara("status");
         String search = this.getPara("search");
         String select = "select t1.*,t2.cusName,t2.phone,t2.wechat,t2.upCode,t2.saler,t3.addr";
         StringBuilder from = new StringBuilder("from od_order t1 INNER JOIN mall_customer t2 on t1.customer = t2.cusCode INNER JOIN od_order_addr t3 on t1.orderID = t3.orderID where 1=1");
         List<String> params = new ArrayList<String>();
+        if (!StringUtils.isEmpty(status)) {
+            from.append(" and t1.status=?");
+            params.add(status);
+        }
         if (!StringUtils.isEmpty(search)) {
             from.append(" and (t1.orderID = ? OR t2.cusCode = ?)");
             params.add(search);
@@ -59,10 +74,19 @@ public class OrderController extends BaseController {
         SysUser sysUser = IWebUtils.getCurrentSysUser(getRequest());
         String orderID = this.getPara("orderID");
         Integer status = this.getParaToInt("status");
+        OrderService orderService = Duang.duang(OrderService.class);
+        orderService.auditOrder(orderID, status, null, null, sysUser.getName());
+        this.renderJson(InvokeResult.success());
+    }
+
+    @RequiresPermissions(value = {"/mall/order"})
+    public void send() {
+        SysUser sysUser = IWebUtils.getCurrentSysUser(getRequest());
+        String orderID = this.getPara("orderID");
         String express = this.getPara("express");
         String courierNum = this.getPara("courierNum");
         OrderService orderService = Duang.duang(OrderService.class);
-        orderService.auditOrder(orderID, status, express, courierNum, sysUser.getName());
+        orderService.auditOrder(orderID, 3, express, courierNum, sysUser.getName());
         this.renderJson(InvokeResult.success());
     }
 
@@ -73,5 +97,23 @@ public class OrderController extends BaseController {
         setAttr("order", order);
         setAttr("category", "view");
         render("order_view.jsp");
+    }
+
+    @RequiresPermissions(value = {"/mall/order"})
+    public void auditView() {
+        String orderID = this.getPara("orderID");
+        Order order = Order.dao.findFirst("SELECT t1.*,t2.cusName,t3.addr FROM od_order t1 INNER JOIN mall_customer t2 ON t1.customer = t2.cusCode INNER JOIN od_order_addr t3 on t1.orderID = t3.orderID WHERE t1.orderID=?", orderID);
+        setAttr("order", order);
+        setAttr("category", "view");
+        render("order_audit_view.jsp");
+    }
+
+    @RequiresPermissions(value = {"/mall/order"})
+    public void sendView() {
+        String orderID = this.getPara("orderID");
+        Order order = Order.dao.findFirst("SELECT t1.*,t2.cusName,t3.addr FROM od_order t1 INNER JOIN mall_customer t2 ON t1.customer = t2.cusCode INNER JOIN od_order_addr t3 on t1.orderID = t3.orderID WHERE t1.orderID=?", orderID);
+        setAttr("order", order);
+        setAttr("category", "view");
+        render("order_send_view.jsp");
     }
 }

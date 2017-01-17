@@ -22,37 +22,25 @@
     <div class="main-content" id="page-wrapper">
         <div class="page-content" id="page-content">
             <div class="row">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <!-- PAGE CONTENT BEGINS -->
-                        <div class="widget-box">
-                            <div class="widget-header widget-header-small">
-                                <h5 class="widget-title lighter">筛选</h5>
-                            </div>
+                <div class="col-xs-12">
+                    <!-- PAGE CONTENT BEGINS -->
+                    <div class="widget-box">
+                        <div class="widget-header widget-header-small">
+                            <h5 class="widget-title lighter">筛选</h5>
+                        </div>
 
-                            <div class="widget-body">
-                                <div class="widget-main">
-                                    <div class="row">
-                                        <div class="col-xs-12 col-sm-8">
-                                            <div class="input-group">
+                        <div class="widget-body">
+                            <div class="widget-main">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-8">
+                                        <div class="input-group">
+																	<span class="input-group-addon">
+																		<i class="ace-icon fa fa-check"></i>
+																	</span>
 
-                                                年:<select id="search_year">
-                                            </select>
-
-                                                月:<select id="search_month">
-                                                <option value="01">一月</option>
-                                                <option value="02">二月</option>
-                                                <option value="03">三月</option>
-                                                <option value="04">四月</option>
-                                                <option value="05">五月</option>
-                                                <option value="06">六月</option>
-                                                <option value="07">七月</option>
-                                                <option value="08">八月</option>
-                                                <option value="09">九月</option>
-                                                <option value="10">十月</option>
-                                                <option value="11">十一月</option>
-                                                <option value="12">十二月</option>
-                                            </select>
+                                            <input type="text" id="search" name="search"
+                                                   class="form-control search-query"
+                                                   placeholder="请输入操作人"/>
 																	<span class="input-group-btn">
 																		<button type="button" id="btn_search"
                                                                                 class="btn btn-purple btn-sm">
@@ -60,7 +48,6 @@
                                                                             搜索
                                                                         </button>
 																	</span>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -71,6 +58,7 @@
                 <div class="col-xs-12">
                     <div class="row-fluid" style="margin-bottom: 5px;">
                         <div class="span12 control-group">
+                            <jc:button className="btn btn-success" id="btn-audit" textName="审核"/>
                         </div>
                     </div>
                     <!-- PAGE CONTENT BEGINS -->
@@ -88,18 +76,6 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        // 初始化年和月
-        var date = new Date();
-        var currentYear = date.getFullYear();
-        var currentMonth = date.getMonth() + 1;
-        if (currentMonth < 10) {
-            currentMonth = "0" + currentMonth;
-        }
-        for (var year = currentYear; year >= 2010; year--) {
-            $("#search_year").append("<option value='" + year + "'>" + year + "</option>");
-        }
-        $('#search_month').val(currentMonth);
-
         var grid_selector = "#grid-table";
         var pager_selector = "#grid-pager";
         //resize to fit page size
@@ -118,12 +94,27 @@
         });
 
         $("#grid-table").jqGrid({
-            url: '${context_path}/mall/rate/getRatedData',
+            url: '${context_path}/mall/order/getListData?status=1',
             mtype: "GET",
-            datatype: "local",
+            datatype: "json",
             colModel: [
-                {label: '月份', name: 'rated', width: 150},
-                {label: '计提金额', name: 'amount', width: 150}
+                {label: '订单编号', name: 'orderID', key: true, width: 75},
+                {label: '商家编号', name: 'customer', width: 150},
+                {label: '商家名称', name: 'cusName', width: 150},
+                {label: '总金额', name: 'amount', width: 150},
+                {label: '总成本', name: 'cost', width: 150},
+                {label: '复核人', name: 'reviewer', width: 150},
+                {label: '数量', name: 'amount', width: 150},
+                {label: '快递公司', name: 'express', width: 150},
+                {label: '快递单号', name: 'courierNum', width: 150},
+                {label: '状态', name: 'status', width: 75, formatter: fmatterStatus},
+                {
+                    label: '下单时间',
+                    name: 'odtime',
+                    width: 150,
+                    formatter: "date",
+                    formatoptions: {srcformat: "ISO8601Long", newformat: "Y-m-d"}
+                }
             ],
             height: 280,
             rowNum: 10,
@@ -142,14 +133,36 @@
         $(window).triggerHandler('resize.jqGrid');
         $("#btn_search").click(function () {
             //此处可以添加对查询数据的合法验证
-            var search_user = '${userId}';
-            var search_year = $("#search_year").val();
-            var search_month = $("#search_month").val();
+            var search = $("#search").val();
             $("#grid-table").jqGrid('setGridParam', {
                 datatype: 'json',
-                postData: {'search_user': search_user,'search_year': search_year,'search_month': search_month}, //发送数据
+                postData: {'search': search}, //发送数据
                 page: 1
             }).trigger("reloadGrid"); //重新载入
+        });
+
+        $("#btn-audit").click(function () {//审核页面
+            var rid = getOneSelectedRows();
+            if (rid == -1) {
+                layer.msg("请选择一个订单", {
+                    icon: 2,
+                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                });
+            } else if (rid == -2) {
+                layer.msg("只能选择一个订单", {
+                    icon: 2,
+                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                });
+            } else {
+                parent.layer.open({
+                    title: '查看明细',
+                    type: 2,
+                    area: ['600px', '500px'],
+                    fix: false, //不固定
+                    maxmin: true,
+                    content: '${context_path}/mall/order/auditView?orderID=' + rid
+                });
+            }
         });
     });
     //replace icons with FontAwesome icons like above
@@ -195,6 +208,23 @@
             } else {
                 return "-2";
             }
+        }
+    }
+    function reloadGrid() {
+        $("#grid-table").trigger("reloadGrid"); //重新载入
+    }
+    //格式化状态显示
+    function fmatterStatus(cellvalue, options, rowObject) {
+        if (cellvalue == 0) {
+            return '<span class="label label-sm label-warning">待付款</span>';
+        } else if (cellvalue == 1) {
+            return '<span class="label label-sm label-success">已付款</span>';
+        } else if (cellvalue == 2) {
+            return '<span class="label label-sm label-success">已审核</span>';
+        } else if (cellvalue == 3) {
+            return '<span class="label label-sm label-success">已发货</span>';
+        } else {
+            return '<span class="label label-sm label-success">关闭</span>';
         }
     }
 </script>

@@ -100,6 +100,7 @@ public class CustomerController extends BaseController {
         String strRate = this.getPara("rate");
         Float rate = Float.parseFloat(strRate);
         String priceType = this.getPara("priceType");
+        String agency = this.getPara("agency");
         Set<Condition> conditions = new HashSet<Condition>();
         Condition condition = new Condition("id", Operators.EQ, id);
         conditions.add(condition);
@@ -110,6 +111,7 @@ public class CustomerController extends BaseController {
         params.put("rate", rate);
         params.put("priceType", priceType);
         params.put("status", 1);
+        params.put("agency", agency);
         Customer.dao.clear().update(conditions, params);
 
         this.renderJson(InvokeResult.success());

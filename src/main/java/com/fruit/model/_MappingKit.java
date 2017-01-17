@@ -52,6 +52,7 @@ public class _MappingKit {
         arp.addMapping("customer_rated", "id", CustomerRated.class);
         arp.addMapping("customer_rated_de", "id", CustomerRatedDe.class);
         arp.addMapping("customer_up_rated", "id", CustomerUpRated.class);
+        arp.addMapping("customer_gift", "id", CustomerGift.class);
     }
 }
 

@@ -93,6 +93,19 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label class="control-label col-xs-2 col-sm-2 no-padding-right"
+                                       for="agency">供应商</label>
+
+                                <div class="col-xs-3 col-sm-3">
+                                    <div class="clearfix">
+                                        <select name="priceType" id="agency" class="col-xs-12 col-sm-12">
+                                            <option value="0" ${customer.agency eq '0'?'selected':''}>否</option>
+                                            <option value="1" ${customer.agency eq '1'?'selected':''}>是</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
 
                             <div class="clearfix form-actions" align="center">
                                 <div class="col-md-offset-3 col-md-6">

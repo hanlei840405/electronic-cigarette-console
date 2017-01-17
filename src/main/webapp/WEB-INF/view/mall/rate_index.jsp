@@ -98,6 +98,9 @@
         var date = new Date();
         var currentYear = date.getFullYear();
         var currentMonth = date.getMonth() + 1;
+        if (currentMonth < 10) {
+            currentMonth = "0" + currentMonth;
+        }
         for (var year = currentYear; year >= 2010; year--) {
             $("#search_year").append("<option value='" + year + "'>" + year + "</option>");
         }
