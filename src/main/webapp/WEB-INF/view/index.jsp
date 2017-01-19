@@ -128,6 +128,8 @@
 		<script type="text/javascript"> 
 		var currentIframe;
 		$(function(){
+			$('#logo').css("height",$('#navbar').height());
+			$('#logo').attr('src','/res/image/logo2.png');
 			menuEventInit();
 			tabsEventInit();
 			initPwdSettingEvent();

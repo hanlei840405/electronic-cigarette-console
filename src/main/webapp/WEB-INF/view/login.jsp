@@ -64,7 +64,7 @@
 									<div class="widget-body">
 										<div class="widget-main">
 											<h4 class="header blue lighter bigger" >
-												<img src="/res/image/logo.png" style="width: 100%">
+												<img src="/res/image/logo1.png" style="width: 100%">
 											</h4>
 
 											<div class="space-6" ></div>
