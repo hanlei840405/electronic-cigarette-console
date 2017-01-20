@@ -241,15 +241,15 @@
     //格式化状态显示
     function fmatterStatus(cellvalue, options, rowObject) {
         if (cellvalue == 0) {
-            return '<span class="label label-sm label-warning">待付款</span>';
+            return '<span class="label label-sm label-danger">待付款</span>';
         } else if (cellvalue == 1) {
-            return '<span class="label label-sm label-success">已付款</span>';
+            return '<span class="label label-sm label-warning">已付款</span>';
         } else if (cellvalue == 2) {
             return '<span class="label label-sm label-success">已审核</span>';
         } else if (cellvalue == 3) {
-            return '<span class="label label-sm label-success">已发货</span>';
+            return '<span class="label label-sm label-default">已发货</span>';
         } else {
-            return '<span class="label label-sm label-success">关闭</span>';
+            return '<span class="label label-sm label-danger">关闭</span>';
         }
     }
 </script>

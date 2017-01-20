@@ -135,7 +135,7 @@
             auditOrder(2);
         });
         $("#btn-refuse").click(function () {//审核拒绝
-            auditOrder(1);
+            auditOrder(0);
         });
         $("#btn-send").click(function () {//发货
             auditOrder(3, $('#express').val(), $('#courierNum').val());

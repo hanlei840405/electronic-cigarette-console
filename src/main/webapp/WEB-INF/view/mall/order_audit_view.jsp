@@ -122,7 +122,7 @@
             auditOrder(2);
         });
         $("#btn-refuse").click(function () {//审核拒绝
-            auditOrder(1);
+            auditOrder(0);
         });
         $("#btn-cancel").click(function () {//关闭订单
             auditOrder(4);
