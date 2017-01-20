@@ -5,10 +5,9 @@ import com.fruit.core.auth.anno.RequiresPermissions;
 import com.fruit.core.controller.BaseController;
 import com.fruit.core.util.JqGridModelUtils;
 import com.fruit.core.view.InvokeResult;
-import com.fruit.model.mall.Customer;
-import com.fruit.model.mall.CustomerGift;
-import com.fruit.model.mall.Order;
-import com.jfinal.plugin.activerecord.Db;
+import com.fruit.model.mall.*;
+import com.fruit.transaction.CustomerGiftService;
+import com.jfinal.aop.Duang;
 import com.jfinal.plugin.activerecord.Page;
 
 import java.util.ArrayList;
@@ -28,11 +27,23 @@ public class CustomerGiftController extends BaseController {
     public void view() {
         Long id = getParaToLong("id");
         CustomerGift customerGift = CustomerGift.dao.findById(id);
+        Sku gift = Sku.dao.findFirst("select * from mall_sku where sku=?", customerGift.getGift());
         Order order = Order.dao.findById(customerGift.getOrderID());
         Customer customer = Customer.dao.findFirst("select * from mall_customer where cusCode=?", order.getCustomer());
+        setAttr("id", id);
+        setAttr("status", customerGift.getStatus());
         setAttr("orderID", customerGift.getOrderID());
         setAttr("cusName", customer.getCusName());
         setAttr("amount", order.getAmount());
+        setAttr("gift", gift == null ? null : gift.getSkuName());
+        setAttr("quantity", customerGift.getQuantity());
+        List<Category> categories = Category.me.find("select * from mall_category where parentCode is not null");
+        for (Category category : categories) {
+            category.setSkus(Sku.dao.find("select * from mall_sku where category=? and attribute='1'", category.getCateCode()));
+        }
+        setAttr("categories", categories);
+
+
         render("customer_gift_view.jsp");
     }
 
@@ -40,7 +51,7 @@ public class CustomerGiftController extends BaseController {
     public void getListData() {
         String searchCustomer = this.getPara("search_customer");
         String searchStatus = this.getPara("search_status");
-        String select = "select t1.*,t2.cusName as customerName,t3.cusName as relationShipName,t4.odtime";
+        String select = "select t1.*,t2.cusName as customerName,t3.cusName as relationshipName,t4.odtime";
         StringBuilder from = new StringBuilder("from customer_gift t1 INNER JOIN mall_customer t2 on t1.customer = t2.cusCode INNER JOIN mall_customer t3 on t1.relationship = t3.cusCode INNER JOIN od_order t4 on t1.orderID = t4.orderID where 1=1");
         List<Object> params = new ArrayList<Object>();
         if (!StringUtils.isEmpty(searchCustomer)) {
@@ -57,19 +68,16 @@ public class CustomerGiftController extends BaseController {
     }
 
     @RequiresPermissions(value = {"/mall/customerGift"})
-    public void audit() {
-        String[] ids = getPara("ids").split(",");
-        List<CustomerGift> customerGifts = new ArrayList<CustomerGift>();
-        for (String id : ids) {
-            CustomerGift customerGift = CustomerGift.dao.findById(Long.parseLong(id));
-            customerGift.setStatus("1");
-            customerGifts.add(customerGift);
-        }
+    public void send() {
+        Long id = getParaToLong("id");
+        String gift = getPara("gift");
+        Integer quantity = getParaToInt("quantity");
         try {
-            Db.batchUpdate(customerGifts, ids.length);
+            CustomerGiftService customerGiftService = Duang.duang(CustomerGiftService.class);
+            customerGiftService.send(id, gift, quantity);
+            this.renderJson(InvokeResult.success());
         } catch (Exception e) {
             this.renderJson(InvokeResult.failure("操作失败，联系运维"));
         }
-        this.renderJson(InvokeResult.success());
     }
 }

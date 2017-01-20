@@ -67,19 +67,19 @@ public abstract class BaseCustomerGift<M extends BaseCustomerGift<M>> extends Ba
         return get("odtime");
     }
 
-    public void setGift(Long gift) {
+    public void setGift(String gift) {
         set("gift", gift);
     }
 
-    public Long getGift() {
+    public String getGift() {
         return get("gift");
     }
 
-    public void setQuantity(Long quantity) {
+    public void setQuantity(Integer quantity) {
         set("quantity", quantity);
     }
 
-    public Long getQuantity() {
+    public Integer getQuantity() {
         return get("quantity");
     }
 

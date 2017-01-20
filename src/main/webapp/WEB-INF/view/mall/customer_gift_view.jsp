@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <jsp:include page="/WEB-INF/view/common/basecss.jsp" flush="true"/>
     <link rel="stylesheet" href="${res_url}js/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+    <link rel="stylesheet" href="${res_url}css/select2/select2.min.css" type="text/css">
 </head>
 
 <body class="no-skin">
@@ -24,11 +25,45 @@
             <div class="page-content" id="page-content">
                 <div class="row">
                     <div class="col-xs-12">
-                        <p>订单编号:${orderID}</p>
-
-                        <p class="col-xs-4">客户:${cusName}</p>
-
-                        <p class="col-xs-4">总金额:${amount}</p>
+                        <table width="100%">
+                            <tr>
+                                <td>订单编号</td>
+                                <td>${orderID}</td>
+                                <td>客户</td>
+                                <td>${cusName}</td>
+                                <td>总金额</td>
+                                <td>${amount}</td>
+                            </tr>
+                        </table>
+                        <c:if test="${status == 0 }">
+                            <table width="100%">
+                                <tr>
+                                    <td>赠品</td>
+                                    <td><select id="giftSku" style="width: 200px;">
+                                        <option value="">请选择</option>
+                                        <c:forEach items="${categories }" var="item">
+                                            <optgroup label="${item.cateName }"></optgroup>
+                                            <c:forEach items="${item.skus }" var="sku">
+                                                <option value="${sku.sku }">${sku.skuName }</option>
+                                            </c:forEach>
+                                        </c:forEach>
+                                    </select></td>
+                                    <td>数量</td>
+                                    <td><input id="giftQuantity" type="number" min="1" value="1"/></td>
+                                    <td><button onclick="sendGift()">提交</button></td>
+                                </tr>
+                            </table>
+                        </c:if>
+                        <c:if test="${status == 1 }">
+                            <table width="100%">
+                                <tr>
+                                    <td>赠品</td>
+                                    <td>${gift}</td>
+                                    <td>数量</td>
+                                    <td>${quantity}</td>
+                                </tr>
+                            </table>
+                        </c:if>
                         <!-- PAGE CONTENT BEGINS -->
                         <table id="grid-table"></table>
 
@@ -42,9 +77,10 @@
 </div><!-- /.main-container -->
 <!-- basic scripts -->
 <jsp:include page="/WEB-INF/view/common/basejs.jsp" flush="true"/>
-
+<script src="${res_url}js/select2/select2.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
+        $("#giftSku").select2();
         var grid_selector = "#grid-table";
         var pager_selector = "#grid-pager";
         //resize to fit page size
@@ -103,6 +139,35 @@
             var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
             if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
         })
+    }
+
+    function sendGift(){
+        var gift=$("#giftSku").val();
+        var quantity = $("#giftQuantity").val();
+        if (gift == "" || gift == null) {
+            alert("选择赠品");
+            return;
+        }
+        if (isNaN(quantity) || quantity < 1) {
+            alert("数量必须大于0");
+            return;
+        }
+        $.post("${context_path}/mall/customerGift/send", {"id": "${id}","gift": gift,"quantity": quantity}, function (data) {
+
+            if (data.code == 0) {
+                layer.msg("操作成功", {
+                    icon: 1,
+                    time: 1000 //1秒关闭（如果不配置，默认是3秒）
+                }, function () {
+                    parent.reloadGrid();
+                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                    parent.layer.close(index); //再执行关闭
+                });
+
+            } else {
+                layer.alert(data.msg);
+            }
+        }, "json");
     }
 </script>
 </body>

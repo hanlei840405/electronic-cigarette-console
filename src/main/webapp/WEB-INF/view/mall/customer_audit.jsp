@@ -99,7 +99,7 @@
 
                                 <div class="col-xs-3 col-sm-3">
                                     <div class="clearfix">
-                                        <select name="priceType" id="agency" class="col-xs-12 col-sm-12">
+                                        <select name="agency" id="agency" class="col-xs-12 col-sm-12">
                                             <option value="0" ${customer.agency eq '0'?'selected':''}>否</option>
                                             <option value="1" ${customer.agency eq '1'?'selected':''}>是</option>
                                         </select>
