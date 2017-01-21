@@ -4,7 +4,6 @@ import com.alibaba.druid.util.StringUtils;
 import com.fruit.core.model.Condition;
 import com.fruit.core.model.Operators;
 import com.fruit.core.util.NumberUtils;
-import com.fruit.model.SysUser;
 import com.fruit.model.mall.Customer;
 import com.fruit.model.mall.Order;
 import com.fruit.model.mall.OrderDe;
@@ -24,7 +23,11 @@ public class OrderService {
 
     @Before(Tx.class)
     public void auditOrder(String orderID, int status, String express, String courierNum, String reviewer) {
-
+        if (status == 2) {
+            Order order = Order.dao.findById(orderID);
+            CustomerRatedService customerRatedService = Duang.duang(CustomerRatedService.class);
+            customerRatedService.create(orderID, order.getCustomer());
+        }
         BigDecimal cost = new BigDecimal(0);
         if (status == 3) {
             Order order = Order.dao.findById(orderID);

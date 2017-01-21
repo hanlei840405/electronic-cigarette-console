@@ -9,27 +9,27 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings("serial")
 public abstract class BaseCustomerRatedDe<M extends BaseCustomerRatedDe<M>> extends BaseModel<M> implements IBean {
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		set("id", id);
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return get("id");
 	}
 
-	public void setRatedID(Integer ratedID) {
+	public void setRatedID(Long ratedID) {
 		set("ratedID", ratedID);
 	}
 
-	public Integer getRatedID() {
+	public Long getRatedID() {
 		return get("ratedID");
 	}
 
-	public void setOrderDeID(Integer orderDeID) {
+	public void setOrderDeID(Long orderDeID) {
 		set("orderDeID", orderDeID);
 	}
 
-	public Integer getOrderDeID() {
+	public Long getOrderDeID() {
 		return get("orderDeID");
 	}
 
