@@ -112,7 +112,7 @@ public class InboundController extends BaseController {
                     skuInboundDe.setInboundID(inboundID);
                     skuInboundService.saveInbound(inboundID, skuInboundDe, sysUser);
                 } else { // 追加明细（新建）
-                    skuInboundService.saveInboundDetail(skuInboundDe, quantity);
+                    skuInboundService.saveInboundDetail(skuInboundDe);
                 }
             }
             result.put("code", "200");
