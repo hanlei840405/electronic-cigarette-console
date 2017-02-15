@@ -22,7 +22,6 @@ import com.fruit.core.model.Condition;
 import com.fruit.core.model.Operators;
 import com.fruit.core.view.InvokeResult;
 import com.fruit.model.ConsoleSequence;
-import com.fruit.model.SysUser;
 import com.fruit.model.mall.Category;
 
 import java.util.*;
@@ -47,11 +46,11 @@ public class CategoryController extends BaseController {
     @RequiresPermissions(value = {"/mall/category"})
     public void delete() {
         Long id = this.getParaToLong("id");
-        if(id != null) {
+        if (id != null) {
             Category.me.deleteById(id);
             this.renderJson(InvokeResult.success());
 
-        }else {
+        } else {
             this.renderJson(InvokeResult.failure(500, "该数据不存在"));
         }
     }
@@ -72,16 +71,19 @@ public class CategoryController extends BaseController {
     public void save() {
         Long id = this.getParaToLong("id");
         String parentCode = this.getPara("parentCode").trim();
-        String cateName = this.getPara("cateName").trim();
+
+        String cateName = this.getPara("cateName") != null ? this.getPara("cateName").trim() : null;
+        Integer sequence = this.getParaToInt("sequence",0);
         if (id == null) {
             String cateCode = ConsoleSequence.dao.generateSequence("类目");
-            Category.me.clear().set("cateCode", cateCode).set("cateName", cateName).set("parentCode", StringUtils.isEmpty(parentCode) ? null : parentCode).save();
+            Category.me.clear().set("cateCode", cateCode).set("cateName", cateName).set("sequence", sequence).set("parentCode", StringUtils.isEmpty(parentCode) ? null : parentCode).save();
         } else {
             Set<Condition> conditions = new HashSet<Condition>();
             conditions.add(new Condition("id", Operators.EQ, id));
             Map<String, Object> values = new HashMap<String, Object>();
             values.put("cateName", cateName);
             values.put("parentCode", parentCode);
+            values.put("sequence", sequence);
             Category.me.clear().update(conditions, values);
         }
         this.renderJson(InvokeResult.success());

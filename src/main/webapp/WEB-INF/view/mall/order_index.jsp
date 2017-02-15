@@ -124,6 +124,37 @@
             recordtext: "{0} - {1} 共 {2} 条",
             pgtext: "第 {0} 页 共 {1} 页",
             pager: pager_selector,
+            subGrid: true,
+            subGridOptions: {
+                plusicon: 'iconfont icon-plusicon',
+                minusicon: 'iconfont icon-iconminus',
+            },
+            subGridRowExpanded: function (subgrid_id, row_id) {
+                var subgrid_table_id;
+                subgrid_table_id = subgrid_id + "_t";   // (3)根据subgrid_id定义对应的子表格的table的id
+
+                var subgrid_pager_id;
+                subgrid_pager_id = subgrid_id + "_pgr"  // (4)根据subgrid_id定义对应的子表格的pager的id
+
+                // (5)动态添加子报表的table和pager
+                $("#" + subgrid_id).html("<table id='"+subgrid_table_id+"' class='scroll'></table><div id='"+subgrid_pager_id+"' class='scroll'></div>");
+                $("#" + subgrid_table_id).jqGrid({
+                    url: '${context_path}/mall/order/orderDetail?oid=' + row_id,
+                    mtype: "GET",
+                    datatype: "json",
+                    colModel: [
+                        {label: '商品', name: 'skuName', width: 150, sortable: false},
+                        {label: '编号', name: 'sku', width: 80, sortable: false},
+                        {label: '规格', name: 'specName', width: 150, sortable: false},
+                        {label: '购买数量', name: 'quantity', width: 80, sortable: false},
+                        {label: '价格', name: 'price', width: 80, sortable: false},
+                        {label: '成本', name: 'allcost', width: 80, sortable: false}
+                    ],
+                    height: 280,
+                    rowNum: 10,
+                    altRows: true,//隔行变色
+                });
+            },
             loadComplete: function () {
                 var table = this;
                 setTimeout(function () {

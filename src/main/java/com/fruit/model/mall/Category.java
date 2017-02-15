@@ -64,6 +64,7 @@ public class Category extends BaseMallCategory<Category> {
             mapItem.put("cateCode", item.getStr("cateCode"));
             mapItem.put("cateName", item.getStr("cateName"));
             mapItem.put("parentCode", item.getStr("parentCode"));
+            mapItem.put("sequence", item.getInt("sequence"));
             mapItem.put("remare", item.getStr("remare"));
             mapItem.put("loaded", true);
             mapItem.put("expanded", true);
@@ -83,6 +84,7 @@ public class Category extends BaseMallCategory<Category> {
                 mapItem.put("cateCode", subItem.getStr("cateCode"));
                 mapItem.put("cateName", subItem.getStr("cateName"));
                 mapItem.put("parentCode", subItem.getStr("parentCode"));
+                mapItem.put("sequence", subItem.getInt("sequence"));
                 mapItem.put("remare", subItem.getStr("remare"));
                 mapItem.put("loaded", true);
                 mapItem.put("expanded", true);

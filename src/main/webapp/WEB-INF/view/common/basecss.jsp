@@ -21,6 +21,7 @@
 		<link rel="stylesheet" href="${res_url}ace-1.3.3/assets/css/daterangepicker.css" />
 		<link rel="stylesheet" href="${res_url}ace-1.3.3/assets/css/bootstrap-datetimepicker.css" />
 		<link rel="stylesheet" href="${res_url}ace-1.3.3/assets/css/colorpicker.css" />
+		<link rel="stylesheet" type="text/css" href="${res_url}ace-1.3.3/assets/css/custom/iconfont.css">
 		
 		<!--[if lte IE 9]>
 			<link rel="stylesheet" href="${res_url}ace-1.3.3/assets/css/ace-part2.css" class="ace-main-stylesheet" />

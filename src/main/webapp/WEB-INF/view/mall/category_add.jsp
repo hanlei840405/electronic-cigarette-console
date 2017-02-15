@@ -68,6 +68,17 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label class="control-label col-xs-2 col-sm-12 no-padding-right"
+                                       for="sequence">顺序</label>
+
+                                <div class="col-xs-10 col-sm-12">
+                                    <div class="clearfix">
+                                        <input type="number" name="sequence" id="sequence" value="${category.sequence}"
+                                               class="col-xs-12 col-sm-12">
+                                    </div>
+                                </div>
+                            </div>
 
                             <div class="clearfix form-actions" align="center">
                                 <div class="col-md-offset-3 col-md-6">
