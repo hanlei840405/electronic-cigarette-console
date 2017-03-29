@@ -57,4 +57,12 @@ public abstract class BaseOdOrderDe<M extends BaseOdOrderDe<M>> extends BaseMode
 		return get("allcost");
 	}
 
+	public void setRated(java.math.BigDecimal rated) {
+		set("rated", rated);
+	}
+
+	public java.math.BigDecimal getRated() {
+		return get("rated");
+	}
+
 }

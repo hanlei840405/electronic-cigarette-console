@@ -39,10 +39,10 @@
                             <div class="form-group">
                                 <input name="id" type="hidden" value="${sku.id}"/>
                                 <input id="image" name="image" type="hidden" value="${sku.image}"/>
-                                <label class="control-label col-xs-2 col-sm-2 no-padding-right"
+                                <label class="control-label col-xs-3 col-sm-2 no-padding-right"
                                        for="displayName">类目</label>
 
-                                <div class="col-xs-10 col-sm-12">
+                                <div class="col-xs-9 col-sm-12">
                                     <div class="input-icon input-icon-right" id="kka">
                                         <input type="hidden" id="category" name="category" value="${sku.category }"/>
                                         <input type="text" readonly="readonly" id="displayName" name="displayName"
@@ -58,9 +58,9 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-xs-2 col-sm-12 no-padding-right" for="skuName">名称</label>
+                                <label class="control-label col-xs-3 col-sm-12 no-padding-right" for="skuName">名称</label>
 
-                                <div class="col-xs-10 col-sm-12">
+                                <div class="col-xs-9 col-sm-12">
                                     <div class="clearfix">
                                         <input type="text" name="skuName" id="skuName" value="${sku.skuName}"
                                                class="col-xs-12 col-sm-12">
@@ -68,10 +68,10 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-xs-2 col-sm-12 no-padding-right"
+                                <label class="control-label col-xs-3 col-sm-12 no-padding-right"
                                        for="specName">规格</label>
 
-                                <div class="col-xs-10 col-sm-12">
+                                <div class="col-xs-9 col-sm-12">
                                     <div class="clearfix">
                                         <input type="text" name="specName" id="specName" value="${sku.specName}"
                                                class="col-xs-12 col-sm-12">
@@ -79,10 +79,10 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-xs-2 col-sm-12 no-padding-right"
+                                <label class="control-label col-xs-3 col-sm-12 no-padding-right"
                                        for="sku">编号</label>
 
-                                <div class="col-xs-10 col-sm-12">
+                                <div class="col-xs-9 col-sm-12">
                                     <div class="clearfix">
                                         <input type="text" name="sku" id="sku" value="${sku.sku}"
                                                class="col-xs-12 col-sm-12">
@@ -90,10 +90,10 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-xs-2 col-sm-12 no-padding-right"
-                                       for="file_upload">提成(%)</label>
+                                <label class="control-label col-xs-3 col-sm-12 no-padding-right"
+                                       for="file_upload">提成系数(%)</label>
 
-                                <div class="col-xs-10 col-sm-12">
+                                <div class="col-xs-9 col-sm-12">
                                     <div class="clearfix">
                                         <input type="number" name="rated" id="rated" min="0" value="${sku.rated}"
                                                class="col-xs-12 col-sm-12">
@@ -101,10 +101,10 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-xs-2 col-sm-12 no-padding-right"
+                                <label class="control-label col-xs-3 col-sm-12 no-padding-right"
                                        for="file_upload">图片</label>
 
-                                <div class="col-xs-10 col-sm-12">
+                                <div class="col-xs-9 col-sm-12">
                                     <div class="clearfix">
                                         <input type="text" name="file_upload" id="file_upload" value="${sku.sku}"
                                                class="col-xs-12 col-sm-12">
@@ -112,20 +112,20 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-xs-2 col-sm-12 no-padding-right"
+                                <label class="control-label col-xs-3 col-sm-12 no-padding-right"
                                        for="file_upload">专属</label>
 
-                                <div class="col-xs-10 col-sm-12">
+                                <div class="col-xs-9 col-sm-12">
                                     <div class="clearfix">
                                         <input type="checkbox" name="exclusive" id="exclusive" value="1" <c:if test="${sku.exclusive == '1'}">checked </c:if>/>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-xs-2 col-sm-12 no-padding-right"
+                                <label class="control-label col-xs-3 col-sm-12 no-padding-right"
                                        for="attribute">赠品</label>
 
-                                <div class="col-xs-10 col-sm-12">
+                                <div class="col-xs-9 col-sm-12">
                                     <div class="clearfix">
                                         <input type="checkbox" name="attribute" id="attribute" value="1" <c:if test="${sku.attribute == '1'}">checked </c:if>/>
                                     </div>

@@ -109,7 +109,7 @@
                 {label: '专属', name: 'exclusive', formatter: exclusiveStatus, width: 50},
                 {label: '类目', name: 'category', width: 150},
                 {label: '状态', name: 'status', formatter: fmatterStatus, width: 50},
-                {label: '提成(%)', name: 'rated', width: 75},
+                {label: '提成系数(%)', name: 'rated', width: 75},
                 {label: '图片', name: 'image', formatter: fmatterImage, width: 50}
             ],
             viewrecords: true,
