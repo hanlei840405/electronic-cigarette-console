@@ -31,7 +31,10 @@ public class CustomerController extends BaseController {
         if (!StringUtils.isEmpty(customer)) {
             conditions.add(new Condition("cusCode", Operators.EQ, customer));
         }
-        Page<Customer> pageInfo = Customer.dao.getPage(getPage(), this.getRows(), conditions);
+        LinkedHashMap<String, String> orderby = new LinkedHashMap<String, String>();
+        orderby.put("status", "asc");
+        orderby.put("id", "asc");
+        Page<Customer> pageInfo = Customer.dao.getPage(getPage(), this.getRows(), conditions, orderby);
         this.renderJson(JqGridModelUtils.toJqGridView(pageInfo));
     }
 
@@ -138,7 +141,7 @@ public class CustomerController extends BaseController {
                 CustomerUpRated.dao.clear().set("customer", customer).set("up", up.getCusCode()).set("sku", sku).set("rated", rated).save();
             }
             this.renderJson(InvokeResult.success());
-        }catch (Exception e) {
+        } catch (Exception e) {
             this.renderJson(InvokeResult.failure("保存失败，请检查上级商家、商品是否存在或者金额是否正确"));
         }
     }

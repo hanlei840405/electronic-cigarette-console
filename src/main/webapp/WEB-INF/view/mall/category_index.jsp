@@ -90,6 +90,11 @@
                     index: "cateCode",
                     label: "编号",
                     sortable: false
+                }, {
+                    name: "sequence",
+                    index: "sequence",
+                    label: "顺序",
+                    sortable: false
                 },
                 {
                     name: "parentCode",

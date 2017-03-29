@@ -22,6 +22,11 @@ import java.util.Set;
 public class SkuInboundService {
 
     @Before(Tx.class)
+    public void saveInbound(String inboundID, String user) {
+        SkuInbound.dao.clear().set("inboundID", inboundID).set("executor", user).set("extime", new Date()).save();
+    }
+
+    @Before(Tx.class)
     public void saveInbound(String inboundID, SkuInboundDe skuInboundDe, SysUser sysUser) {
         SkuInbound.dao.clear().set("inboundID", inboundID).set("executor", sysUser.get("name")).set("extime", new Date()).save();
         skuInboundDe.save();
@@ -35,9 +40,9 @@ public class SkuInboundService {
     }
 
     @Before(Tx.class)
-    public void saveInboundDetail(SkuInboundDe skuInboundDe, long quantity) {
+    public void saveInboundDetail(SkuInboundDe skuInboundDe) {
         skuInboundDe.save();
-        SkStock.dao.add(skuInboundDe.getSku(), quantity);
+        SkStock.dao.add(skuInboundDe.getSku(), skuInboundDe.getQuantity());
     }
 
     @Before(Tx.class)

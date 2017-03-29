@@ -54,6 +54,14 @@ public abstract class BaseMallCategory<M extends BaseMallCategory<M>> extends Ba
         return get("remare");
     }
 
+    public void setSequence(Integer sequence) {
+        set("sequence", sequence);
+    }
+
+    public String getSequence() {
+        return get("sequence");
+    }
+
     public void setSkus(List<Sku> skus) {
         this.skus = skus;
     }

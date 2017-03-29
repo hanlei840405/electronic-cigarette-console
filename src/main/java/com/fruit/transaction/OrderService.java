@@ -4,10 +4,12 @@ import com.alibaba.druid.util.StringUtils;
 import com.fruit.core.model.Condition;
 import com.fruit.core.model.Operators;
 import com.fruit.core.util.NumberUtils;
+import com.fruit.model.ConsoleSequence;
 import com.fruit.model.mall.Customer;
 import com.fruit.model.mall.Order;
 import com.fruit.model.mall.OrderDe;
 import com.fruit.model.mall.UserRated;
+import com.fruit.model.stock.SkuInboundDe;
 import com.jfinal.aop.Before;
 import com.jfinal.aop.Duang;
 import com.jfinal.plugin.activerecord.Db;
@@ -43,10 +45,17 @@ public class OrderService {
             Db.batchUpdate(orderDes, 20);
         }
         if (status == 4) { // 回退库存
+            // FIXME: 2017/2/6 自动生成入库单
+            SkuInboundService skuInboundService = Duang.duang(SkuInboundService.class);
+            String inboundID = ConsoleSequence.dao.generateSequence("入库");
+            skuInboundService.saveInbound(inboundID,reviewer);
             List<OrderDe> orderDes = OrderDe.dao.find("SELECT * FROM od_order_de WHERE orderID=?", orderID);
             for (OrderDe orderDe : orderDes) {
-                Db.update("UPDATE sk_stock SET quantity=quantity + ? WHERE sku=?", orderDe.getQuantity(), orderDe.getSku());
+                SkuInboundDe skuInboundDe = SkuInboundDe.dao.clear().set("inboundID", inboundID).set("sku", orderDe.getSku()).set("status", 1).set("quantity", orderDe.getQuantity()).set("cost", orderDe.getAllcost().divide(new BigDecimal(orderDe.getQuantity()))).set("leftQty", orderDe.getQuantity());
+                skuInboundService.saveInboundDetail(skuInboundDe);
+//                Db.update("UPDATE sk_stock SET quantity=quantity + ? WHERE sku=?", orderDe.getQuantity(), orderDe.getSku());
             }
+
         }
 
         Set<Condition> conditions = new HashSet<Condition>();
