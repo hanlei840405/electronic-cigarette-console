@@ -204,7 +204,7 @@ public class CustomerController extends BaseController {
         Set<Condition> conditions = new HashSet<Condition>();
         conditions.add(new Condition("id", Operators.EQ, id));
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put("status", 0);
+        params.put("status", 2);
         Customer.dao.clear().update(conditions, params);
 
         this.renderJson(InvokeResult.success());

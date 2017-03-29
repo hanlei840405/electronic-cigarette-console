@@ -105,4 +105,12 @@ public abstract class BaseMallSku<M extends BaseMallSku<M>> extends BaseModel<M>
         return get("customer");
     }
 
+    public void setRated(Integer rated) {
+        set("rated", rated);
+    }
+
+    public String getRated() {
+        return get("rated");
+    }
+
 }

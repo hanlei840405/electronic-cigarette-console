@@ -91,6 +91,17 @@
                             </div>
                             <div class="form-group">
                                 <label class="control-label col-xs-2 col-sm-12 no-padding-right"
+                                       for="file_upload">提成(%)</label>
+
+                                <div class="col-xs-10 col-sm-12">
+                                    <div class="clearfix">
+                                        <input type="number" name="rated" id="rated" min="0" value="${sku.rated}"
+                                               class="col-xs-12 col-sm-12">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-xs-2 col-sm-12 no-padding-right"
                                        for="file_upload">图片</label>
 
                                 <div class="col-xs-10 col-sm-12">
