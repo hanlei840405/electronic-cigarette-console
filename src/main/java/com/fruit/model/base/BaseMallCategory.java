@@ -58,7 +58,7 @@ public abstract class BaseMallCategory<M extends BaseMallCategory<M>> extends Ba
         set("sequence", sequence);
     }
 
-    public String getSequence() {
+    public Integer getSequence() {
         return get("sequence");
     }
 
