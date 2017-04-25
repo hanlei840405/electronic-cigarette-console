@@ -52,7 +52,7 @@ public class CustomerController extends BaseController {
         String customer = this.getPara("customer");
         SysUser sysUser = IWebUtils.getCurrentSysUser(getRequest());
         String select = "select cusCode,cusName,totalCost,lastOrderDate,lastOrderPrice";
-        StringBuilder from = new StringBuilder(" FROM (select t1.cusCode,t1.cusName,t1.amount as totalCost,t2.odtime as lastOrderDate, t2.amount as lastOrderPrice from mall_customer t1 INNER JOIN od_order t2 on t1.cusCode=t2.customer WHERE 1=1");
+        StringBuilder from = new StringBuilder(" FROM (select t1.cusCode,t1.cusName,t1.amount as totalCost,t2.odtime as lastOrderDate, t2.amount as lastOrderPrice from mall_customer t1 LEFT JOIN od_order t2 on t1.cusCode=t2.customer WHERE 1=1");
         List<String> params = new ArrayList<String>();
         if (!StringUtils.isEmpty(customer)) {
             from.append(" AND t1.cusCode=?");

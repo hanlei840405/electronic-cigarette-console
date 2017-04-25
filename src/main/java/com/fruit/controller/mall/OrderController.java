@@ -27,6 +27,11 @@ public class OrderController extends BaseController {
     }
 
     @RequiresPermissions(value = {"/mall/order"})
+    public void read() {
+        render("order_read.jsp");
+    }
+
+    @RequiresPermissions(value = {"/mall/order"})
     public void auditIndex() {
         render("order_audit_index.jsp");
     }
