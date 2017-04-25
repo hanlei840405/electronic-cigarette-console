@@ -109,7 +109,6 @@ public class OrderController extends BaseController {
         String orderID = this.getPara("orderID");
         Order order = Order.dao.findFirst("SELECT t1.*,t2.cusName,t3.addr FROM od_order t1 INNER JOIN mall_customer t2 ON t1.customer = t2.cusCode INNER JOIN od_order_addr t3 on t1.orderID = t3.orderID WHERE t1.orderID=?", orderID);
         setAttr("order", order);
-        setAttr("category", "view");
         render("order_audit_view.jsp");
     }
 
@@ -118,7 +117,14 @@ public class OrderController extends BaseController {
         String orderID = this.getPara("orderID");
         Order order = Order.dao.findFirst("SELECT t1.*,t2.cusName,t3.addr FROM od_order t1 INNER JOIN mall_customer t2 ON t1.customer = t2.cusCode INNER JOIN od_order_addr t3 on t1.orderID = t3.orderID WHERE t1.orderID=?", orderID);
         setAttr("order", order);
-        setAttr("category", "view");
         render("order_send_view.jsp");
+    }
+
+    @RequiresPermissions(value = {"/mall/order"})
+    public void readView() {
+        String orderID = this.getPara("orderID");
+        Order order = Order.dao.findFirst("SELECT t1.*,t2.cusName,t3.addr FROM od_order t1 INNER JOIN mall_customer t2 ON t1.customer = t2.cusCode INNER JOIN od_order_addr t3 on t1.orderID = t3.orderID WHERE t1.orderID=?", orderID);
+        setAttr("order", order);
+        render("order_read_view.jsp");
     }
 }

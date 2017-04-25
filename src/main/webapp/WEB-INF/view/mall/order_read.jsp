@@ -191,7 +191,7 @@
                     area: ['600px', '500px'],
                     fix: false, //不固定
                     maxmin: true,
-                    content: '${context_path}/mall/order/view?orderID=' + rid
+                    content: '${context_path}/mall/order/readView?orderID=' + rid
                 });
             }
         });

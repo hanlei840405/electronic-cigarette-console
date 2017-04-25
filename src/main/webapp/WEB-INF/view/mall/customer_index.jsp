@@ -390,7 +390,7 @@
         } else if (cellvalue == 1) {
             return '<span class="label label-sm label-success">审核通过</span>';
         } else if (cellvalue == 2) {
-            return '<span class="label label-sm label-success">禁用</span>';
+            return '<span class="label label-sm label-danger">禁用</span>';
         } else {
             return '<span class="label label-sm label-success">审核不通过</span>';
         }
