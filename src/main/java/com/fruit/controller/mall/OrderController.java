@@ -59,7 +59,7 @@ public class OrderController extends BaseController {
 
     @RequiresPermissions(value = {"/mall/order"})
     public void orderDetail() {
-        String orderID = this.getPara("oid");
+        String orderID = this.getPara("orderID");
         String select = "select t1.*,t2.skuName,t2.specName";
         StringBuilder from = new StringBuilder("from od_order_de t1 INNER JOIN mall_sku t2 on t1.sku = t2.sku where 1=1");
         List<String> params = new ArrayList<String>();

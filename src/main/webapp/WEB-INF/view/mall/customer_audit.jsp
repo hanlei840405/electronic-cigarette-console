@@ -95,7 +95,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="control-label col-xs-2 col-sm-2 no-padding-right"
-                                       for="agency">供应商</label>
+                                       for="agency">经销商</label>
 
                                 <div class="col-xs-3 col-sm-3">
                                     <div class="clearfix">

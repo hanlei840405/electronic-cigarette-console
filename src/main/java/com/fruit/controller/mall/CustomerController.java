@@ -5,11 +5,15 @@ import com.fruit.core.auth.anno.RequiresPermissions;
 import com.fruit.core.controller.BaseController;
 import com.fruit.core.model.Condition;
 import com.fruit.core.model.Operators;
+import com.fruit.core.util.IWebUtils;
 import com.fruit.core.util.JqGridModelUtils;
 import com.fruit.core.util.security.MessageDigestPasswordEncoder;
 import com.fruit.core.view.InvokeResult;
+import com.fruit.model.SysUser;
 import com.fruit.model.mall.*;
+import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.activerecord.Record;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -36,6 +40,30 @@ public class CustomerController extends BaseController {
         orderby.put("id", "asc");
         Page<Customer> pageInfo = Customer.dao.getPage(getPage(), this.getRows(), conditions, orderby);
         this.renderJson(JqGridModelUtils.toJqGridView(pageInfo));
+    }
+
+    @RequiresPermissions(value = {"/mall/customer"})
+    public void own() {
+        render("customer_own_index.jsp");
+    }
+
+    @RequiresPermissions(value = {"/mall/customer"})
+    public void getMyCustomers() {
+        String customer = this.getPara("customer");
+        SysUser sysUser = IWebUtils.getCurrentSysUser(getRequest());
+        String select = "select cusCode,cusName,totalCost,lastOrderDate,lastOrderPrice";
+        StringBuilder from = new StringBuilder(" FROM (select t1.cusCode,t1.cusName,t1.amount as totalCost,t2.odtime as lastOrderDate, t2.amount as lastOrderPrice from mall_customer t1 INNER JOIN od_order t2 on t1.cusCode=t2.customer WHERE 1=1");
+        List<String> params = new ArrayList<String>();
+        if (!StringUtils.isEmpty(customer)) {
+            from.append(" AND t1.cusCode=?");
+            params.add(customer);
+        }
+        from.append(" AND t1.saler=?");
+        params.add(sysUser.getName());
+        from.append(" GROUP BY cusCode,cusName,totalCost,lastOrderPrice ORDER BY t1.status ASC, t1.id ASC) t");
+
+        Page<Record> page = Db.paginate(getPage(), this.getRows(), select, from.toString(), params.toArray());
+        this.renderJson(JqGridModelUtils.toJqGridView(page));
     }
 
     @RequiresPermissions(value = {"/mall/customer"})
