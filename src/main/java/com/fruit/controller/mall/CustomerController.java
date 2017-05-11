@@ -178,19 +178,24 @@ public class CustomerController extends BaseController {
     public void saveCustomerPrice() {
         String customer = this.getPara("customer");
         String sku = this.getPara("sku");
-        BigDecimal price = BigDecimal.valueOf(Double.parseDouble(this.getPara("price")));
+        String value = this.getPara("price");
         Set<Condition> conditions = new HashSet<Condition>();
         Condition condition1 = new Condition("customer", Operators.EQ, customer);
         Condition condition2 = new Condition("sku", Operators.EQ, sku);
         conditions.add(condition1);
         conditions.add(condition2);
-        boolean isExist = SkuSprice.dao.isExit(conditions);
-        if (isExist) {
-            Map<String, Object> params = new HashMap<String, Object>();
-            params.put("price", price);
-            SkuSprice.dao.clear().update(conditions, params);
-        } else {
-            SkuSprice.dao.clear().set("customer", customer).set("sku", sku).set("price", price).save();
+        if (StringUtils.isEmpty(value)) { // 空，说明为删除特殊价格
+            SkuSprice.dao.clear().delete(conditions);
+        }else {
+            boolean isExist = SkuSprice.dao.isExit(conditions);
+            BigDecimal price = BigDecimal.valueOf(Double.parseDouble(this.getPara("price")));
+            if (isExist) {
+                Map<String, Object> params = new HashMap<String, Object>();
+                params.put("price", price);
+                SkuSprice.dao.clear().update(conditions, params);
+            } else {
+                SkuSprice.dao.clear().set("customer", customer).set("sku", sku).set("price", price).save();
+            }
         }
 
         this.renderJson(InvokeResult.success());

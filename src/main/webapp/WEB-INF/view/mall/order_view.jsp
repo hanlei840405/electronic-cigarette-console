@@ -28,6 +28,8 @@
 
                         <p class="col-xs-4">客户:${order.cusName}</p>
 
+                        <p class="col-xs-4">快递信息:${order.express} - ${order.courierNum}</p>
+
                         <p class="col-xs-4">总金额:${order.amount}</p>
 
                         <p class="col-xs-4">

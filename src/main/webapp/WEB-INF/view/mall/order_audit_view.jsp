@@ -30,6 +30,10 @@
 
                         <p class="col-xs-4">总金额:${order.amount}</p>
 
+                        <p class="col-xs-4">快递信息:${order.express} - ${order.courierNum}</p>
+
+                        <p class="col-xs-4">总金额:${order.amount}</p>
+
                         <p class="col-xs-4">
                             <c:if test="${order.status == 0 }">
                                 <span class="label label-sm label-info">待付款</span>
@@ -146,10 +150,6 @@
 
     function auditOrder(status, express, courierNum) {
         var values = {status: status, orderID: '${order.orderID}'};
-        if (status == 3) {
-            values.express = express;
-            values.courierNum = courierNum;
-        }
         $.post("${context_path}/mall/order/audit", values, function (data) {
             if (data.code == 0) {
                 layer.msg('操作成功', {

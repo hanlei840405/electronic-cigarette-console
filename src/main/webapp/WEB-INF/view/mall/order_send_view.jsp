@@ -28,6 +28,8 @@
 
                         <p class="col-xs-4">客户:${order.cusName}</p>
 
+                        <p class="col-xs-4">快递信息:${order.express} - ${order.courierNum}</p>
+
                         <p class="col-xs-4">总金额:${order.amount}</p>
 
                         <p class="col-xs-4">
@@ -119,10 +121,10 @@
         });
         $(window).triggerHandler('resize.jqGrid');
         $("#btn-send").click(function () {//发货
-            auditOrder(3, $('#express').val(), $('#courierNum').val());
+            auditOrder('send', 3, $('#express').val(), $('#courierNum').val());
         });
         $("#btn-cancel").click(function () {//关闭订单
-            auditOrder(4);
+            auditOrder('audit', 4);
         });
     });
     //replace icons with FontAwesome icons like above
@@ -141,13 +143,13 @@
         })
     }
 
-    function auditOrder(status, express, courierNum) {
+    function auditOrder(method, status, express, courierNum) {
         var values = {status: status, orderID: '${order.orderID}'};
         if (status == 3) {
             values.express = express;
             values.courierNum = courierNum;
         }
-        $.post("${context_path}/mall/order/audit", values, function (data) {
+        $.post("${context_path}/mall/order/" + method, values, function (data) {
             if (data.code == 0) {
                 layer.msg('操作成功', {
                     icon: 1,
