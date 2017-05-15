@@ -51,7 +51,7 @@
                         </p>
 
                         <c:if test="${order.status != 0 && order.status != 3 }">
-                            <img width="100px" src="${context_path}/${order.certificate}"/>
+                            <img width="100px" src="/mall/ext/private/${order.certificate}"/>
                         </c:if>
                         <p>${order.addr}</p>
 
