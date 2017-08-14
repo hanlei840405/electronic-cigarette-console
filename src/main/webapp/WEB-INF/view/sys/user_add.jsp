@@ -33,13 +33,15 @@
                                 <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="name">用户名</label>
                                 <div class="col-xs-12 col-sm-9">
                                     <div class="clearfix">
-                                        <input type="text" id="name" name="name" ${id ne null?'readonly':'' } value="${item.name}"
+                                        <input type="text" id="name" name="name" ${id ne null?'readonly':'' }
+                                               value="${item.name}"
                                                class="col-xs-12 col-sm-6">
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="realName">姓名</label>
+                                <label class="control-label col-xs-12 col-sm-3 no-padding-right"
+                                       for="realName">姓名</label>
                                 <div class="col-xs-12 col-sm-9">
                                     <div class="clearfix">
                                         <input type="text" name="realName" id="realName" value="${item.realName}"
@@ -47,23 +49,22 @@
                                     </div>
                                 </div>
                             </div>
-                            <c:if test="${id eq null }">
-                                <div class="form-group">
-                                    <label class="control-label col-xs-12 col-sm-3 no-padding-right"
-                                           for="password">密码</label>
-                                    <div class="col-xs-12 col-sm-9">
-                                        <div class="clearfix">
-                                            <input type="text" id="password" name="password" class="col-xs-12 col-sm-6">
-                                        </div>
+                            <div class="form-group">
+                                <label class="control-label col-xs-12 col-sm-3 no-padding-right"
+                                       for="password">密码</label>
+                                <div class="col-xs-12 col-sm-9">
+                                    <div class="clearfix">
+                                        <input type="text" id="password" name="password" class="col-xs-12 col-sm-6">
                                     </div>
                                 </div>
-                            </c:if>
+                            </div>
 
                             <div class="form-group">
                                 <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="des">描述</label>
                                 <div class="col-xs-12 col-sm-9">
                                     <div class="clearfix">
-                                        <input type="text" id="des" name="des" value="${item.des}" class="col-xs-12 col-sm-6">
+                                        <input type="text" id="des" name="des" value="${item.des}"
+                                               class="col-xs-12 col-sm-6">
                                     </div>
                                 </div>
                             </div>
@@ -165,24 +166,24 @@
                 if ($btn.hasClass("disabled")) return;
                 var postData = $("#validation-form").serializeJson();
                 $.post("${context_path}/sys/user/save", postData,
-                        function (data) {
-                            if (data.code == 0) {
-                                parent.reloadGrid(); //重新载入
-                                layer.msg('操作成功', {
-                                    icon: 1,
-                                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
-                                }, function () {
-                                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-                                    parent.layer.close(index); //再执行关闭
-                                });
-                            } else {
-                                layer.msg(data.msg, {
-                                    icon: 2,
-                                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
-                                });
-                            }
-                            $("#btn-submit").removeClass("disabled");
-                        }, "json");
+                    function (data) {
+                        if (data.code == 0) {
+                            parent.reloadGrid(); //重新载入
+                            layer.msg('操作成功', {
+                                icon: 1,
+                                time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                            }, function () {
+                                var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                                parent.layer.close(index); //再执行关闭
+                            });
+                        } else {
+                            layer.msg(data.msg, {
+                                icon: 2,
+                                time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                            });
+                        }
+                        $("#btn-submit").removeClass("disabled");
+                    }, "json");
                 return false;
             },
             invalidHandler: function (form) {
