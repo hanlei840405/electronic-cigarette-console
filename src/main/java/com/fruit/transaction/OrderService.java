@@ -5,6 +5,7 @@ import com.fruit.core.model.Condition;
 import com.fruit.core.model.Operators;
 import com.fruit.core.util.NumberUtils;
 import com.fruit.model.ConsoleSequence;
+import com.fruit.model.SysUser;
 import com.fruit.model.mall.Customer;
 import com.fruit.model.mall.Order;
 import com.fruit.model.mall.OrderDe;
@@ -77,7 +78,10 @@ public class OrderService {
 
     @Before(Tx.class)
     public void rated(Long searchUser, String searchYear, String searchMonth) {
-        List<Order> orders = Order.dao.find("select t1.*,t2.rate from od_order t1 INNER JOIN mall_customer t2 on t1.customer = t2.cusCode where t1.status in (1,2,3) and t1.rated is null and t2.saler=? and t1.odtime like ?", searchUser, searchYear + '-' + searchMonth + "%");
+        Set<Condition> conditions = new HashSet<Condition>();
+        conditions.add(new Condition("id", Operators.EQ, searchUser));
+        SysUser user = SysUser.me.get(conditions);
+        List<Order> orders = Order.dao.find("select t1.*,t2.rate from od_order t1 INNER JOIN mall_customer t2 on t1.customer = t2.cusCode where t1.status in (1,2,3) and t1.rated is null and t2.saler=? and t1.odtime like ?", user.getName(), searchYear + '-' + searchMonth + "%");
         BigDecimal amount = new BigDecimal(0);
         for (Order order : orders) {
             Customer customer = Customer.dao.findFirst("select * from mall_customer where cusCode=?", order.getCustomer());
@@ -88,7 +92,7 @@ public class OrderService {
             }
             amount = NumberUtils.round(amount.multiply(customer.getRate().divide(new BigDecimal(100))), 2);
         }
-        Db.update("update od_order t1 inner join mall_customer t2 on t1.customer = t2.cusCode set t1.rated= now() where t1.status in (1,2,3) and t1.rated is null and t2.saler= ? and date_format(t1.odtime,'%Y-%m')=?", searchUser, searchYear + '-' + searchMonth);
+        Db.update("update od_order t1 inner join mall_customer t2 on t1.customer = t2.cusCode set t1.rated= now() where t1.status in (1,2,3) and t1.rated is null and t2.saler= ? and date_format(t1.odtime,'%Y-%m')=?", user.getName(), searchYear + '-' + searchMonth);
 
         UserRated.dao.clear().set("saler", searchUser).set("rated", searchYear + '-' + searchMonth).set("amount", amount).save();
     }

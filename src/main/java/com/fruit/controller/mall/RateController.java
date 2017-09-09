@@ -46,12 +46,15 @@ public class RateController extends BaseController {
      */
     public void getListData() {
         Long searchUser = this.getParaToLong("search_user");
+        Set<Condition> conditions = new HashSet<Condition>();
+        conditions.add(new Condition("id", Operators.EQ, searchUser));
+        SysUser user = SysUser.me.get(conditions);
         String searchYear = this.getPara("search_year");
         String searchMonth = this.getPara("search_month");
         String select = "select t1.*,t2.cusName,t2.phone,t2.wechat,t3.addr, t1.amount * t2.rate / 100 as rate";
         StringBuilder from = new StringBuilder("from od_order t1 INNER JOIN mall_customer t2 on t1.customer = t2.cusCode INNER JOIN od_order_addr t3 on t1.orderID = t3.orderID where t1.status in (1,2,3) and t1.rated is null and t2.saler=? and t1.odtime like ? order by t1.odtime desc");
         List<Object> params = new ArrayList<Object>();
-        params.add(searchUser);
+        params.add(user.getName());
         params.add(searchYear + "-" + searchMonth + "%");
         Page<Order> pageInfo = Order.dao.getPage(getPage(), this.getRows(), select, from.toString(), null, params.toArray());
         this.renderJson(JqGridModelUtils.toJqGridView(pageInfo));
@@ -62,10 +65,13 @@ public class RateController extends BaseController {
      */
     public void getRatedData() {
         Long searchUser = this.getParaToLong("search_user");
+        Set<Condition> conditions = new HashSet<Condition>();
+        conditions.add(new Condition("id", Operators.EQ, searchUser));
+        SysUser user = SysUser.me.get(conditions);
         String searchYear = this.getPara("search_year");
         String searchMonth = this.getPara("search_month");
-        Set<Condition> conditions = new HashSet<Condition>();
-        conditions.add(new Condition("saler", Operators.EQ, searchUser));
+        conditions.clear();
+        conditions.add(new Condition("saler", Operators.EQ, user.getName()));
         conditions.add(new Condition("rated", Operators.EQ, searchYear + "-" + searchMonth));
         Page<UserRated> pageInfo = UserRated.dao.getPage(getPage(), this.getRows(), conditions);
         this.renderJson(JqGridModelUtils.toJqGridView(pageInfo));
