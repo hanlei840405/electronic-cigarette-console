@@ -85,12 +85,13 @@ public class OrderService {
         BigDecimal amount = new BigDecimal(0);
         for (Order order : orders) {
             Customer customer = Customer.dao.findFirst("select * from mall_customer where cusCode=?", order.getCustomer());
+            BigDecimal orderAmount = new BigDecimal(0);
             List<OrderDe> orderDes = OrderDe.dao.find("SELECT t1.*,t2.rated FROM od_order_de t1 INNER JOIN mall_sku t2 ON t1.sku=t2.sku WHERE t1.orderID=?", order.getOrderID());
             for (OrderDe orderDe : orderDes) {
                 BigDecimal rated = orderDe.getRated();
-                amount = amount.add(orderDe.getPrice().multiply(rated.divide(new BigDecimal(100))));
+                orderAmount = orderAmount.add(orderDe.getPrice().multiply(new BigDecimal(orderDe.getQuantity())).multiply(rated.divide(new BigDecimal(100))));
             }
-            amount = NumberUtils.round(amount.multiply(customer.getRate().divide(new BigDecimal(100))), 2);
+            amount = amount.add(NumberUtils.round(orderAmount.multiply(customer.getRate().divide(new BigDecimal(100))), 2));
         }
         Db.update("update od_order t1 inner join mall_customer t2 on t1.customer = t2.cusCode set t1.rated= now() where t1.status in (1,2,3) and t1.rated is null and t2.saler= ? and date_format(t1.odtime,'%Y-%m')=?", user.getName(), searchYear + '-' + searchMonth);
 
