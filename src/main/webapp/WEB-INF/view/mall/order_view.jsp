@@ -116,8 +116,7 @@
                 {label: '编号', name: 'sku', width: 80, sortable: false},
                 {label: '规格', name: 'specName', width: 150, sortable: false},
                 {label: '购买数量', name: 'quantity', width: 80, sortable: false},
-                {label: '价格', name: 'price', width: 80, sortable: false},
-                {label: '成本', name: 'allcost', width: 80, sortable: false}
+                {label: '价格', name: 'price', width: 80, sortable: false}
             ],
             height: 280,
             rowNum: 10,
